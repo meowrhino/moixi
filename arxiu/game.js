@@ -63,7 +63,7 @@ async function init() {
     </div>
 
     <div class="game-layout">
-      <div class="game-canvas">${playerHTML}</div>
+      <div class="game-canvas" style="background: ${g.thumb};">${playerHTML}</div>
       <aside class="game-sidebar">
         <div class="sidebar-block">
           <p class="game-summary">${escapeHTML(g.summary)}</p>

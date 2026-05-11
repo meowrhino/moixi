@@ -86,6 +86,9 @@
     }
     /* el anillo ámbar respiratorio queda raro en embed pequeño, lo silenciamos */
     html.embed .canvas-wrap::before { display: none; }
+    /* el d-pad táctil sobreescribe el juego dentro del iframe del arxiu;
+       el contenedor padre (game.html) montará sus propios controles */
+    html.embed [data-mosi-dpad] { display: none !important; }
   </style>
 </head>
 <body>

@@ -85,10 +85,108 @@ body {
 /* Cuando hay canvas del juego en página, centrarlo */
 [data-mosi-canvas] {
   display: block;
-  margin: 2vh auto;
+  margin: 0 auto;
   border: 2px solid var(--ink);
   box-shadow: 6px 6px 0 var(--ink);
   background: var(--ink);
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+[data-mosi-canvas]:hover {
+  box-shadow: 6px 6px 0 var(--amber);
+}
+
+/* Wrapper del canvas: hosting del overlay y de la animación "respiratoria" */
+.canvas-wrap {
+  position: relative;
+  margin: 2vh auto;
+  width: fit-content;
+}
+/* Anillo sutil que respira cuando el juego NO se está jugando (atrayendo a pulsar) */
+.canvas-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1.5px solid var(--amber);
+  pointer-events: none;
+  opacity: 0;
+  animation: canvas-breathe 2.2s ease-in-out infinite;
+}
+.canvas-wrap.playing::before {
+  animation: none;
+  opacity: 0;
+}
+@keyframes canvas-breathe {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.01); }
+}
+
+/* Overlay "click o teclas para jugar" sobre el canvas */
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 26, 26, 0.78);
+  color: var(--paper);
+  cursor: pointer;
+  z-index: 2;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+  padding: 1rem;
+  user-select: none;
+  animation: overlay-pulse 1.6s ease-in-out infinite;
+}
+.play-overlay.hidden {
+  display: none;
+}
+.play-overlay .overlay-text {
+  padding: 0.6em 1em;
+  border: 1.5px solid var(--paper);
+  background: rgba(26, 26, 26, 0.6);
+}
+.play-overlay .kbd-inline {
+  display: inline-block;
+  padding: 0 0.25em;
+  border: 1px solid var(--paper);
+  margin: 0 0.15em;
+  font-size: 0.85em;
+}
+@keyframes overlay-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.78; }
+}
+
+/* Hints de controles bajo el canvas */
+.control-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em 1em;
+  justify-content: center;
+  align-items: center;
+  padding: 0.6rem 0.4rem 0;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+.control-hints kbd {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.85em;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  padding: 0.15em 0.45em;
+  margin: 0 0.05em;
+  min-width: 1em;
+  text-align: center;
+}
+.control-hints .hint-sep {
+  margin-right: 0.4em;
+  opacity: 0.85;
 }
 
 /* Botones genéricos */

@@ -39,9 +39,18 @@
   <div class="player">
     <header>
       <h1 id="game-title">cargando…</h1>
-      <span class="credits">↑↓←→ + space</span>
     </header>
-    <canvas data-mosi-canvas></canvas>
+    <div class="canvas-wrap">
+      <canvas data-mosi-canvas></canvas>
+      <div class="play-overlay" id="play-overlay" role="button" tabindex="0" aria-label="empezar a jugar">
+        <span class="overlay-text">click o teclas <span class="kbd-inline">↑↓←→</span> para jugar</span>
+      </div>
+    </div>
+    <div class="control-hints">
+      <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> <span class="hint-sep">moverse</span>
+      <kbd>espacio</kbd> <span class="hint-sep">hablar / avanzar</span>
+      <kbd>esc</kbd> <span class="hint-sep">cancelar</span>
+    </div>
     <div class="divider-glyphs"></div>
     <footer class="studio-footer">
       <img class="mascot alive" src="./assets/mascot.svg" alt="">
@@ -109,6 +118,19 @@
     core.bus.emit('roomEnter', { roomId: gameData.startRoom });
 
     core.start();
+
+    // Overlay "click o teclas para jugar": se quita al primer input.
+    const overlay = document.getElementById('play-overlay');
+    if (overlay) {
+      const hideOverlay = () => {
+        overlay.classList.add('hidden');
+        document.querySelector('.canvas-wrap')?.classList.add('playing');
+        window.removeEventListener('keydown', hideOverlay);
+        overlay.removeEventListener('click', hideOverlay);
+      };
+      window.addEventListener('keydown', hideOverlay);
+      overlay.addEventListener('click', hideOverlay);
+    }
   </script>
 </body>
 </html>

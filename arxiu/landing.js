@@ -134,7 +134,7 @@ function bind() {
 
 async function init() {
   try {
-    const data = await fetch(MOCK_URL).then(r => r.json());
+    const data = await fetch(`${MOCK_URL}?t=${Date.now()}`).then(r => r.json());
     allGames = data.games || [];
     users = data.users || {};
   } catch (e) {

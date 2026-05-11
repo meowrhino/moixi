@@ -21,7 +21,7 @@ async function init() {
     return;
   }
   let data;
-  try { data = await fetch(MOCK_URL).then(r => r.json()); }
+  try { data = await fetch(`${MOCK_URL}?t=${Date.now()}`).then(r => r.json()); }
   catch (e) {
     $('#profile-page').innerHTML = `<div class="empty">no se pudo cargar.</div>`;
     return;

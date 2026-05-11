@@ -1,0 +1,114 @@
+{
+  "name": "norte",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "tramo1",
+  "avatarStart": { "x": 8, "y": 14 },
+  "introScript": "{position center}norte{p}{position center}{wavy}camina hacia el norte{/wavy}",
+
+  "palettes": {
+    "duna": {
+      "name": "duna",
+      "colors": ["#f4ecd8", "#e8dcb8", "#1a1a1a", "#d4843e", "#a83e3e"]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ]
+    },
+    "borde": {
+      "name": "borde",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[
+        0,0,0,0,0,0,0,0, 0,0,0,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,1,0,0,0,1,0,
+        0,0,0,0,0,0,0,0, 0,1,0,0,0,1,0,0, 0,0,0,0,0,0,0,0, 0,0,0,1,0,0,0,0
+      ]]
+    },
+    "flecha": {
+      "name": "norte",
+      "colorIndex": 3,
+      "script": "{position center}una flecha clavada{p}\"N\"{p}{position bottom}sigues caminando.{move-avatar tramo2 8 14}",
+      "frames": [[
+        0,0,0,1,1,0,0,0, 0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,0,1,1,0,1,1,
+        0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0
+      ]]
+    },
+    "huella": {
+      "name": "huella",
+      "colorIndex": 4,
+      "script": "{position center}una huella en la arena{p}\"alguien pasó por aquí\"",
+      "frames": [[
+        0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0,
+        0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 0,0,0,0,0,0,0,0
+      ]]
+    },
+    "final": {
+      "name": "horizonte",
+      "colorIndex": 3,
+      "script": "{position center}llegas al norte{p}{wavy}pero el norte está más lejos{/wavy}{p}{position bottom}giras y vuelves a empezar.{move-avatar tramo1 8 14}",
+      "frames": [[
+        0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0
+      ]]
+    }
+  },
+
+  "rooms": {
+    "tramo1": {
+      "name": "tramo 1",
+      "palette": "duna",
+      "tiles": [
+        ["borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde"],
+        ["borde",null,null,null,null,null,null,null,"flecha",null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,"huella",null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,"huella",null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde"]
+      ]
+    },
+    "tramo2": {
+      "name": "tramo 2",
+      "palette": "duna",
+      "tiles": [
+        ["borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde"],
+        ["borde",null,null,null,null,null,null,null,"final",null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,"huella",null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,"huella",null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,"huella",null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"borde"],
+        ["borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde","borde"]
+      ]
+    }
+  }
+}

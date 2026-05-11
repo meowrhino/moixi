@@ -1,0 +1,123 @@
+{
+  "name": "una nit a la lluna",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "cel",
+  "avatarStart": { "x": 8, "y": 8 },
+  "introScript": "{position center}una nit a la lluna{p}{position center}{wavy}camina i mira{/wavy}",
+
+  "palettes": {
+    "nit": {
+      "name": "nit",
+      "colors": ["#1a1a1a", "#3d7068", "#f4ecd8", "#d4843e", "#a83e3e"]
+    }
+  },
+
+  "songs": {
+    "lluna": {
+      "name": "tema lluna",
+      "wave": "sine",
+      "loop": true,
+      "notes": [
+        { "note": "A3", "dur": 0.6 }, { "note": "C4", "dur": 0.6 },
+        { "note": "E4", "dur": 0.6 }, { "note": "C4", "dur": 0.6 }
+      ]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "light": { "radius": 3, "color": "rgba(244,236,216,0.4)" },
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ]
+    },
+    "roca": {
+      "name": "roca",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,1,1,0,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,0,1,1,1,0,
+        1,1,1,1,1,1,1,1, 1,0,1,1,1,1,0,1, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1
+      ]]
+    },
+    "estel": {
+      "name": "estel",
+      "colorIndex": 3,
+      "isItem": true,
+      "fps": 3,
+      "script": "{position center}una estrella diminuta{p}{inc-item-count estel}en duus {item-count estel}",
+      "frames": [
+        [0,0,0,1,1,0,0,0, 0,0,1,0,0,1,0,0, 0,1,0,1,1,0,1,0, 1,0,1,0,0,1,0,1, 1,0,1,0,0,1,0,1, 0,1,0,1,1,0,1,0, 0,0,1,0,0,1,0,0, 0,0,0,1,1,0,0,0],
+        [0,0,0,1,1,0,0,0, 0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,0,1,1,0,0,0]
+      ]
+    },
+    "selene": {
+      "name": "selene",
+      "colorIndex": 3,
+      "script": "{position center}selene t'observa{p}\"tres estrelles\"{p}\"i et porto on vols\"{p}{if {gte {item-count estel} 3}}\"vine\"{set-music lluna}{move-avatar mar 8 1}{else}\"encara no\"{/if}",
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,1,0,1,1,0,1,0, 1,0,1,1,1,1,0,1, 1,1,1,0,0,1,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,1,0,1,1,0,1,0, 0,1,0,1,1,0,1,0]
+      ]
+    }
+  },
+
+  "rooms": {
+    "cel": {
+      "name": "cel",
+      "palette": "nit",
+      "music": "lluna",
+      "ambient": "rgba(10,10,30,0.7)",
+      "tiles": [
+        ["roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,"estel",null,null,null,null,null,null,null,null,"estel",null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,"estel",null,null,"estel",null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,"selene",null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,"estel",null,null,null,null,"estel",null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,"estel",null,null,null,null,null,null,null,null,"estel",null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca"]
+      ]
+    },
+    "mar": {
+      "name": "el mar de la lluna",
+      "palette": "nit",
+      "ambient": "rgba(10,20,40,0.55)",
+      "enterScript": "{position center}el mar plàcid t'espera{p}has trobat un final.",
+      "tiles": [
+        ["roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"roca"],
+        ["roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca","roca"]
+      ]
+    }
+  }
+}

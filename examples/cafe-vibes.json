@@ -1,0 +1,125 @@
+{
+  "name": "cafe vibes",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "cafe",
+  "avatarStart": { "x": 8, "y": 13 },
+  "introScript": "{position center}cafe vibes{p}{position center}busca conversación.",
+
+  "palettes": {
+    "morning": {
+      "name": "mañana de café",
+      "colors": ["#f4ecd8", "#d4843e", "#1a1a1a", "#a83e3e", "#3d7068"]
+    }
+  },
+
+  "songs": {
+    "jazz": {
+      "name": "jazz suave",
+      "wave": "triangle",
+      "loop": true,
+      "notes": [
+        { "note": "F3", "dur": 0.4 }, { "note": "A3", "dur": 0.4 },
+        { "note": "C4", "dur": 0.4 }, { "note": "A3", "dur": 0.4 },
+        { "note": "G3", "dur": 0.4 }, { "note": "Bb3", "dur": 0.4 }
+      ]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ]
+    },
+    "pared": {
+      "name": "pared",
+      "colorIndex": 2,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "mesa": {
+      "name": "mesa",
+      "colorIndex": 2,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,0,1,0,0,1,0,1,
+        1,0,1,0,0,1,0,1, 1,0,1,1,1,1,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "taza": {
+      "name": "taza",
+      "colorIndex": 3,
+      "isItem": true,
+      "script": "{position center}café caliente{p}{inc-item-count cafe}",
+      "frames": [[
+        1,1,1,1,1,1,1,0, 1,0,0,0,0,0,1,1, 1,0,0,0,0,0,1,1, 1,0,0,0,0,0,1,0,
+        1,0,0,0,0,0,1,0, 1,1,0,0,0,1,0,0, 0,1,1,1,1,0,0,0, 0,0,1,1,1,0,0,0
+      ]]
+    },
+    "raul": {
+      "name": "raül",
+      "colorIndex": 1,
+      "script": "{position bottom}raül et saluda{p}\"otra ronda?\"{p}\"el secreto es la temperatura\"",
+      "frames": [[
+        0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1,
+        0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1
+      ]]
+    },
+    "ana": {
+      "name": "ana",
+      "colorIndex": 4,
+      "script": "{position bottom}ana lee el diario{p}\"todo el mundo se va\"{p}\"yo me quedo aquí\"",
+      "frames": [[
+        0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1,
+        1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0
+      ]]
+    },
+    "luna": {
+      "name": "luna",
+      "colorIndex": 3,
+      "script": "{position bottom}luna escribe{p}\"un poema sobre cafés\"{p}\"pero todavía no rima\"",
+      "frames": [[
+        0,0,0,1,1,0,0,0, 0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,0,1,0,0,1,0,1,
+        1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0
+      ]]
+    }
+  },
+
+  "rooms": {
+    "cafe": {
+      "name": "café",
+      "palette": "morning",
+      "music": "jazz",
+      "tiles": [
+        ["pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,"mesa","mesa",null,null,null,null,null,null,null,"mesa","mesa",null,null,"pared"],
+        ["pared",null,"mesa","taza",null,null,null,null,null,null,null,"taza","mesa",null,null,"pared"],
+        ["pared",null,null,"raul",null,null,null,null,null,null,null,null,"ana",null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,"mesa","mesa","mesa","mesa",null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,"mesa","taza","taza","mesa",null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,"luna",null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared"]
+      ]
+    }
+  }
+}

@@ -668,8 +668,9 @@ button.ghost:hover { color: var(--ink); border-color: var(--ink); }
   overflow: hidden;
   background: var(--ink);
   aspect-ratio: 1 / 1;
+  max-height: 80dvh;
 }
-.game-iframe { width: 100%; height: 100%; border: 0; display: block; }
+.game-iframe { width: 100%; height: 100%; border: 0; display: block; background: var(--paper); }
 .game-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .placeholder-text {
   background: rgba(26,26,26,0.7);

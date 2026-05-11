@@ -1,0 +1,107 @@
+{
+  "name": "cartes no enviades",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "habitacio",
+  "avatarStart": { "x": 8, "y": 14 },
+  "introScript": "{position center}cartes no enviades{p}{position center}pots cremar-ne una.",
+
+  "palettes": {
+    "sepia": {
+      "name": "sepia",
+      "colors": ["#e8dcb8", "#d4843e", "#1a1a1a", "#a83e3e", "#3d7068"]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ]
+    },
+    "paret": {
+      "name": "paret",
+      "colorIndex": 2,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,0,1,1,1,1,1, 1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,0,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "carta1": {
+      "name": "carta 1",
+      "colorIndex": 1,
+      "isItem": true,
+      "script": "{position center}\"perdona el silenci.\"{p}\"no sabia què escriure'm.\"{p}{inc-item-count carta}",
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,1,0,0,1,0,1, 1,0,0,1,1,0,0,1,
+        1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "carta2": {
+      "name": "carta 2",
+      "colorIndex": 1,
+      "isItem": true,
+      "script": "{position center}\"no t'has equivocat.\"{p}\"jo també vaig oblidar.\"{p}{inc-item-count carta}",
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,1,0,0,1,0,1, 1,0,0,1,1,0,0,1,
+        1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "carta3": {
+      "name": "carta 3",
+      "colorIndex": 1,
+      "isItem": true,
+      "script": "{position center}\"si llegeixes això, ja he marxat.\"{p}{inc-item-count carta}",
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,1,0,0,1,0,1, 1,0,0,1,1,0,0,1,
+        1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "foc": {
+      "name": "foc",
+      "colorIndex": 3,
+      "fps": 4,
+      "light": { "radius": 4, "color": "rgba(232,90,40,0.7)" },
+      "script": "{position center}foc{p}{if {gte {item-count carta} 1}}\"crema una carta\"{p}\"sents més lleugera\"{else}\"no tens cap carta\"{/if}",
+      "frames": [
+        [0,0,0,1,1,0,0,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 0,1,0,1,1,0,1,0, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0],
+        [0,0,0,1,1,0,0,0, 0,0,1,1,1,1,0,0, 0,1,0,1,1,0,1,0, 1,1,1,0,0,1,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 1,1,0,1,1,0,1,1, 0,0,1,1,1,1,0,0]
+      ]
+    }
+  },
+
+  "rooms": {
+    "habitacio": {
+      "name": "habitació",
+      "palette": "sepia",
+      "ambient": "rgba(30,20,10,0.45)",
+      "tiles": [
+        ["paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,"foc",null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,"carta1",null,null,null,null,null,null,null,null,"carta2",null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,"carta3",null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"paret"],
+        ["paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret","paret"]
+      ]
+    }
+  }
+}

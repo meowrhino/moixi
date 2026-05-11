@@ -18,7 +18,7 @@
       "forkOf": null,
       "summary": "un jardín, un zorro, tres flores que recoger.",
       "thumb": "linear-gradient(135deg, #3d7068 0%, #f4ecd8 50%, #d4843e 100%)",
-      "playUrl": "play.html?game=examples/garden.json"
+      "playUrl": "./play.html?game=examples/garden.json&embed=1"
     },
     {
       "id": "lluna",
@@ -37,7 +37,7 @@
       "forkOf": null,
       "summary": "passejada lunar curta, en català. tres finals possibles.",
       "thumb": "linear-gradient(160deg, #1a1a1a 0%, #3d7068 60%, #d4843e 100%)",
-      "playUrl": "#mock"
+      "playUrl": "./play.html?game=examples/lluna.json&embed=1"
     },
     {
       "id": "lluna-fork-mar",
@@ -56,7 +56,7 @@
       "forkOf": "lluna",
       "summary": "fork de la lluna d'anaïs, afegint un final marí.",
       "thumb": "linear-gradient(160deg, #1a1a1a 0%, #3d7068 40%, #ef7d57 100%)",
-      "playUrl": "#mock"
+      "playUrl": "./play.html?game=examples/lluna-fork-mar.json&embed=1"
     },
     {
       "id": "cafe-vibes",
@@ -75,7 +75,7 @@
       "forkOf": null,
       "summary": "una mañana en un café, charlas pequeñas, varios outcomes.",
       "thumb": "linear-gradient(135deg, #d4843e 0%, #f4ecd8 50%, #a83e3e 100%)",
-      "playUrl": "#mock"
+      "playUrl": "./play.html?game=examples/cafe-vibes.json&embed=1"
     },
     {
       "id": "norte",
@@ -94,7 +94,7 @@
       "forkOf": null,
       "summary": "caminas hacia el norte. cada vez que llegas, el norte está más lejos.",
       "thumb": "linear-gradient(180deg, #f4ecd8 0%, #e8dcb8 60%, #d4843e 100%)",
-      "playUrl": "#mock"
+      "playUrl": "./play.html?game=examples/norte.json&embed=1"
     },
     {
       "id": "mudanza",
@@ -113,7 +113,7 @@
       "forkOf": null,
       "summary": "1 room, 30 cajas, una semana para decidir qué tirar y qué guardar.",
       "thumb": "linear-gradient(135deg, #e8dcb8 0%, #444 70%, #1a1a1a 100%)",
-      "playUrl": "#mock"
+      "playUrl": "./play.html?game=examples/mudanza.json&embed=1"
     },
     {
       "id": "contestador",
@@ -132,7 +132,7 @@
       "forkOf": null,
       "summary": "vuelves de la oficina. parpadea el contestador. cinco mensajes.",
       "thumb": "linear-gradient(160deg, #1a1a1a 0%, #a83e3e 55%, #ef7d57 100%)",
-      "playUrl": "#mock"
+      "playUrl": "./play.html?game=examples/contestador.json&embed=1"
     },
     {
       "id": "cartes",
@@ -151,7 +151,7 @@
       "forkOf": null,
       "summary": "cartes que la gent va escriure i mai va enviar. pots cremar-ne una.",
       "thumb": "linear-gradient(135deg, #e8dcb8 0%, #d4843e 80%, #a83e3e 100%)",
-      "playUrl": "#mock"
+      "playUrl": "./play.html?game=examples/cartes.json&embed=1"
     },
     {
       "id": "shrine",
@@ -170,7 +170,7 @@
       "forkOf": null,
       "summary": "cuatro habitaciones. dejas un objeto, recibes una palabra. doce palabras para terminar.",
       "thumb": "linear-gradient(180deg, #1a1a1a 0%, #3d7068 55%, #d4843e 100%)",
-      "playUrl": "#mock"
+      "playUrl": "./play.html?game=examples/shrine.json&embed=1"
     },
     {
       "id": "tres-am",
@@ -189,7 +189,7 @@
       "forkOf": null,
       "summary": "passejar el gos a les 3 del matí. el carrer és buit. el gos sí que veu coses.",
       "thumb": "linear-gradient(180deg, #1a1a1a 0%, #3d7068 60%, #1a1a1a 100%)",
-      "playUrl": "#mock"
+      "playUrl": "./play.html?game=examples/tres-am.json&embed=1"
     }
   ],
   "users": {

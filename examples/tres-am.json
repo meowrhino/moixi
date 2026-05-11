@@ -1,0 +1,96 @@
+{
+  "name": "3am",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "carrer",
+  "avatarStart": { "x": 2, "y": 14 },
+  "introScript": "{position center}3am{p}{position center}el gos vol passejar.",
+
+  "palettes": {
+    "matinada": {
+      "name": "matinada",
+      "colors": ["#1a1a1a", "#3d7068", "#f4ecd8", "#d4843e", "#444444"]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "light": { "radius": 3, "color": "rgba(244,236,216,0.3)" },
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ]
+    },
+    "vorera": {
+      "name": "vorera",
+      "colorIndex": 4,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "fanal": {
+      "name": "fanal",
+      "colorIndex": 3,
+      "isWall": true,
+      "light": { "radius": 4, "color": "rgba(232,200,90,0.4)" },
+      "script": "{position bottom}la llum del fanal parpelleja.",
+      "frames": [[
+        0,1,1,1,1,1,1,0, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,1,0,0,0,0,1,1,
+        0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0
+      ]]
+    },
+    "gos": {
+      "name": "gos",
+      "colorIndex": 1,
+      "script": "{position center}el gos s'atura{p}\"mira allà\"{p}{position bottom}però no veus res.",
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,1, 0,0,1,1,1,1,1,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
+        [0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,1, 0,0,1,1,1,1,1,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ]
+    },
+    "ombra": {
+      "name": "ombra",
+      "colorIndex": 1,
+      "script": "{position center}{wavy}una ombra es mou{/wavy}{p}\"o no?\"",
+      "frames": [[
+        0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1,
+        0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0
+      ]]
+    }
+  },
+
+  "rooms": {
+    "carrer": {
+      "name": "carrer",
+      "palette": "matinada",
+      "ambient": "rgba(5,5,15,0.7)",
+      "tiles": [
+        ["vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,"fanal",null,null,null,null,null,null,null,"fanal",null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,"ombra",null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,"fanal",null,null,null,null,null,null,null,"fanal",null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,"gos",null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"vorera"],
+        ["vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera","vorera"]
+      ]
+    }
+  }
+}

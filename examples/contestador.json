@@ -1,0 +1,147 @@
+{
+  "name": "contestador",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "salon",
+  "avatarStart": { "x": 3, "y": 13 },
+  "introScript": "{position center}contestador{p}{position center}vuelves de la oficina. parpadea.",
+
+  "palettes": {
+    "nocturna": {
+      "name": "nocturna",
+      "colors": ["#1a1a1a", "#3d2020", "#f4ecd8", "#a83e3e", "#ef7d57"]
+    }
+  },
+
+  "songs": {
+    "tono": {
+      "name": "tono contestador",
+      "wave": "square",
+      "loop": true,
+      "notes": [
+        { "note": "C3", "dur": 0.2 }, { "note": "rest", "dur": 1.4 }
+      ]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "light": { "radius": 4, "color": "rgba(244,236,216,0.35)" },
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0]
+      ]
+    },
+    "pared": {
+      "name": "pared",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "mesa": {
+      "name": "mesa",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,0,1,0,0,1,0,1,
+        1,0,1,0,0,1,0,1, 1,0,1,1,1,1,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "msg1": {
+      "name": "mensaje 1",
+      "colorIndex": 3,
+      "isWall": true,
+      "fps": 4,
+      "light": { "radius": 2, "color": "rgba(232,90,90,0.5)" },
+      "script": "{position bottom}\"hola soy mamá. llámame cuando puedas. nada importante.\"",
+      "frames": [
+        [0,1,1,1,1,1,1,0, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 0,1,0,0,0,0,1,0, 0,0,1,0,0,1,0,0, 0,1,1,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0]
+      ]
+    },
+    "msg2": {
+      "name": "mensaje 2",
+      "colorIndex": 3,
+      "isWall": true,
+      "fps": 4,
+      "light": { "radius": 2, "color": "rgba(232,90,90,0.5)" },
+      "script": "{position bottom}\"soy yo. olvidé las llaves. estoy en el bar de la esquina.\"",
+      "frames": [
+        [0,1,1,1,1,1,1,0, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 0,1,0,0,0,0,1,0, 0,0,1,0,0,1,0,0, 0,1,1,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0]
+      ]
+    },
+    "msg3": {
+      "name": "mensaje 3",
+      "colorIndex": 3,
+      "isWall": true,
+      "fps": 4,
+      "light": { "radius": 2, "color": "rgba(232,90,90,0.5)" },
+      "script": "{position bottom}*silencio durante 12 segundos. luego un beep.*",
+      "frames": [
+        [0,1,1,1,1,1,1,0, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 0,1,0,0,0,0,1,0, 0,0,1,0,0,1,0,0, 0,1,1,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0]
+      ]
+    },
+    "msg4": {
+      "name": "mensaje 4",
+      "colorIndex": 3,
+      "isWall": true,
+      "fps": 4,
+      "light": { "radius": 2, "color": "rgba(232,90,90,0.5)" },
+      "script": "{position bottom}\"creo que te equivocaste de número. pero buena suerte.\"",
+      "frames": [
+        [0,1,1,1,1,1,1,0, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 0,1,0,0,0,0,1,0, 0,0,1,0,0,1,0,0, 0,1,1,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0]
+      ]
+    },
+    "msg5": {
+      "name": "mensaje 5",
+      "colorIndex": 4,
+      "isWall": true,
+      "fps": 4,
+      "light": { "radius": 3, "color": "rgba(239,125,87,0.7)" },
+      "script": "{position center}{wavy}\"no me llames más.\"{/wavy}{p}{position bottom}cuelgan.",
+      "frames": [
+        [0,1,1,1,1,1,1,0, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 0,1,0,0,0,0,1,0, 0,0,1,0,0,1,0,0, 0,1,1,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0]
+      ]
+    }
+  },
+
+  "rooms": {
+    "salon": {
+      "name": "salón",
+      "palette": "nocturna",
+      "music": "tono",
+      "ambient": "rgba(10,5,15,0.85)",
+      "tiles": [
+        ["pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,"mesa","mesa","mesa","mesa","mesa",null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,"msg1","msg2","msg3","msg4","msg5",null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared"]
+      ]
+    }
+  }
+}

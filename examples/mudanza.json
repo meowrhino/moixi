@@ -1,0 +1,115 @@
+{
+  "name": "la mudanza",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "piso",
+  "avatarStart": { "x": 8, "y": 13 },
+  "introScript": "{position center}la mudanza{p}{position center}una semana. tirar o guardar.",
+
+  "palettes": {
+    "gris": {
+      "name": "gris cartón",
+      "colors": ["#e8dcb8", "#444444", "#1a1a1a", "#d4843e", "#a83e3e"]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ]
+    },
+    "pared": {
+      "name": "pared",
+      "colorIndex": 2,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,1,1,1,0,1,1, 1,1,1,1,1,1,1,1, 1,1,1,0,1,1,1,0,
+        1,1,1,1,1,1,1,1, 1,0,1,1,1,1,0,1, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1
+      ]]
+    },
+    "caja1": {
+      "name": "caja 1",
+      "colorIndex": 1,
+      "isWall": true,
+      "script": "{position center}una caja con libros{p}\"¿los lees alguna vez?\"",
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,0,1,0,0,1,0,1,
+        1,0,1,0,0,1,0,1, 1,0,1,1,1,1,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "caja2": {
+      "name": "caja 2",
+      "colorIndex": 1,
+      "isWall": true,
+      "script": "{position center}fotos viejas{p}\"el chico del fondo eras tú\"",
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,0,1,1,0,0,1, 1,0,1,0,0,1,0,1,
+        1,0,1,0,0,1,0,1, 1,0,0,1,1,0,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "caja3": {
+      "name": "caja 3",
+      "colorIndex": 1,
+      "isWall": true,
+      "script": "{position center}ropa de invierno{p}\"esto pesa\"",
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,1,0,0,1,0,1, 1,0,0,1,1,0,0,1,
+        1,0,0,1,1,0,0,1, 1,0,1,0,0,1,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "caja4": {
+      "name": "caja 4",
+      "colorIndex": 1,
+      "isWall": true,
+      "script": "{position center}cables{p}\"¿de qué eran estos?\"",
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,1,0,1,0,0,1, 1,0,0,1,0,1,0,1, 1,0,1,0,1,0,1,1,
+        1,0,0,1,0,1,0,1, 1,0,1,0,1,0,1,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "caja5": {
+      "name": "caja 5",
+      "colorIndex": 4,
+      "isWall": true,
+      "script": "{position center}una caja sin etiqueta{p}{wavy}no la abras{/wavy}",
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1
+      ]]
+    }
+  },
+
+  "rooms": {
+    "piso": {
+      "name": "piso",
+      "palette": "gris",
+      "tiles": [
+        ["pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared","caja1","caja2",null,null,null,null,null,null,null,null,null,null,"caja3","caja4","pared"],
+        ["pared","caja2","caja1",null,null,null,null,null,null,null,null,null,null,"caja4","caja3","pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,"caja5",null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,"caja2",null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared","caja3","caja4",null,null,null,null,null,null,null,null,null,null,"caja1","caja2","pared"],
+        ["pared","caja4","caja3",null,null,null,null,null,null,null,null,null,null,"caja2","caja1","pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"pared"],
+        ["pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared","pared"]
+      ]
+    }
+  }
+}

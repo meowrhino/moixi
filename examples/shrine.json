@@ -1,0 +1,191 @@
+{
+  "name": "el shrine",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "shrine1",
+  "avatarStart": { "x": 8, "y": 14 },
+  "introScript": "{position center}el shrine{p}{position center}{wavy}deja algo. recibe una palabra.{/wavy}",
+
+  "palettes": {
+    "ritual": {
+      "name": "ritual",
+      "colors": ["#1a1a1a", "#3d7068", "#f4ecd8", "#d4843e", "#a83e3e"]
+    }
+  },
+
+  "songs": {
+    "ritual": {
+      "name": "ritual",
+      "wave": "triangle",
+      "loop": true,
+      "notes": [
+        { "note": "D3", "dur": 0.8 }, { "note": "G3", "dur": 0.8 },
+        { "note": "A3", "dur": 0.8 }, { "note": "D3", "dur": 0.8 }
+      ]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "light": { "radius": 3, "color": "rgba(212,132,62,0.4)" },
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0]
+      ]
+    },
+    "piedra": {
+      "name": "piedra",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,1,1,0,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,0,1,1,1,0,
+        1,1,1,1,1,1,1,1, 1,0,1,1,1,1,0,1, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1
+      ]]
+    },
+    "altar1": {
+      "name": "altar de la sal",
+      "colorIndex": 3,
+      "isWall": true,
+      "script": "{position center}altar de la sal{p}\"silencio\"{p}{position bottom}avanzas al siguiente.{move-avatar shrine2 8 14}",
+      "frames": [[
+        0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1,
+        1,1,1,1,1,1,1,1, 1,1,0,0,0,0,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "altar2": {
+      "name": "altar del agua",
+      "colorIndex": 3,
+      "isWall": true,
+      "script": "{position center}altar del agua{p}\"olvido\"{p}{position bottom}avanzas al siguiente.{move-avatar shrine3 8 14}",
+      "frames": [[
+        0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1,
+        1,1,1,1,1,1,1,1, 1,1,0,0,0,0,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "altar3": {
+      "name": "altar del fuego",
+      "colorIndex": 4,
+      "isWall": true,
+      "script": "{position center}altar del fuego{p}\"deseo\"{p}{position bottom}avanzas al siguiente.{move-avatar shrine4 8 14}",
+      "frames": [[
+        0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1,
+        1,1,1,1,1,1,1,1, 1,1,0,0,0,0,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1
+      ]]
+    },
+    "altar4": {
+      "name": "altar final",
+      "colorIndex": 3,
+      "isWall": true,
+      "script": "{position center}altar final{p}{wavy}\"vuelve\"{/wavy}{p}{position bottom}el ritual está completo.",
+      "frames": [[
+        0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1,
+        1,1,1,1,1,1,1,1, 1,1,0,0,0,0,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1
+      ]]
+    }
+  },
+
+  "rooms": {
+    "shrine1": {
+      "name": "sal",
+      "palette": "ritual",
+      "music": "ritual",
+      "ambient": "rgba(20,30,40,0.6)",
+      "tiles": [
+        ["piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,"altar1",null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra"]
+      ]
+    },
+    "shrine2": {
+      "name": "agua",
+      "palette": "ritual",
+      "music": "ritual",
+      "ambient": "rgba(20,40,40,0.6)",
+      "tiles": [
+        ["piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,"altar2",null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra"]
+      ]
+    },
+    "shrine3": {
+      "name": "fuego",
+      "palette": "ritual",
+      "music": "ritual",
+      "ambient": "rgba(40,20,20,0.6)",
+      "tiles": [
+        ["piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,"altar3",null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra"]
+      ]
+    },
+    "shrine4": {
+      "name": "vuelve",
+      "palette": "ritual",
+      "music": "ritual",
+      "ambient": "rgba(10,10,15,0.65)",
+      "tiles": [
+        ["piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,"altar4",null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"piedra"],
+        ["piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra","piedra"]
+      ]
+    }
+  }
+}

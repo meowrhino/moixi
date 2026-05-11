@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>moixi · editor</title>
+  <meta name="description" content="editor minimal para juegos tipo bitsy/mosi en vanilla js">
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./editor/editor.css">
+</head>
+<body>
+  <noscript>este editor necesita javascript activado.</noscript>
+  <script type="module">
+    // cache-bust en development: evita servir editor.js cacheado tras cambios.
+    await import(`./editor/editor.js?t=${Date.now()}`);
+  </script>
+</body>
+</html>

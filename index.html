@@ -3,14 +3,68 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>moixi · editor</title>
-  <meta name="description" content="editor minimal para juegos tipo bitsy/mosi en vanilla js">
+  <title>moixi · arxiu</title>
+  <meta name="description" content="arxiu de juegos pequeños hechos con moixi · motor tipo bitsy/mosi en vanilla js · meowrhino studio">
   <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
   <link rel="stylesheet" href="./style.css">
-  <link rel="stylesheet" href="./editor/editor.css">
 </head>
-<body>
-  <noscript>este editor necesita javascript activado.</noscript>
-  <script type="module" src="./editor/editor.js"></script>
+<body class="arxiu">
+  <header class="arxiu-nav">
+    <a href="/" class="brand">
+      <img class="mascot alive" src="./assets/mascot.svg" alt="">
+      <span class="brand-name">moixi</span>
+      <span class="brand-tag">· arxiu</span>
+    </a>
+    <nav class="arxiu-actions">
+      <a href="/editor.html" class="btn-link">crear juego</a>
+    </nav>
+  </header>
+
+  <section class="arxiu-hero">
+    <h1>arxiu de juegos pequeños</h1>
+    <p class="lead">camina por jardines de otra gente. recoge cosas. habla con bichos. <br>
+    o haz fork del juego de alguien y dale tu propia ruta.</p>
+    <div class="searchbar">
+      <input type="search" id="search" placeholder="buscar por nombre, autor, tag…" autocomplete="off" />
+    </div>
+  </section>
+
+  <section class="arxiu-controls">
+    <div class="filters">
+      <label class="filter">
+        <span>tag</span>
+        <select id="filter-tag"><option value="">todos</option></select>
+      </label>
+      <label class="filter">
+        <span>autor</span>
+        <select id="filter-author"><option value="">todos</option></select>
+      </label>
+      <label class="filter">
+        <span>orden</span>
+        <select id="sort">
+          <option value="recent">recientes</option>
+          <option value="plays">más jugados</option>
+          <option value="forks">más forkeados</option>
+          <option value="random">random</option>
+        </select>
+      </label>
+      <button id="clear-filters" class="ghost">limpiar</button>
+    </div>
+    <div class="filter-results" id="filter-results">…</div>
+  </section>
+
+  <main class="arxiu-grid" id="grid">
+    <div class="loading">cargando…</div>
+  </main>
+
+  <div class="divider-glyphs"></div>
+  <footer class="studio-footer">
+    <img class="mascot alive" src="./assets/mascot.svg" alt="">
+    &nbsp;made in barcelona ☼ <a href="https://meowrhino.neocities.org">meowrhino studio</a> · inspirado en <a href="https://zenzoa.itch.io/mosi">mosi</a>
+  </footer>
+
+  <script type="module">
+    await import(`./arxiu/landing.js?t=${Date.now()}`);
+  </script>
 </body>
 </html>

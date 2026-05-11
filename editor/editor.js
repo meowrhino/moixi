@@ -117,8 +117,21 @@ onEditorEv('editor:change', () => {
   }
 });
 
+function showSplash() {
+  document.body.insertAdjacentHTML('afterbegin', `
+    <div class="splash" id="splash" aria-hidden="true">
+      <img class="mascot xl" src="./assets/mascot.svg" alt="">
+      <h1 class="splash-name">moixi</h1>
+      <div class="splash-tag">editor</div>
+    </div>
+  `);
+  // Alinea con el fin de la CSS animation (0.5s delay + 0.45s = ~0.95s).
+  setTimeout(() => document.getElementById('splash')?.remove(), 1000);
+}
+
 async function bootstrap() {
   setupLayout();
+  showSplash();
 
   // Intentar restaurar autosave
   let game = null;

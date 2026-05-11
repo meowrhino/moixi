@@ -41,14 +41,11 @@
 
 ### 1.1 — branding meowrhino
 
-- [ ] 🟢 **Mascota gato-rinoceronte 8x8.** Crear `assets/mascot.svg` con un bicho pixel (cabeza de gato, cuerno de rinoceronte). Usarlo como:
-  - favicon del editor y del player.
-  - logo junto al brand "moixi" en la toolbar.
-  - "firma" en el footer del player exportado.
-- [ ] 🟢 **Paleta studio extendida.** Añadir un quinto color en `style.css` (`--coral: #ef7d57` o similar) y usarlo en estados especiales (hover de elementos activos, badges de "nuevo").
-- [ ] 🟢 **Footer firma.** En `play.html` y en el HTML exportado: `made in Barcelona ☼ vanilla, forever` o lo que prefiera Manu.
+- [x] 🟢 **Mascota gato-rinoceronte 8x8.** Existe en `assets/mascot.svg`, ya integrada en favicon, header del editor, footer del player y HTML exportado.
+- [x] 🟢 **Paleta studio extendida.** 6 colores (`--paper`, `--ink`, `--amber`, `--teal`, `--rust`, `--coral`) en `style.css`.
+- [x] 🟢 **Footer firma.** "made in barcelona ☼ meowrhino studio · inspirado en mosi" en `play.html` y HTML exportado.
 - [ ] 🟡 **Cursor personalizado en el editor.** SVG del bicho como cursor en las zonas creativas (paint canvas, room grid).
-- [ ] 🟢 **Separadores tipográficos.** Reemplazar las líneas `border-bottom` planas por glifos `▮▰▱◆` distribuidos como pattern. Documentar en `DESIGN.md`.
+- [x] 🟢 **Separadores tipográficos.** Glifos `▮▰▱` en `.divider-glyphs` en `style.css`.
 - [ ] 🟢 **Splash al cargar el editor.** Pantallita de medio segundo con el bicho y el nombre antes de mostrar la UI.
 
 ---

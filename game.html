@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>moixi · juego</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="arxiu">
+  <header class="arxiu-nav">
+    <a href="/" class="brand">
+      <img class="mascot alive" src="./assets/mascot.svg" alt="">
+      <span class="brand-name">moixi</span>
+      <span class="brand-tag">· arxiu</span>
+    </a>
+    <nav class="arxiu-actions">
+      <a href="/" class="btn-link ghost">← volver</a>
+      <a href="/editor.html" class="btn-link">crear juego</a>
+    </nav>
+  </header>
+
+  <main class="game-page" id="game-page">
+    <div class="loading">cargando…</div>
+  </main>
+
+  <div class="divider-glyphs"></div>
+  <footer class="studio-footer">
+    <img class="mascot alive" src="./assets/mascot.svg" alt="">
+    &nbsp;made in barcelona ☼ <a href="https://meowrhino.neocities.org">meowrhino studio</a> · inspirado en <a href="https://zenzoa.itch.io/mosi">mosi</a>
+  </footer>
+
+  <script type="module">
+    await import(`./arxiu/game.js?t=${Date.now()}`);
+  </script>
+</body>
+</html>

@@ -32,12 +32,12 @@
 
 ### 1.0 — UX del play (no parece interactivo)
 
-- [ ] 🟡 **Indicador "click/tecla para empezar"** sobre el canvas hasta que el usuario interactúa por primera vez. Después se oculta.
-- [ ] 🟢 **Cursor pointer + outline al hover** sobre el canvas en el player.
-- [ ] 🟢 **Idle animation del avatar** (parpadea o respira) cuando no se mueve, para señalar "estoy vivo, esperándote".
-- [ ] 🟢 **Controles más visibles** debajo del canvas (no solo el texto pequeño "↑↓←→ + space" en el header).
-- [ ] 🟡 **D-pad táctil visible también en desktop** (más pequeño, esquina inferior derecha) — refuerza la idea de "esto se juega".
-- [ ] 🟡 **Border/marco** alrededor del canvas que respira o sutilmente cambia al jugar (no estático).
+- [x] 🟡 **Indicador "click/tecla para empezar"** sobre el canvas hasta primer input.
+- [x] 🟢 **Cursor pointer + outline al hover** sobre el canvas. Hover → sombra ámbar.
+- [ ] 🟢 **Idle animation del avatar** (parpadea o respira). NOTA: el avatar ya tiene 2 frames con fps:2 que parpadean — animación más distintiva requiere tocar `sprites.js`, queda pendiente.
+- [x] 🟢 **Controles más visibles** debajo del canvas (kbd hints: ↑↓←→ moverse · espacio hablar/avanzar · esc cancelar).
+- [ ] 🟡 **D-pad táctil visible también en desktop** — pendiente; `touch.js` ya monta el D-pad en touch devices.
+- [x] 🟡 **Border/marco** alrededor del canvas que respira (anillo ámbar pulsante) mientras está idle. Para cuando empiezas a jugar.
 
 ### 1.1 — branding meowrhino
 
@@ -46,7 +46,7 @@
 - [x] 🟢 **Footer firma.** "made in barcelona ☼ meowrhino studio · inspirado en mosi" en `play.html` y HTML exportado.
 - [ ] 🟡 **Cursor personalizado en el editor.** SVG del bicho como cursor en las zonas creativas (paint canvas, room grid).
 - [x] 🟢 **Separadores tipográficos.** Glifos `▮▰▱` en `.divider-glyphs` en `style.css`.
-- [ ] 🟢 **Splash al cargar el editor.** Pantallita de medio segundo con el bicho y el nombre antes de mostrar la UI.
+- [x] 🟢 **Splash al cargar el editor.** Mascota + "moixi · editor" durante ~1s antes de mostrar la UI. Animación bounce en la mascota.
 
 ---
 
@@ -64,9 +64,9 @@
 
 ## fase 3 — features visuales del runtime
 
-- [ ] 🟢 **`modules/render/transitions.js`** — fade/wipe/pixelate al cambiar de room. Se engancha a `roomEnter`. Añade `room.transition: 'fade'|'wipe'|'pixelate'`.
+- [x] 🟢 **`modules/gameplay/transitions.js`** — fade negro de 420ms al cambiar de room. Tipos: 'fade' (default), 'instant', 'wipe'. Hook `render:final`. Config via `game.transition` o `room.transition`.
 - [ ] 🟡 **`modules/render/lighting.js`** — radio de luz por sprite, `ambient` por room. Hook `render:fg`. Plantilla concreta ya está en el README, sección "crear un módulo nuevo". Añade `room.ambient` y `sprite.lightRadius`.
-- [ ] 🟡 **`modules/render/camera.js`** — modos `flip` (default), `follow`, `smooth`. Hook `tick`. Añade `world.cameraMode`. Atención: requiere que `render:tiles` y `render:sprites` apliquen un offset; el canvas se queda fijo pero se pinta desplazado.
+- [x] 🟡 **`modules/render/camera.js`** — modos `flip` (default, retrocompat mosi), `follow`, `smooth`. Aplica `ctx.translate` en render:bg con clamp al room. `game.cameraMode` o `{set-camera mode}`.
 - [ ] 🟡 **`modules/render/layers.js`** — z-ordering por sprite con `sprite.layer: 0..3`. Hook `render:bg/tiles/sprites/fg`. Reescribir el orden de pintado de `sprites.js` para respetar layer.
 - [ ] 🔴 **`modules/render/parallax.js`** — capas con scroll diferencial. Depende de `layers` y `camera`. Añade `layer.parallax: 0..1`.
 - [ ] 🟡 **`modules/render/particles.js`** — sistema simple. Hook `render:sprites`, `tick`. Funciones de script `{emit kind x y}`, `{emit-burst kind x y}`.

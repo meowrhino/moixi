@@ -9,6 +9,16 @@
 - mascota gato-rinoceronte 8x8 en `assets/mascot.svg` + favicon.
 - color `--coral` añadido a la paleta.
 - footer con firma "meowrhino studio" en player y editor.
+- `examples/test-all.json`: example mínimo que ejercita todos los módulos (walls, items, vars, condiciones, set-sprite-wall, exits, audio multi-room).
+- `TESTING-fase0.md`: guía de smoke test para el usuario tras renombrar el proyecto.
+- sección "flujo test-all" en `TESTING.md` con checklist por feature.
+- `.gitignore` y repo inicializado con git (`main`).
+
+### changed
+- proyecto renombrado a **moixi** (antes placeholder `<NAME>` / `mosi-vanilla-engine`).
+
+### fixed
+- `walls.js`, `world.js`, `dialog.js` y `canvas.js` accedían al core via el global `window.MOSI`. Ahora guardan `core` en variable de módulo desde `setup(c)` y usan `core.api.*` directamente. La exposición `window.MOSI = core` en `core/index.js` se mantiene como API intencional para debug y para el HTML standalone exportado.
 
 ## [0.1.0] — esqueleto inicial
 

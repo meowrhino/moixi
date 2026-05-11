@@ -1,0 +1,146 @@
+{
+  "name": "test-all",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "p",
+  "startRoom": "r1",
+  "avatarStart": { "x": 2, "y": 2 },
+  "introScript": "{position center}{wavy}test-all{/wavy}{p}{position center}{color 3}coge la llave y cruza la puerta{/color}",
+
+  "palettes": {
+    "p1": {
+      "name": "p1 — claro",
+      "colors": ["#f4ecd8", "#1a1a1a", "#d4843e", "#3d7068", "#a83e3e"]
+    },
+    "p2": {
+      "name": "p2 — oscuro",
+      "colors": ["#1a1a1a", "#d4843e", "#f4ecd8", "#ef7d57", "#3d7068"]
+    }
+  },
+
+  "songs": {
+    "a": {
+      "name": "tema a",
+      "wave": "square",
+      "loop": true,
+      "notes": [
+        { "note": "C4", "dur": 0.3 }, { "note": "E4", "dur": 0.3 },
+        { "note": "G4", "dur": 0.3 }, { "note": "E4", "dur": 0.3 }
+      ]
+    },
+    "b": {
+      "name": "tema b",
+      "wave": "sine",
+      "loop": true,
+      "notes": [
+        { "note": "F4", "dur": 0.3 }, { "note": "A4", "dur": 0.5 },
+        { "note": "D4", "dur": 0.4 }
+      ]
+    }
+  },
+
+  "sprites": {
+    "p": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "frames": [
+        [0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1, 0,1,1,1,1,1,1,0],
+        [0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1, 1,1,1,0,0,1,1,1]
+      ]
+    },
+    "w": {
+      "name": "pared",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[1,1,1,1,1,1,1,1, 1,0,1,1,1,1,0,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,0,1,1,1,1,0,1, 1,1,1,1,1,1,1,1]]
+    },
+    "npc": {
+      "name": "npc",
+      "colorIndex": 3,
+      "script": "{position center}hola{b}{if {eq {var hablado} 1}}{color 4}ya me hablaste{/color}{else}primera vez{set-var hablado 1}{/if}{p}{position top}{shaky}sigue{/shaky}",
+      "frames": [[0,1,1,1,1,1,1,0, 0,1,0,1,1,0,1,0, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 0,1,1,1,1,1,1,0, 0,1,0,1,1,0,1,0, 0,1,0,1,1,0,1,0]]
+    },
+    "key": {
+      "name": "llave",
+      "colorIndex": 2,
+      "isItem": true,
+      "script": "{position center}{shaky}+1 llave{/shaky}{p}llaves: {item-count llave}",
+      "frames": [[0,0,0,1,1,0,0,0, 0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,1,1,0, 0,0,0,1,1,0,1,0, 0,0,0,1,1,1,1,0]]
+    },
+    "door": {
+      "name": "puerta",
+      "colorIndex": 4,
+      "isWall": true,
+      "script": "{if {gte {item-count llave} 1}}{position center}la puerta se abre{set-sprite-wall false}{dec-item-count llave}{else}{position center}{color 4}cerrado — necesitas una llave{/color}{/if}",
+      "frames": [[1,1,1,1,1,1,1,1, 1,0,0,0,0,0,0,1, 1,0,1,1,1,1,0,1, 1,0,1,0,0,1,0,1, 1,0,1,0,1,1,0,1, 1,0,1,1,1,1,0,1, 1,0,0,0,0,0,0,1, 1,1,1,1,1,1,1,1]]
+    },
+    "sign": {
+      "name": "letrero",
+      "colorIndex": 3,
+      "isWall": true,
+      "script": "{position top}{delay 5}vars demo{b}hablado={var hablado}{b}llaves={item-count llave}",
+      "frames": [[0,1,1,1,1,1,1,0, 1,1,0,0,0,0,1,1, 1,0,1,0,0,1,0,1, 1,0,0,0,0,0,0,1, 1,0,1,0,0,1,0,1, 0,1,1,1,1,1,1,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0]]
+    }
+  },
+
+  "rooms": {
+    "r1": {
+      "name": "habitación 1",
+      "palette": "p1",
+      "music": "a",
+      "enterScript": "{position top}r1 · música a",
+      "tiles": [
+        ["w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,"sign",null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,"key",null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,"npc",null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,"door",null],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"]
+      ],
+      "exits": [
+        { "x": 15, "y": 8, "toRoom": "r2", "toX": 1, "toY": 8 }
+      ]
+    },
+    "r2": {
+      "name": "habitación 2",
+      "palette": "p2",
+      "music": "b",
+      "enterScript": "{position center}{wavy}r2 · música b{/wavy}{p}{position top}vuelve por el oeste",
+      "tiles": [
+        ["w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"w"],
+        ["w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"]
+      ],
+      "exits": [
+        { "x": 0, "y": 8, "toRoom": "r1", "toX": 14, "toY": 8 }
+      ]
+    }
+  }
+}

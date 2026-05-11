@@ -3,6 +3,13 @@
 > Checkpoints manuales para verificar que cambios no rompen lo que ya funciona.
 > Marca con `[x]` cuando los pases. Re-pásalos antes de cualquier release.
 
+## examples disponibles
+
+- **`examples/garden.json`** — el juego "narrativo" de muestra: jardín con zorro, flores, dos rooms (`garden` ↔ `forest`). Usa: avatar animado, items, wall, condition en script (vía fox dialog), música, dos paletas.
+- **`examples/test-all.json`** — example mínimo que ejercita TODOS los módulos en pocas pantallas: walls, items, NPC con `set-var`+`if/else`, puerta con condición sobre inventario (`set-sprite-wall`), 2 rooms con palettes y músicas distintas, exits sin condición, tags inline (`{wavy}`, `{shaky}`, `{color}`, `{position}`, `{delay}`, `{b}`, `{p}`).
+
+Cuando cambies código que afecta a varios módulos, **prueba primero `test-all.json`** (es más rápido) y luego `garden.json` (más realista).
+
 ## verificación rápida (≤2 min)
 
 - [ ] `node --check` pasa en todos los `.js` del repo.
@@ -19,6 +26,20 @@
 - [ ] En `forest`, salir por la posición (7, 15) o (8, 15): vuelve a `garden`.
 - [ ] Refrescar la página: el estado se resetea (lo esperado, no hay autosave en player aún).
 - [ ] En consola del navegador: `MOSI.api.save.saveToURL()`. Copiar la URL. Abrir en otra pestaña: el avatar aparece donde estaba con vars/inventario.
+
+## flujo test-all (≤3 min) — ejercita todos los módulos
+
+Cargar: `http://localhost:8000/play.html?game=examples/test-all.json`.
+
+- [ ] Carga sin errores en consola. Intro: `{wavy}test-all{/wavy}` + segunda página con texto en `{color 3}`.
+- [ ] Música `tema a` (square) suena al primer click/keystroke.
+- [ ] `r1` se ve: paredes en los 4 bordes (excepto un hueco donde está la puerta), letrero, llave, npc, puerta.
+- [ ] **Vars + condicional**: tocar el `npc`. Primera vez dice "primera vez", `{set-var hablado 1}`. Segunda vez dice "ya me hablaste" en `{color 4}` (índice 4 = `#a83e3e` rust).
+- [ ] **Inventario**: pisar la `key`. Diálogo `{shaky}+1 llave{/shaky}`, luego `llaves: 1`.
+- [ ] **Item-count + set-sprite-wall**: con 0 llaves, intentar pasar por la `door` → diálogo "cerrado". Con 1 llave (recogida), tocar la puerta → "se abre", `{set-sprite-wall false}`, `{dec-item-count llave}`. Ahora se puede caminar a través de ella.
+- [ ] **Exit room**: cruzar la puerta y salir por (15, 8) → entras a `r2`. Música cambia a `tema b` (sine). Palette cambia a `p2` (oscura). `enterScript` muestra `{wavy}r2 · música b{/wavy}`.
+- [ ] **Exit de vuelta**: en `r2`, mover hasta (0, 8) → vuelves a `r1` en (14, 8).
+- [ ] **Letrero (delay + b + var/item-count read)**: tocar el `sign`. Esperar 5 frames (delay). Aparecen 3 líneas: "vars demo", "hablado=1" (si hablaste), "llaves=N". Verifica que los valores son correctos.
 
 ## flujo end-to-end del editor
 

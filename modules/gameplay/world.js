@@ -15,7 +15,7 @@ function checkExits() {
       if (exit.condition) {
         // ejecuta como expresión booleana: solo si devuelve true cruza
         // (evaluación simplificada: usa el dispatcher de scripting si hay)
-        const result = window.MOSI?.api?.script?.eval?.(exit.condition);
+        const result = core.api.script?.eval?.(exit.condition);
         if (!result) continue;
       }
       // cambio de room

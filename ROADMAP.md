@@ -22,7 +22,7 @@
   - editar paleta, autosave debe persistir en recargar.
   - el preview en vivo debe reflejar cambios al pulsar play.
 - [ ] 🟡 **Corregir bugs descubiertos en testing.** Probable: caché de sprites no se invalida al cambiar `colorIndex` por nombre, room exits sin `condition` evaluable porque `script-mosi` no expone `eval` correctamente al módulo `world`.
-- [ ] 🟢 **Reemplazar el `window.MOSI` global por inyección via `setup(core)`** en los módulos que aún lo usan (`walls.js`, `dialog.js` lo usa parcialmente para `MOSI.api.palettes.color`). Es accesible pero rompe la pureza de la arquitectura.
+- [x] 🟢 **Reemplazar el `window.MOSI` global por inyección via `setup(core)`** en los módulos que aún lo usan. Aplicado a `walls.js`, `world.js`, `dialog.js` y `canvas.js`. Solo queda la exposición intencional en `core/index.js:28` para debug y HTML standalone.
 
 ---
 

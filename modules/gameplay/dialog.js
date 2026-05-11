@@ -219,7 +219,7 @@ function renderEffects(text) {
         }
       } else if (tag.startsWith('color:')) {
         const idx = parseInt(tag.slice(6), 10);
-        const color = window.MOSI?.api?.palettes?.color?.(idx) ?? 'inherit';
+        const color = core.api.palettes?.color?.(idx) ?? 'inherit';
         out += `<span style="color:${color}">`;
         active.push({ name: 'color' });
       } else {

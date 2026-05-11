@@ -1,6 +1,7 @@
 // modules/render/canvas.js — gestión del canvas y pintado pixel-perfect.
 // Crea un canvas "lógico" pequeño (ej. 128x128) y lo escala al DOM con CSS.
 
+let core = null;
 let ctx = null;
 let canvasEl = null;
 let logicalW = 128;
@@ -11,7 +12,8 @@ export default {
   version: '1.0.0',
   deps: [],
 
-  setup(core) {
+  setup(c) {
+    core = c;
     const game = core.state.game;
     const tileSize = game?.tileSize ?? 8;
     const [rw, rh] = game?.roomSize ?? [16, 16];
@@ -40,7 +42,7 @@ export default {
   hooks: {
     'render:bg': () => {
       // Limpia con el color de fondo de la paleta actual si existe; si no, negro.
-      const pal = window.MOSI?.api?.palettes?.current?.();
+      const pal = core.api.palettes?.current?.();
       ctx.fillStyle = pal?.colors?.[0] ?? '#000';
       ctx.fillRect(0, 0, logicalW, logicalH);
     },

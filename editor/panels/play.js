@@ -13,31 +13,37 @@ async function startPreview(state) {
   }
 
   // imports dinámicos para reset
+  const T = Date.now();
+  const im = (p) => import(`${p}?t=${T}`);
   const [
-    coreMod, canvasMod, palettes, sprites, camera, lighting, keyboard, touch, mover,
+    coreMod, canvasMod, palettes, sprites, camera, lighting, layers, particles, screenshot,
+    keyboard, touch, mover,
     walls, interactable, dialog, inventory, world, transitions,
     script, stdlib, vars, audio, save,
   ] = await Promise.all([
-    import('../../core/index.js?t=' + Date.now()),
-    import('../../modules/render/canvas.js?t=' + Date.now()),
-    import('../../modules/render/palettes.js?t=' + Date.now()),
-    import('../../modules/render/sprites.js?t=' + Date.now()),
-    import('../../modules/render/camera.js?t=' + Date.now()),
-    import('../../modules/render/lighting.js?t=' + Date.now()),
-    import('../../modules/input/keyboard.js?t=' + Date.now()),
-    import('../../modules/input/touch.js?t=' + Date.now()),
-    import('../../modules/input/mover.js?t=' + Date.now()),
-    import('../../modules/gameplay/walls.js?t=' + Date.now()),
-    import('../../modules/gameplay/interactable.js?t=' + Date.now()),
-    import('../../modules/gameplay/dialog.js?t=' + Date.now()),
-    import('../../modules/gameplay/inventory.js?t=' + Date.now()),
-    import('../../modules/gameplay/world.js?t=' + Date.now()),
-    import('../../modules/gameplay/transitions.js?t=' + Date.now()),
-    import('../../modules/script/mosi.js?t=' + Date.now()),
-    import('../../modules/script/stdlib.js?t=' + Date.now()),
-    import('../../modules/script/vars.js?t=' + Date.now()),
-    import('../../modules/audio/beeps.js?t=' + Date.now()),
-    import('../../modules/persistence/save.js?t=' + Date.now()),
+    im('../../core/index.js'),
+    im('../../modules/render/canvas.js'),
+    im('../../modules/render/palettes.js'),
+    im('../../modules/render/sprites.js'),
+    im('../../modules/render/camera.js'),
+    im('../../modules/render/lighting.js'),
+    im('../../modules/render/layers.js'),
+    im('../../modules/render/particles.js'),
+    im('../../modules/render/screenshot.js'),
+    im('../../modules/input/keyboard.js'),
+    im('../../modules/input/touch.js'),
+    im('../../modules/input/mover.js'),
+    im('../../modules/gameplay/walls.js'),
+    im('../../modules/gameplay/interactable.js'),
+    im('../../modules/gameplay/dialog.js'),
+    im('../../modules/gameplay/inventory.js'),
+    im('../../modules/gameplay/world.js'),
+    im('../../modules/gameplay/transitions.js'),
+    im('../../modules/script/mosi.js'),
+    im('../../modules/script/stdlib.js'),
+    im('../../modules/script/vars.js'),
+    im('../../modules/audio/beeps.js'),
+    im('../../modules/persistence/save.js'),
   ]);
 
   const c = coreMod.default;
@@ -45,7 +51,8 @@ async function startPreview(state) {
   const gameClone = JSON.parse(JSON.stringify(state.game));
   c.load(gameClone);
 
-  c.use(canvasMod.default).use(palettes.default).use(sprites.default).use(camera.default).use(lighting.default)
+  c.use(canvasMod.default).use(palettes.default).use(sprites.default).use(layers.default)
+    .use(camera.default).use(lighting.default).use(particles.default).use(screenshot.default)
     .use(keyboard.default).use(touch.default).use(mover.default)
     .use(walls.default).use(interactable.default).use(script.default).use(stdlib.default).use(vars.default)
     .use(dialog.default).use(inventory.default).use(world.default).use(transitions.default)

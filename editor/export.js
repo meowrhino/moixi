@@ -15,6 +15,9 @@ const RUNTIME_FILES = [
   'modules/render/sprites.js',
   'modules/render/camera.js',
   'modules/render/lighting.js',
+  'modules/render/layers.js',
+  'modules/render/particles.js',
+  'modules/render/screenshot.js',
   'modules/input/keyboard.js',
   'modules/input/touch.js',
   'modules/input/mover.js',
@@ -113,6 +116,9 @@ export async function exportHTML(game) {
     import sprites from "${finalURLs['modules/render/sprites.js']}";
     import camera from "${finalURLs['modules/render/camera.js']}";
     import lighting from "${finalURLs['modules/render/lighting.js']}";
+    import layers from "${finalURLs['modules/render/layers.js']}";
+    import particles from "${finalURLs['modules/render/particles.js']}";
+    import screenshot from "${finalURLs['modules/render/screenshot.js']}";
     import keyboard from "${finalURLs['modules/input/keyboard.js']}";
     import touch from "${finalURLs['modules/input/touch.js']}";
     import mover from "${finalURLs['modules/input/mover.js']}";
@@ -130,7 +136,8 @@ export async function exportHTML(game) {
 
     const game = ${JSON.stringify(game)};
     core.load(game);
-    core.use(canvasMod).use(palettes).use(sprites).use(camera).use(lighting)
+    core.use(canvasMod).use(palettes).use(sprites).use(layers)
+      .use(camera).use(lighting).use(particles).use(screenshot)
       .use(keyboard).use(touch).use(mover)
       .use(walls).use(interactable).use(script).use(stdlib).use(vars)
       .use(dialog).use(inventory).use(world).use(transitions)

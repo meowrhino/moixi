@@ -121,7 +121,8 @@
     const t = Date.now();
     const im = (p) => import(`${p}?t=${t}`).then(m => m.default);
     const [
-      core, canvasMod, palettes, sprites, camera, lighting, keyboard, touch, mover,
+      core, canvasMod, palettes, sprites, camera, lighting, layers, particles, screenshot,
+      keyboard, touch, mover,
       walls, interactable, dialog, inventory, world, transitions,
       script, stdlib, vars, audio, save,
     ] = await Promise.all([
@@ -131,6 +132,9 @@
       im('./modules/render/sprites.js'),
       im('./modules/render/camera.js'),
       im('./modules/render/lighting.js'),
+      im('./modules/render/layers.js'),
+      im('./modules/render/particles.js'),
+      im('./modules/render/screenshot.js'),
       im('./modules/input/keyboard.js'),
       im('./modules/input/touch.js'),
       im('./modules/input/mover.js'),
@@ -159,8 +163,11 @@
       .use(canvasMod)
       .use(palettes)
       .use(sprites)
+      .use(layers)
       .use(camera)
       .use(lighting)
+      .use(particles)
+      .use(screenshot)
       .use(keyboard)
       .use(touch)
       .use(mover)

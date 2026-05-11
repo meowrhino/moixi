@@ -35,12 +35,78 @@ function rasterize(sprite, frameIdx, colorIndex, palette, tileSize, mode = 'fram
 
 export function clearCache() { cache.clear(); }
 
+// Pinta los tiles del room actual cuyo sprite tenga `layer === layerN` (o
+// `undefined` cuando layerN === 1 y no hay módulo layers activo). Llamable
+// desde el hook propio y desde layers.js via API.
+function paintTiles(layerN, t) {
+  const ctx = core.api.canvas.ctx();
+  const game = core.state.game;
+  const room = core.state.runtime.currentRoom;
+  if (!room || !ctx) return;
+  const tileSize = game.tileSize ?? 8;
+  const palette = core.api.palettes.current();
+  if (!palette) return;
+  palette.id = palette.id || room.palette;
+  const layersOn = !!core.state.runtime.layersEnabled;
+
+  const tiles = room.tiles || [];
+  for (let y = 0; y < tiles.length; y++) {
+    for (let x = 0; x < (tiles[y]?.length || 0); x++) {
+      const ref = tiles[y][x];
+      if (!ref) continue;
+      const sprite = game.sprites[ref];
+      if (!sprite) continue;
+      // Si layers está activo, solo pinta sprites de la capa solicitada.
+      // Si no, ignora layer y pinta todo durante la llamada al layer 1 (default).
+      const spriteLayer = sprite.layer ?? 1;
+      if (layersOn && spriteLayer !== layerN) continue;
+      if (!layersOn && layerN !== 1) continue;
+      sprite.id = ref;
+      const fps = sprite.fps || 2;
+      const frameCount = sprite.frames?.length || 1;
+      const frame = frameCount > 1 ? Math.floor((t / (1000 / fps)) % frameCount) : 0;
+      const bmp = rasterize(sprite, frame, sprite.colorIndex ?? 2, palette, tileSize);
+      ctx.drawImage(bmp, x * tileSize, y * tileSize);
+    }
+  }
+}
+
+function paintAvatar(layerN, t) {
+  const ctx = core.api.canvas.ctx();
+  const game = core.state.game;
+  const room = core.state.runtime.currentRoom;
+  if (!room || !ctx) return;
+  const tileSize = game.tileSize ?? 8;
+  const palette = core.api.palettes.current();
+  if (!palette) return;
+  const layersOn = !!core.state.runtime.layersEnabled;
+
+  const avatarRef = game.avatar;
+  const avatarSprite = game.sprites[avatarRef];
+  if (!avatarSprite) return;
+  const spriteLayer = avatarSprite.layer ?? 1;
+  if (layersOn && spriteLayer !== layerN) return;
+  if (!layersOn && layerN !== 1) return;
+
+  avatarSprite.id = avatarRef;
+  const a = core.state.runtime.avatar;
+  const isIdle = idleTime > IDLE_THRESHOLD_MS && avatarSprite.idle?.length;
+  const mode = isIdle ? 'idle' : 'frames';
+  const frames = isIdle ? avatarSprite.idle : (avatarSprite.frames || []);
+  const fps = isIdle ? (avatarSprite.idleFps || 1.5) : (avatarSprite.fps || 2);
+  const frameCount = frames.length || 1;
+  const frame = frameCount > 1 ? Math.floor((t / (1000 / fps)) % frameCount) : 0;
+  const bmp = rasterize(avatarSprite, frame, avatarSprite.colorIndex ?? 2, palette, tileSize, mode);
+  ctx.drawImage(bmp, a.x * tileSize, a.y * tileSize);
+}
+
 export default {
   name: 'sprites',
-  version: '1.0.0',
+  version: '1.1.0',
   deps: ['canvas', 'palettes'],
   schema: {
     sprites: '{ id: { name, frames, colorIndex, isWall, isItem, layer, fps, script } }',
+    'sprite.layer': '0..3 — capa de pintado si el módulo layers está cargado (default 1)',
   },
 
   setup(c) {
@@ -55,47 +121,8 @@ export default {
 
   hooks: {
     'render:sprites': ({ t }) => {
-      const ctx = core.api.canvas.ctx();
-      const game = core.state.game;
-      const room = core.state.runtime.currentRoom;
-      if (!room || !ctx) return;
-      const tileSize = game.tileSize ?? 8;
-      const palette = core.api.palettes.current();
-      if (!palette) return;
-      palette.id = palette.id || room.palette;
-
-      // pintar tiles del room (sprites colocados en el grid)
-      const tiles = room.tiles || [];
-      for (let y = 0; y < tiles.length; y++) {
-        for (let x = 0; x < (tiles[y]?.length || 0); x++) {
-          const ref = tiles[y][x];
-          if (!ref) continue;
-          const sprite = game.sprites[ref];
-          if (!sprite) continue;
-          sprite.id = ref;
-          const fps = sprite.fps || 2;
-          const frameCount = sprite.frames?.length || 1;
-          const frame = frameCount > 1 ? Math.floor((t / (1000 / fps)) % frameCount) : 0;
-          const bmp = rasterize(sprite, frame, sprite.colorIndex ?? 2, palette, tileSize);
-          ctx.drawImage(bmp, x * tileSize, y * tileSize);
-        }
-      }
-
-      // pintar avatar (con idle animation si lleva IDLE_THRESHOLD_MS sin moverse)
-      const avatarRef = game.avatar;
-      const avatarSprite = game.sprites[avatarRef];
-      if (avatarSprite) {
-        avatarSprite.id = avatarRef;
-        const a = core.state.runtime.avatar;
-        const isIdle = idleTime > IDLE_THRESHOLD_MS && avatarSprite.idle?.length;
-        const mode = isIdle ? 'idle' : 'frames';
-        const frames = isIdle ? avatarSprite.idle : (avatarSprite.frames || []);
-        const fps = isIdle ? (avatarSprite.idleFps || 1.5) : (avatarSprite.fps || 2);
-        const frameCount = frames.length || 1;
-        const frame = frameCount > 1 ? Math.floor((t / (1000 / fps)) % frameCount) : 0;
-        const bmp = rasterize(avatarSprite, frame, avatarSprite.colorIndex ?? 2, palette, tileSize, mode);
-        ctx.drawImage(bmp, a.x * tileSize, a.y * tileSize);
-      }
+      paintTiles(1, t);
+      paintAvatar(1, t);
     },
   },
 
@@ -201,6 +228,12 @@ export default {
 
   api: {
     clearCache,
+    // Pinta una capa concreta de sprites (tiles + avatar si su layer coincide).
+    // El módulo layers.js usa esto para distribuir sprites entre render:bg / fg / final.
+    paintLayer(layerN, t = performance.now()) {
+      paintTiles(layerN, t);
+      paintAvatar(layerN, t);
+    },
     // Devuelve una vista mutable del sprite en (x,y): lecturas y escrituras
     // van al sprite original (game.sprites[id]); id/x/y se "inyectan" como propiedades
     // de instancia. Sin esto, set-sprite-wall y demás mutarían una copia y se perderían.

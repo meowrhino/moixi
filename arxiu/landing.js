@@ -48,27 +48,22 @@ function gameCard(g) {
   const forkBadge = g.forkOf
     ? `<span class="fork-badge" title="fork de ${g.forkOf}">↳ fork</span>`
     : '';
-  // Card es <article> (no <a>) para poder tener <a class="author-link"> dentro.
-  // El click en cualquier sitio del card (excepto en sub-links) navega al game page.
   return `
-    <article class="card" data-href="/game.html?id=${encodeURIComponent(g.id)}" tabindex="0" role="link" aria-label="${escapeHTML(g.name)}">
-      <div class="card-thumb" style="background: ${g.thumb};">
-        <span class="card-thumb-name">${escapeHTML(g.name)}</span>
-      </div>
+    <article class="card" data-href="/game.html?id=${encodeURIComponent(g.id)}" tabindex="0" role="link" aria-label="${escapeHTML(g.name)} por ${escapeHTML(g.author)}">
+      <div class="card-thumb" style="background: ${g.thumb};" aria-hidden="true"></div>
       <div class="card-body">
-        <div class="card-title">
-          ${escapeHTML(g.name)} ${forkBadge}
-        </div>
-        <div class="card-meta">
-          por <a href="/u.html?handle=${encodeURIComponent(g.authorHandle)}" class="author-link">${escapeHTML(g.author)}</a>
-          · ${fmtDate(g.updatedAt)}
+        <div class="card-title">${escapeHTML(g.name)}${forkBadge}</div>
+        <div class="card-byline">
+          <span class="by">por</span>
+          <a href="/u.html?handle=${encodeURIComponent(g.authorHandle)}" class="author-link">${escapeHTML(g.author)}</a>
         </div>
         <p class="card-summary">${escapeHTML(g.summary)}</p>
         <div class="card-tags">${tagsHTML}</div>
         <div class="card-stats">
-          <span>▶ ${g.plays}</span>
-          <span>↳ ${g.forks}</span>
-          <span>${g.rooms} rooms</span>
+          <span title="plays">▶ ${g.plays}</span>
+          <span title="forks">↳ ${g.forks}</span>
+          <span title="rooms">⌂ ${g.rooms}</span>
+          <span class="card-date">${fmtDate(g.updatedAt)}</span>
         </div>
       </div>
     </article>

@@ -60,12 +60,16 @@ function render(state) {
     editor.appendChild(big);
 
     // Color picker (solo del 0..colors.length-1, color 0 = transparente / fondo)
-    const cRow = el('div', { class: 'color-row' });
+    const cRow = el('div', { class: 'color-row', role: 'radiogroup', 'aria-label': 'color activo' });
     cRow.appendChild(el('div', {
       class: 'color-swatch' + (activeColor === 0 ? ' active' : ''),
       style: { background:
         'repeating-conic-gradient(#888 0 25%, #ccc 0 50%) 50% / 8px 8px' },
       title: 'transparente',
+      role: 'radio',
+      tabindex: '0',
+      'aria-checked': activeColor === 0 ? 'true' : 'false',
+      'aria-label': 'color transparente',
       onclick: () => { activeColor = 0; render(state); },
     }));
     for (let i = 1; i < colors.length; i++) {
@@ -73,6 +77,10 @@ function render(state) {
         class: 'color-swatch' + (activeColor === i ? ' active' : ''),
         style: { background: colors[i] },
         title: `color ${i}`,
+        role: 'radio',
+        tabindex: '0',
+        'aria-checked': activeColor === i ? 'true' : 'false',
+        'aria-label': `color ${i} (${colors[i]})`,
         onclick: () => { activeColor = i; render(state); },
       }));
     }

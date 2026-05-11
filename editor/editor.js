@@ -31,12 +31,12 @@ function setupLayout() {
   document.body.innerHTML = `
     <header class="toolbar">
       <span class="brand"><img class="mascot alive" src="./assets/mascot.svg" alt=""> moixi</span>
-      <div class="tabs" id="tabs"></div>
+      <div class="tabs" id="tabs" role="tablist" aria-label="paneles del editor"></div>
       <span class="spacer"></span>
       <span class="file-name" id="file-name">${state.fileName}</span>
-      <button id="btn-import">cargar</button>
-      <button id="btn-export-json">json</button>
-      <button id="btn-export-html" class="primary">exportar html</button>
+      <button id="btn-import" aria-label="cargar juego desde archivo">cargar</button>
+      <button id="btn-export-json" aria-label="descargar como json">json</button>
+      <button id="btn-export-html" class="primary" aria-label="exportar como html standalone">exportar html</button>
     </header>
     <div class="workspace">
       <aside class="panel left" id="panel-left"></aside>
@@ -59,6 +59,9 @@ function setupLayout() {
     b.textContent = p.label || id;
     b.onclick = () => switchTab(id);
     b.dataset.tab = id;
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', id === state.activeTab ? 'true' : 'false');
+    b.setAttribute('aria-label', `tab ${p.label || id} (tecla ${Object.keys(PANELS).indexOf(id) + 1})`);
     tabsEl.appendChild(b);
   }
 
@@ -74,7 +77,9 @@ function setupLayout() {
 function switchTab(id) {
   state.activeTab = id;
   for (const btn of document.querySelectorAll('.tab')) {
-    btn.classList.toggle('active', btn.dataset.tab === id);
+    const active = btn.dataset.tab === id;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
   }
   rerender();
 }

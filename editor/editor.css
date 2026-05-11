@@ -53,6 +53,21 @@ body {
   border-color: var(--ink);
 }
 
+/* Focus visible: outline ámbar consistente en todo el editor.
+ * Solo afecta navegación por teclado (no por mouse) gracias a :focus-visible. */
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+button:focus-visible { outline-offset: 1px; }
+.tab:focus-visible { outline-offset: -3px; }
+.list-item:focus-visible,
+.frame:focus-visible,
+.color-swatch:focus-visible {
+  outline-offset: 1px;
+}
+.room-cell:focus-visible { outline-offset: -2px; z-index: 1; }
+
 .workspace {
   display: grid;
   grid-template-columns: 280px 1fr 320px;

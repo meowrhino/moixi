@@ -62,6 +62,7 @@ function render(state) {
       const label = el('span', {}, i === 0 ? 'fondo' : `color ${i}`);
       const rmBtn = pal.colors.length > 2 ? el('button', {
         class: 'danger',
+        'aria-label': `borrar color ${i}`,
         onclick: () => { pal.colors.splice(i, 1); emit('editor:change'); render(state); }
       }, '×') : null;
       row.appendChild(el('div', {

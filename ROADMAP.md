@@ -26,7 +26,20 @@
 
 ---
 
-## fase 1 — estética meowrhino studio
+## fase 1 — estética meowrhino studio + UX del flow
+
+> Cambios estéticos y de **flow del editor/player**. Crítica del 2026-05-11: "el editor estéticamente me gusta, pero al darle play parece un video, no transmite interactivo". Hay que arreglar eso en esta fase, no solo decorar.
+
+### 1.0 — UX del play (no parece interactivo)
+
+- [ ] 🟡 **Indicador "click/tecla para empezar"** sobre el canvas hasta que el usuario interactúa por primera vez. Después se oculta.
+- [ ] 🟢 **Cursor pointer + outline al hover** sobre el canvas en el player.
+- [ ] 🟢 **Idle animation del avatar** (parpadea o respira) cuando no se mueve, para señalar "estoy vivo, esperándote".
+- [ ] 🟢 **Controles más visibles** debajo del canvas (no solo el texto pequeño "↑↓←→ + space" en el header).
+- [ ] 🟡 **D-pad táctil visible también en desktop** (más pequeño, esquina inferior derecha) — refuerza la idea de "esto se juega".
+- [ ] 🟡 **Border/marco** alrededor del canvas que respira o sutilmente cambia al jugar (no estático).
+
+### 1.1 — branding meowrhino
 
 - [ ] 🟢 **Mascota gato-rinoceronte 8x8.** Crear `assets/mascot.svg` con un bicho pixel (cabeza de gato, cuerno de rinoceronte). Usarlo como:
   - favicon del editor y del player.
@@ -86,20 +99,25 @@
 
 ## fase 6 — persistencia y distribución
 
+> Nota del 2026-05-11: con Fase 10 (arxiu en Cloudflare), el **deploy "default"** pasa a ser Cloudflare Pages (mismo stack, ya configurado). Neocities y Codeberg quedan como **opciones extra** para autores que quieran publicar también ahí.
+
 - [ ] 🟢 **Verificar `save-url` (ya implementado).** Test: jugar un rato, llamar `core.api.save.saveToURL()`, copiar URL, abrir en otra pestaña, debe reanudar. Documentar.
 - [ ] 🟡 **`modules/persistence/save-slots.js`** — múltiples slots con thumbnail (canvas → dataURL). UI mínima.
-- [ ] 🔴 **`modules/persistence/save-codeberg.js`** — OAuth a Codeberg/GitHub, push a un gist privado. Sin servidor. Requiere abrir popup OAuth.
-- [ ] 🟡 **`modules/dist/dist-neocities.js`** — botón en el editor "publicar a Neocities" usando el [Neocities API](https://neocities.org/api). Pide API key, sube el HTML exportado. **No guarda la key en localStorage por defecto** (ofrecer toggle).
-- [ ] 🟡 **`modules/dist/dist-remix.js`** — el HTML exportado incluye un botón oculto (`?edit` en URL) que reabre el JSON en una instancia del editor. Necesita que el editor pueda recibir un JSON via `postMessage` o URL hash.
+- [ ] 🟡 **`modules/dist/dist-cloudflare.js`** (default) — publicar el juego al arxiu de moixi en Cloudflare. Va a Fase 10, mencionado aquí por completitud.
+- [ ] 🟡 **`modules/dist/dist-neocities.js`** (extra) — botón opcional "publicar también en mi Neocities" usando el [Neocities API](https://neocities.org/api). Pide API key, sube el HTML exportado. Para autores que quieran tener una copia en su propio dominio.
+- [ ] 🔴 **`modules/persistence/save-codeberg.js`** (extra) — OAuth a Codeberg/GitHub, push a un gist privado. Sin servidor. Para power-users.
+- [ ] 🟡 **`modules/dist/dist-remix.js`** — el HTML exportado incluye un botón oculto (`?edit` en URL) que reabre el JSON en una instancia del editor. Útil para "remix mode" del HTML standalone.
 - [ ] 🟢 **Generar `.github/workflows/build.yml`** opcional desde el editor: una Action que recompila el HTML al hacer push al repo. Solo el archivo, sin lógica especial.
 
 ---
 
-## fase 7 — colaboración (los hits)
+## fase 7 — colaboración tiempo real · **DEFERRED**
 
-- [ ] 🔴 **`modules/collab/webrtc.js`** — edición en tiempo real entre dos editores. Stack: WebRTC nativo + [Yjs](https://github.com/yjs/yjs) cargado desde CDN como ES module. Sincroniza `state.game`. Test: dos navegadores, cambio en uno aparece en el otro.
-- [ ] 🔴 **`modules/collab/presence.js`** — muestra el cursor del peer (qué room está viendo, qué sprite tiene seleccionado). Depende de `webrtc`.
-- [ ] 🔴 **`modules/persistence/diff-merge.js`** — dado dos JSONs del mismo juego, fusiona o lista conflictos. Útil para git workflow.
+> Decisión del 2026-05-11: WebRTC + Yjs es interesante pero NO es prioridad. Multi-autor se resuelve mejor vía la Fase 10 (forks + rutas paralelas async). La colab en tiempo real queda parqueada hasta que alguien la pida explícitamente.
+
+- [ ] ⏸ **`modules/collab/webrtc.js`** — edición en tiempo real entre dos editores. Stack: WebRTC nativo + [Yjs](https://github.com/yjs/yjs) cargado desde CDN como ES module. Sincroniza `state.game`.
+- [ ] ⏸ **`modules/collab/presence.js`** — cursor del peer en el editor.
+- [ ] ⏸ **`modules/persistence/diff-merge.js`** — dado dos JSONs del mismo juego, fusiona o lista conflictos.
 
 ---
 
@@ -119,6 +137,93 @@
 - [ ] 🔴 **`modules/editor/procedural.js`** — generador procedural de rooms con seed (Mosi lo hacía al arrancar). Algoritmos: wave function collapse simple, cellular automata para cuevas, random walks para caminos.
 - [ ] 🔴 **`modules/multiplayer/async.js`** — el mundo es un repo git. Cada jugador hace pull, juega, sus huellas se commitean. Otro jugador hace pull mañana y ve dónde estuvo el anterior. Brutalmente experimental.
 - [ ] 🔴 **`modules/script/visual-dag.js`** — un editor visual de scripts tipo Blender shader nodes, en SVG vanilla. Para no-coders.
+
+---
+
+## fase 10 — arxiu público (cloudflare + multi-autor) ⚠ XL
+
+La idea: que `moixi.dev` (o similar) sea no solo el editor, sino un **archivo público** donde la gente sube juegos, los explora con filtros, hace forks, y eventualmente colabora en rutas/finales de juegos ajenos. Cloudflare Pages para el front, Workers para una API mínima, R2/KV para los JSON. Auth vía GitHub OAuth.
+
+Esta fase es la que más diferencia moixi de mosi: mosi vive en el desktop y exporta HTML que cada uno aloja como puede. moixi sería un **espacio social** alrededor de juegos pequeños.
+
+### subdivisión: 10a (puede empezar YA, sin infra) · 10b (infra después)
+
+> Decisión del 2026-05-11: la parte de **diseño UX/UI del flow del arxiu** se puede arrancar inmediatamente — son wireframes y CSS, no necesitan Cloudflare. Cuando el flow esté claro y validado, ya construimos la infra.
+
+---
+
+### Fase 10a — UX/UI del arxiu (sin backend) · arrancable YA
+
+- [ ] 🟡 **Wireframe de la landing `/`**: grid de juegos, buscador, filtros (tag/autor/fecha/features), sort, botón "crear juego". Empezar con mockup estático en HTML/CSS, datos de juegos fake hardcoded.
+- [ ] 🟡 **Wireframe de `/game/<id>`**: hero con el juego embebido + metadata + autor + forks + (más adelante) histórico. También mockup estático primero.
+- [ ] 🟡 **Wireframe de `/u/<handle>`**: perfil del autor con sus juegos.
+- [ ] 🟡 **Flow del editor revisado**: el editor actual abre con `garden.json`. Repensar el flujo:
+  - landing → "crear juego" → editor vacío con prompt "qué pintamos hoy".
+  - landing → click en un juego → `/game/<id>` → botón "fork" o "play".
+  - editor con un juego cargado → botón "publicar al arxiu" (mockeable sin backend).
+- [ ] 🟢 **Navegación entre páginas** con vanilla routing (hash o pathname + popstate).
+- [ ] 🟢 **Mockup del feed de actividad** ("foo publicó X", "bar forkeó Y"). No requiere data real, solo HTML.
+
+Ventaja de hacer 10a primero: cuando lleguemos a 10b (infra), ya sabemos qué endpoints necesitamos exactamente. Y se puede testear el feel del arxiu con datos fake antes de gastar tiempo en Workers.
+
+---
+
+### Fase 10b — infra Cloudflare (después de 10a)
+
+### 10.1 — infraestructura (M, paralelo)
+- [ ] 🟡 **Setup Cloudflare Pages** con build = nothing (es vanilla). Dominio custom opcional (`moixi.dev`, `arxiu.moixi.dev`).
+- [ ] 🟡 **Setup Cloudflare Workers** con `wrangler` para una API mínima en `/api/*`. Sin npm en runtime — solo Workers SDK.
+- [ ] 🟡 **Setup R2 (object storage)** para los JSON de juegos. Versionado: `games/<gameId>/v<N>.json`.
+- [ ] 🟢 **Setup KV** para metadata (autores, índice, tags, filtros).
+
+### 10.2 — auth (M)
+- [ ] 🟡 **GitHub OAuth** en Worker. Flow: redirect a github, callback al Worker, JWT firmado con secret del Worker, cookie httpOnly. `meowrhino` es el primer admin.
+- [ ] 🟢 Endpoint `GET /api/me` devuelve user actual (o 401).
+- [ ] ⚠ **Magic link via email** (v2, requiere servicio email tipo Resend o Cloudflare Email Workers).
+
+### 10.3 — API de juegos (M-L)
+- [ ] 🟡 `POST /api/games` — crear juego nuevo (validar JSON shape, asignar id, `ownerId = req.user.id`, `version = 1`).
+- [ ] 🟡 `GET /api/games/<id>` — leer la versión vigente del juego.
+- [ ] 🟡 `PATCH /api/games/<id>` — solo si `ownerId === req.user.id`. Sube nueva versión, mantiene anteriores en R2.
+- [ ] 🟡 `DELETE /api/games/<id>` — soft delete: marca `deleted: true` en metadata KV. Las versiones siguen en R2.
+- [ ] 🟡 `GET /api/games/<id>/history` — versiones (solo si owner o si `publicHistory: true`).
+- [ ] 🟢 `GET /api/games` — listado paginado con filtros (?tag=, ?author=, ?features=, ?since=, ?sort=).
+
+### 10.4 — landing y discoverabilidad (L)
+- [ ] 🟡 `index.html` actual pasa a `editor.html`. Nueva landing `/` con:
+  - grid de juegos featured (thumbnail = canvas snapshot → PNG cached en R2).
+  - buscador.
+  - filtros (tag, autor, fecha, features detectados en JSON, # rooms, longitud diálogo).
+  - sort: recientes / featured / random / más jugados / más forks.
+  - botón gordo "crear juego" → `/editor`.
+- [ ] 🟢 `/game/<id>` página individual: juego embebido en iframe + metadata + autor + forks + (si owner) histórico.
+- [ ] 🟢 `/u/<handle>` perfil del autor: sus juegos, sus forks, su genealogía.
+
+### 10.5 — fork / multi-autor v1 (M)
+- [ ] 🟡 Botón "fork" en `/game/<id>`: copia el JSON, asigna nuevo id, `forkOf: <parentId>`. El usuario edita y publica el suyo.
+- [ ] 🟢 Mostrar genealogía: en `/game/<id>` listar "remix de X" y "remixed by [...]".
+- [ ] 🟢 Contadores: # forks, # plays.
+
+### 10.6 — multi-autor v2: rutas paralelas (XL · diferenciador real) ⚠
+- [ ] 🔴 Schema del JSON gana `room.extensible: true` y `game.branches: [{ id, from, to, author, content }]`.
+- [ ] 🔴 Cuando un autor marca un room como extensible, otros usuarios pueden enviar "branches" (mini-juegos que se enganchan a esa room).
+- [ ] 🔴 Endpoint `POST /api/games/<id>/branches` con queue de aprobación al owner.
+- [ ] 🔴 Render: si jugando un juego entras a un room extensible con branches aceptados, salen como exits adicionales.
+
+### 10.7 — extras (M-L cada uno, opcional)
+- [ ] 🟢 Botón "save offline" en editor: descarga el JSON local incluso si estás logueado.
+- [ ] 🟡 **Importar juegos de mosi**: leer el formato JSON de mosi original y convertirlo a moixi (tienen ~90% de overlap).
+- [ ] 🟡 Estadísticas básicas: # plays por juego (counter Worker → Durable Object o KV con eventual consistency).
+- [ ] 🟡 Likes / favoritos.
+- [ ] ⚠ Moderación: flagging, queue de revisión, ban de cuentas (necesario antes de abrir registro público).
+
+### decisiones pendientes (avisar antes de tocar)
+
+- ⚠ **Visibilidad por defecto** de los juegos publicados: público o privado.
+- ⚠ **Política de borrado**: si el owner borra, ¿los forks sobreviven? (recomendación: sí, los forks son independientes).
+- ⚠ **Storage limits** por cuenta gratis (Cloudflare R2 cobra a partir de 10GB/mes).
+- ⚠ **Moderación**: antes de abrir registro público hay que tener un mecanismo (al menos un report button + queue admin).
+- ⚠ **GDPR / privacidad**: si guardamos emails para magic link, hay que tener política de privacidad y borrado de cuenta.
 
 ---
 

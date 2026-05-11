@@ -1,23 +1,27 @@
 // modules/render/sprites.js — renderiza sprites desde bitmaps + caché offscreen.
-// Cada sprite es { name, frames: [[0,1,0,...]], colorIndex, isWall, isItem, layer, fps, script }.
+// Cada sprite es { name, frames: [[0,1,0,...]], colorIndex, isWall, isItem, layer, fps, script, idle?, idleFps? }.
 // Cada frame es un array plano de tileSize*tileSize ints, donde 0=transparente, >0=índice de paleta.
+// idle: frames opcionales que se usan en el avatar cuando lleva idleThresholdMs sin moverse.
 
 let core = null;
-const cache = new Map();  // key = `${spriteId}:${frame}:${colorIndex}:${paletteId}` → canvas
+let idleTime = 0;
+const IDLE_THRESHOLD_MS = 2000;
+const cache = new Map();  // key = `${spriteId}:${mode}:${frame}:${colorIndex}:${paletteId}` → canvas
 
-function bitmapKey(id, frame, colorIndex, palId) {
-  return `${id}:${frame}:${colorIndex}:${palId}`;
+function bitmapKey(id, mode, frame, colorIndex, palId) {
+  return `${id}:${mode}:${frame}:${colorIndex}:${palId}`;
 }
 
-function rasterize(sprite, frameIdx, colorIndex, palette, tileSize) {
-  const key = bitmapKey(sprite.id || sprite.name, frameIdx, colorIndex, palette.id || 'pal');
+function rasterize(sprite, frameIdx, colorIndex, palette, tileSize, mode = 'frames') {
+  const key = bitmapKey(sprite.id || sprite.name, mode, frameIdx, colorIndex, palette.id || 'pal');
   if (cache.has(key)) return cache.get(key);
 
   const off = document.createElement('canvas');
   off.width = tileSize;
   off.height = tileSize;
   const c = off.getContext('2d');
-  const frame = sprite.frames?.[frameIdx] || sprite.frames?.[0] || [];
+  const source = sprite[mode] || sprite.frames;
+  const frame = source?.[frameIdx] || source?.[0] || [];
   const color = palette.colors[colorIndex] ?? '#fff';
   c.fillStyle = color;
   for (let y = 0; y < tileSize; y++) {
@@ -39,7 +43,15 @@ export default {
     sprites: '{ id: { name, frames, colorIndex, isWall, isItem, layer, fps, script } }',
   },
 
-  setup(c) { core = c; },
+  setup(c) {
+    core = c;
+    // Idle: contador que crece en tick y se resetea con cualquier input/movimiento.
+    c.bus.on('tick', ({ dt }) => { idleTime += dt; });
+    c.bus.on('afterMove', () => { idleTime = 0; });
+    for (const ev of ['input:up', 'input:down', 'input:left', 'input:right', 'input:action', 'input:cancel']) {
+      c.bus.on(ev, () => { idleTime = 0; });
+    }
+  },
 
   hooks: {
     'render:sprites': ({ t }) => {
@@ -69,16 +81,19 @@ export default {
         }
       }
 
-      // pintar avatar
+      // pintar avatar (con idle animation si lleva IDLE_THRESHOLD_MS sin moverse)
       const avatarRef = game.avatar;
       const avatarSprite = game.sprites[avatarRef];
       if (avatarSprite) {
         avatarSprite.id = avatarRef;
         const a = core.state.runtime.avatar;
-        const fps = avatarSprite.fps || 2;
-        const frameCount = avatarSprite.frames?.length || 1;
+        const isIdle = idleTime > IDLE_THRESHOLD_MS && avatarSprite.idle?.length;
+        const mode = isIdle ? 'idle' : 'frames';
+        const frames = isIdle ? avatarSprite.idle : (avatarSprite.frames || []);
+        const fps = isIdle ? (avatarSprite.idleFps || 1.5) : (avatarSprite.fps || 2);
+        const frameCount = frames.length || 1;
         const frame = frameCount > 1 ? Math.floor((t / (1000 / fps)) % frameCount) : 0;
-        const bmp = rasterize(avatarSprite, frame, avatarSprite.colorIndex ?? 2, palette, tileSize);
+        const bmp = rasterize(avatarSprite, frame, avatarSprite.colorIndex ?? 2, palette, tileSize, mode);
         ctx.drawImage(bmp, a.x * tileSize, a.y * tileSize);
       }
     },

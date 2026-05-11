@@ -117,6 +117,15 @@ onEditorEv('editor:change', () => {
   }
 });
 
+// Aviso al cerrar pestaña si hay cambios sin exportar (el autosave puede fallar:
+// modo incógnito, quota llena, otro origin). El prompt usa el texto nativo del browser.
+window.addEventListener('beforeunload', (e) => {
+  if (state.dirty) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
 function showSplash() {
   document.body.insertAdjacentHTML('afterbegin', `
     <div class="splash" id="splash" aria-hidden="true">

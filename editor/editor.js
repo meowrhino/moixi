@@ -1,21 +1,25 @@
 // editor/editor.js — controlador principal del editor.
 // Gestiona tabs, carga del JSON, autosave en localStorage, comunicación con paneles.
 
-import worldPanel from './panels/world.js';
-import spritePanel from './panels/sprite.js';
-import palettePanel from './panels/palette.js';
-import playPanel from './panels/play.js';
 import { downloadJSON, exportHTML, importJSON } from './export.js';
 import { on as onEditorEv } from './ui.js';
 import { setupShortcuts } from './shortcuts.js';
 import { setupUndo, clearHistory } from './undo.js';
+import { setupKeyNav } from './keynav.js';
 
-const PANELS = {
-  world: worldPanel,
-  sprite: spritePanel,
-  palette: palettePanel,
-  play: playPanel,
+// Cargamos los paneles con cache-bust dinámico: el editor.html ya lo hace con
+// editor.js, replicamos el patrón aquí para que los paneles (que iteran rápido)
+// no se queden cacheados entre sesiones. En producción gh-pages el cache vence
+// con normalidad; en dev local evita F12+Disable cache.
+const T = Date.now();
+const PANEL_LOADERS = {
+  world:   () => import(`./panels/world.js?t=${T}`),
+  sprite:  () => import(`./panels/sprite.js?t=${T}`),
+  palette: () => import(`./panels/palette.js?t=${T}`),
+  play:    () => import(`./panels/play.js?t=${T}`),
 };
+
+const PANELS = {};
 
 const AUTOSAVE_KEY = 'mosi:editor:game';
 
@@ -212,10 +216,15 @@ onEditorEv('editor:rerender', () => {
 });
 
 async function bootstrap() {
+  // Cargar todos los paneles antes de pintar el layout (el render depende de ellos).
+  await Promise.all(Object.entries(PANEL_LOADERS).map(async ([k, fn]) => {
+    PANELS[k] = (await fn()).default;
+  }));
   setupLayout();
   setupDragDrop();
   setupShortcuts();
   setupUndo(state);
+  setupKeyNav();
   showSplash();
 
   // Intentar restaurar autosave

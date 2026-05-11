@@ -164,6 +164,46 @@ button:focus-visible { outline-offset: 1px; }
 .color-row {
   display: flex; gap: 4px; flex-wrap: wrap; margin-top: 0.4rem;
 }
+
+/* Sprite editor: selector de paleta para preview (no muta el sprite) */
+.preview-palette {
+  display: flex; gap: 0.4rem; flex-wrap: wrap;
+  align-items: center;
+  margin-top: 0.6rem;
+  padding: 0.4rem 0;
+  border-top: 1px dashed var(--ink-soft);
+}
+.preview-palette .label {
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.65rem;
+}
+.palette-btn {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.2em 0.4em;
+  border: 1.5px solid transparent;
+  background: var(--paper);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+.palette-btn:hover { border-color: var(--ink-soft); }
+.palette-btn.active {
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0 var(--amber);
+  background: var(--paper);
+}
+.palette-mini {
+  display: flex;
+  border: 1px solid var(--ink-soft);
+}
+.palette-mini-color {
+  width: 8px; height: 14px;
+}
+.palette-name {
+  font-size: 0.72rem;
+}
 .color-swatch {
   width: 28px; height: 28px;
   border: 1.5px solid var(--ink);
@@ -260,8 +300,51 @@ button:focus-visible { outline-offset: 1px; }
   display: flex; gap: 1rem;
 }
 
-/* Responsive */
+/* Responsive — tablet y móvil */
 @media (max-width: 900px) {
-  .workspace { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
-  .panel { border-right: none; border-bottom: 1px solid var(--ink); max-height: 40vh; }
+  body { height: auto; overflow: auto; }
+  .workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    overflow: visible;
+  }
+  .panel {
+    border-right: none;
+    border-bottom: 2px solid var(--ink);
+    max-height: none;
+    overflow: visible;
+    padding: 0.8rem;
+  }
+  .panel:last-child { border-bottom: none; }
+  /* Center primero: paint/grid es lo principal en móvil */
+  .panel.center { order: -1; place-items: stretch; }
+  .paint { justify-self: center; max-width: 100%; }
+  .paint canvas { max-width: 100%; }
+  .room-grid { width: min(92vw, 480px); }
+  /* tira de tabs scrolleable si caben muchos */
+  .tabs { overflow-x: auto; flex-shrink: 0; }
+  /* status bar más compacto y NO fixed (rompe scroll en móvil con teclado abierto) */
+  .statusbar { position: static; font-size: 0.7rem; padding: 0.3em 0.6rem; }
+  body { padding-bottom: 0; }
+}
+
+@media (max-width: 480px) {
+  .toolbar {
+    padding: 0.5rem;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .toolbar .file-name { display: none; }
+  .toolbar .spacer { display: none; }
+  .toolbar button { font-size: 0.75rem; padding: 0.3em 0.5em; }
+  .tab { font-size: 0.78rem; padding: 0.25em 0.6em; }
+  .panel { padding: 0.6rem; }
+  .panel.center { padding: 0.6rem 0.3rem; }
+  .paint canvas { width: 100%; max-width: 100%; }
+  /* Listas y items más altos para tocar con dedo */
+  .list-item { padding: 0.5em 0.6em; min-height: 36px; }
+  .frame { width: 48px !important; height: 48px !important; }
+  .color-swatch { width: 36px !important; height: 36px !important; }
+  /* Brand sin texto largo */
+  .toolbar .brand .brand-text { display: none; }
 }

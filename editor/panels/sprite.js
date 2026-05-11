@@ -14,7 +14,14 @@ let activeFrame = 0;
 let activeColor = 1;        // índice en la paleta actual
 let tool = 'pencil';        // 'pencil' | 'bucket' | 'eyedropper'
 let onionSkin = false;
+let previewPalette = null;  // id de palette que sobreescribe la default para preview;
+                            // null = usar la default (no modifica el sprite, solo cómo se ve)
 let currentRerender = null; // hook para que listeners externos puedan re-render
+
+function getEffectivePalId(state) {
+  if (previewPalette && game.palettes[previewPalette]) return previewPalette;
+  return state.runtime?.currentRoom?.palette || Object.keys(game.palettes)[0];
+}
 
 // === shortcuts ===
 // Registrados una sola vez al cargar el módulo; togglean state global y rerenderean.
@@ -49,7 +56,7 @@ function renderList(state) {
   list.appendChild(el('h2', {}, 'sprites'));
   const listBox = el('div', { class: 'list' });
 
-  const palId = state.runtime?.currentRoom?.palette || Object.keys(game.palettes)[0];
+  const palId = getEffectivePalId(state);
   const colors = game.palettes[palId].colors;
 
   for (const [id, sp] of Object.entries(game.sprites)) {
@@ -88,7 +95,7 @@ function renderEditor(state) {
   if (!sp.frames) sp.frames = [emptyBitmap(game.tileSize)];
   if (activeFrame >= sp.frames.length) activeFrame = 0;
 
-  const palId = state.runtime?.currentRoom?.palette || Object.keys(game.palettes)[0];
+  const palId = getEffectivePalId(state);
   const colors = game.palettes[palId].colors;
 
   editor.appendChild(el('h2', {}, sp.name || selected));
@@ -116,10 +123,38 @@ function renderEditor(state) {
     toolLabel + (onionSkin && sp.frames.length > 1 ? ' · onion (O)' : '')));
 
   editor.appendChild(renderColorRow(state, colors));
+  editor.appendChild(renderPreviewPalette(state, palId));
   editor.appendChild(el('h3', {}, 'frames'));
   editor.appendChild(renderFramesRow(state, sp, colors));
   editor.appendChild(renderFrameActions(state, sp));
   return editor;
+}
+
+// Selector de paleta para preview: muestra todas las paletas como botones con
+// swatches en miniatura. Click cambia cuál paleta se usa para renderizar el
+// sprite (y la lista), sin tocar el JSON. Click en la activa la desactiva
+// (vuelve a la paleta default de la room/primera).
+function renderPreviewPalette(state, currentPalId) {
+  const row = el('div', { class: 'preview-palette' });
+  row.appendChild(el('span', { class: 'label' }, 'preview:'));
+  for (const palId of Object.keys(game.palettes)) {
+    const pal = game.palettes[palId];
+    const mini = el('div', { class: 'palette-mini' });
+    for (const c of pal.colors.slice(0, 5)) {
+      mini.appendChild(el('span', { class: 'palette-mini-color', style: { background: c } }));
+    }
+    row.appendChild(el('button', {
+      class: 'palette-btn' + (palId === currentPalId ? ' active' : ''),
+      type: 'button',
+      title: pal.name || palId,
+      'aria-pressed': palId === currentPalId ? 'true' : 'false',
+      onclick: () => {
+        previewPalette = (palId === previewPalette) ? null : palId;
+        render(state);
+      },
+    }, [mini, el('span', { class: 'palette-name' }, pal.name || palId)]));
+  }
+  return row;
 }
 
 // Selector de color activo (transparente + N colores de la paleta).

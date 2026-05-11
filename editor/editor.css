@@ -152,6 +152,15 @@ button:focus-visible { outline-offset: 1px; }
   outline-offset: 2px;
 }
 
+.tool-indicator {
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.3rem;
+  text-align: center;
+}
+
 .color-row {
   display: flex; gap: 4px; flex-wrap: wrap; margin-top: 0.4rem;
 }

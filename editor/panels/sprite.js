@@ -6,9 +6,22 @@ let game;
 let selected = null;        // sprite id seleccionado
 let activeFrame = 0;
 let activeColor = 1;        // índice en la paleta actual
+let tool = 'pencil';        // 'pencil' | 'bucket' | 'eyedropper'
+let currentRerender = null; // referencia para que los shortcuts puedan re-render
+
+// Listeners de shortcuts (registrados una vez al cargar el módulo)
+on('editor:shortcut:bucket', () => {
+  tool = tool === 'bucket' ? 'pencil' : 'bucket';
+  currentRerender?.();
+});
+on('editor:shortcut:eyedropper', () => {
+  tool = tool === 'eyedropper' ? 'pencil' : 'eyedropper';
+  currentRerender?.();
+});
 
 function render(state) {
   game = state.game;
+  currentRerender = () => render(state);
   const root = document.querySelector('[data-panel="sprite"]');
   if (!root) return;
   root.innerHTML = '';
@@ -56,8 +69,13 @@ function render(state) {
 
     // Canvas grande para pintar
     const big = el('canvas', { class: 'paint-canvas' });
+    big.setAttribute('data-tool', tool);
     const grid = renderPaintCanvas(big, sp, activeFrame, game.tileSize, colors);
     editor.appendChild(big);
+
+    // Indicador de herramienta activa
+    editor.appendChild(el('div', { class: 'tool-indicator', 'aria-live': 'polite' },
+      tool === 'pencil' ? 'lápiz' : tool === 'bucket' ? 'cubo (B)' : 'cuentagotas (I)'));
 
     // Color picker (solo del 0..colors.length-1, color 0 = transparente / fondo)
     const cRow = el('div', { class: 'color-row', role: 'radiogroup', 'aria-label': 'color activo' });
@@ -164,22 +182,63 @@ function renderPaintCanvas(big, sprite, frameIdx, tileSize, colors) {
   big.height = tileSize;
   const ctx = big.getContext('2d');
   ctx.imageSmoothingEnabled = false;
-  const draw = () => paintBitmap(big, sprite.frames[frameIdx], tileSize, colors, sprite.colorIndex ?? 1);
+  const bitmap = sprite.frames[frameIdx];
+  const draw = () => paintBitmap(big, bitmap, tileSize, colors, sprite.colorIndex ?? 1);
   draw();
 
-  let painting = false;
-  const setPixel = (e) => {
+  const eventXY = (e) => {
     const rect = big.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / rect.width * tileSize);
-    const y = Math.floor((e.clientY - rect.top) / rect.height * tileSize);
-    if (x < 0 || x >= tileSize || y < 0 || y >= tileSize) return;
-    sprite.frames[frameIdx][y * tileSize + x] = activeColor;
+    return [
+      Math.floor((e.clientX - rect.left) / rect.width * tileSize),
+      Math.floor((e.clientY - rect.top) / rect.height * tileSize),
+    ];
+  };
+  const inBounds = (x, y) => x >= 0 && x < tileSize && y >= 0 && y < tileSize;
+
+  const setPixel = (x, y) => {
+    if (!inBounds(x, y)) return;
+    bitmap[y * tileSize + x] = activeColor;
     draw();
     emit('editor:change');
   };
 
-  big.addEventListener('pointerdown', e => { painting = true; setPixel(e); big.setPointerCapture(e.pointerId); });
-  big.addEventListener('pointermove', e => { if (painting) setPixel(e); });
+  // flood fill BFS desde (sx, sy): reemplaza el color en el bitmap por activeColor.
+  const floodFill = (sx, sy) => {
+    if (!inBounds(sx, sy)) return;
+    const target = bitmap[sy * tileSize + sx];
+    if (target === activeColor) return;
+    const queue = [[sx, sy]];
+    while (queue.length) {
+      const [x, y] = queue.shift();
+      if (!inBounds(x, y)) continue;
+      if (bitmap[y * tileSize + x] !== target) continue;
+      bitmap[y * tileSize + x] = activeColor;
+      queue.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+    }
+    draw();
+    emit('editor:change');
+  };
+
+  const eyedrop = (x, y) => {
+    if (!inBounds(x, y)) return;
+    activeColor = bitmap[y * tileSize + x];
+    tool = 'pencil';
+    currentRerender?.();
+  };
+
+  let painting = false;
+  big.addEventListener('pointerdown', e => {
+    const [x, y] = eventXY(e);
+    if (tool === 'bucket') { floodFill(x, y); return; }
+    if (tool === 'eyedropper') { eyedrop(x, y); return; }
+    painting = true;
+    setPixel(x, y);
+    big.setPointerCapture(e.pointerId);
+  });
+  big.addEventListener('pointermove', e => {
+    if (!painting || tool !== 'pencil') return;
+    setPixel(...eventXY(e));
+  });
   big.addEventListener('pointerup',   e => { painting = false; big.releasePointerCapture(e.pointerId); });
   return draw;
 }

@@ -153,7 +153,7 @@ export async function exportHTML(game) {
     <span style="font-size:0.75rem; opacity:0.6;">↑↓←→ + space</span>
   </header>
   <canvas data-mosi-canvas></canvas>
-  <div style="font-size:0.75rem; opacity:0.5;">made with moixi</div>
+  <div style="font-size:0.75rem; opacity:0.5;">made with <a href="https://github.com/meowrhino/moixi" style="color:inherit">moixi</a> · inspirado en <a href="https://zenzoa.itch.io/mosi" style="color:inherit">mosi</a></div>
 </div>
 <script type="module">
 ${bootstrapCode}

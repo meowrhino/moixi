@@ -46,7 +46,7 @@ function setupLayout() {
       <span id="status-msg">listo</span>
       <span class="spacer" style="flex:1"></span>
       <span id="status-dirty"></span>
-      <span style="opacity:0.5">▮ meowrhino studio · vanilla, forever</span>
+      <span style="opacity:0.5">▮ meowrhino studio · inspirado en <a href="https://zenzoa.itch.io/mosi" target="_blank" style="color:inherit">mosi</a></span>
     </div>
   `;
 

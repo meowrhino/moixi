@@ -2,6 +2,25 @@
   "_comment": "Datos fake para la landing del arxiu hasta que F10b (Cloudflare Workers + R2) esté online. Cada entrada simula el resultado de GET /api/games/<id>.",
   "games": [
     {
+      "id": "8-trigrames",
+      "name": "els 8 trigrames",
+      "author": "meowrhino",
+      "authorHandle": "meowrhino",
+      "publishedAt": "2026-05-11",
+      "updatedAt": "2026-05-11",
+      "tags": ["narrative", "abstract", "ritual"],
+      "rooms": 9,
+      "sprites": 11,
+      "palettes": 9,
+      "features": ["walls", "items", "vars", "if-else", "audio"],
+      "plays": 0,
+      "forks": 0,
+      "forkOf": null,
+      "summary": "els 8 trigrames del I Ching. el teu primer revela el teu camí.",
+      "thumb": "linear-gradient(135deg, #1a1a1a 0%, #5d275d 35%, #d4843e 70%, #ffe87c 100%)",
+      "playUrl": "./play.html?game=examples/8-trigrames.json&embed=1"
+    },
+    {
       "id": "garden",
       "name": "el jardín",
       "author": "meowrhino",
@@ -204,6 +223,7 @@
     "lluc": { "handle": "lluc", "name": "lluc", "bio": "passejades nocturnes.", "url": null, "joined": "2026-01-25" }
   },
   "feed": [
+    { "at": "2026-05-11", "actor": "meowrhino", "action": "published", "target": "8-trigrames" },
     { "at": "2026-05-11", "actor": "meowrhino", "action": "updated", "target": "garden" },
     { "at": "2026-05-10", "actor": "meowrhino", "action": "published", "target": "garden" },
     { "at": "2026-05-03", "actor": "anais", "action": "updated", "target": "lluna" },

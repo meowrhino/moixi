@@ -1,0 +1,406 @@
+{
+  "_comment": "Els 8 trigrames del I Ching. 1 pati central + 8 rooms periferiques. Cada room té paleta i música pròpies. Recollir cada element incrementa comptador i registra primer en una variable. L'oracle del pati llegeix el patró final segons amb quin trigrama vas començar.",
+  "name": "els 8 trigrames",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "pati",
+  "avatarStart": { "x": 8, "y": 8 },
+  "introScript": "{position center}els 8 trigrames{p}{position center}{wavy}troba el teu camí{/wavy}",
+
+  "palettes": {
+    "pati":     { "name": "pati",     "colors": ["#f4ecd8", "#3d7068", "#1a1a1a", "#d4843e", "#a83e3e"] },
+    "cel":      { "name": "cel",      "colors": ["#e8f0ff", "#a0b8d8", "#1a1a1a", "#ffe87c", "#88a0c8"] },
+    "llac":     { "name": "llac",     "colors": ["#e8f4f0", "#f8bbd0", "#1a1a1a", "#a0d8e0", "#ec407a"] },
+    "foc":      { "name": "foc",      "colors": ["#3a1a10", "#a83e3e", "#fff0a0", "#ef7d57", "#ffd60a"] },
+    "tro":      { "name": "tro",      "colors": ["#2a2030", "#5d275d", "#fffaf0", "#ffd60a", "#a08070"] },
+    "vent":     { "name": "vent",     "colors": ["#f0f8e8", "#a8c898", "#1a1a1a", "#88a070", "#c8b890"] },
+    "aigua":    { "name": "aigua",    "colors": ["#0a1e3a", "#1d4a7a", "#e8f4ff", "#88c4d4", "#3d7068"] },
+    "muntanya": { "name": "muntanya", "colors": ["#1a2918", "#3e2c1f", "#e8dcb8", "#88a957", "#a07452"] },
+    "terra":    { "name": "terra",    "colors": ["#3e2c1f", "#a07452", "#f5e6d3", "#d4a373", "#8b5a3c"] }
+  },
+
+  "songs": {
+    "pati":     { "name": "centre",    "wave": "triangle", "loop": true,
+      "notes": [{ "note": "C4", "dur": 0.6 }, { "note": "E4", "dur": 0.6 }, { "note": "G4", "dur": 0.6 }] },
+    "cel":      { "name": "cel",       "wave": "triangle", "loop": true,
+      "notes": [{ "note": "G5", "dur": 0.8 }, { "note": "E5", "dur": 0.4 }, { "note": "G5", "dur": 0.8 }] },
+    "llac":     { "name": "llac",      "wave": "triangle", "loop": true,
+      "notes": [{ "note": "C5", "dur": 0.3 }, { "note": "A4", "dur": 0.3 }, { "note": "G4", "dur": 0.3 }, { "note": "E4", "dur": 0.3 }] },
+    "foc":      { "name": "foc",       "wave": "square",   "loop": true,
+      "notes": [{ "note": "F5", "dur": 0.15 }, { "note": "rest", "dur": 0.15 }, { "note": "F5", "dur": 0.15 }, { "note": "rest", "dur": 0.45 }] },
+    "tro":      { "name": "tro",       "wave": "square",   "loop": true,
+      "notes": [{ "note": "C3", "dur": 0.2 }, { "note": "C3", "dur": 0.2 }, { "note": "rest", "dur": 0.6 }] },
+    "vent":     { "name": "vent",      "wave": "sine",     "loop": true,
+      "notes": [{ "note": "A4", "dur": 0.4 }, { "note": "B4", "dur": 0.4 }, { "note": "A4", "dur": 0.4 }, { "note": "G4", "dur": 0.4 }] },
+    "aigua":    { "name": "aigua",     "wave": "sine",     "loop": true,
+      "notes": [{ "note": "D5", "dur": 0.4 }, { "note": "C5", "dur": 0.4 }, { "note": "A4", "dur": 0.4 }, { "note": "G4", "dur": 0.8 }] },
+    "muntanya": { "name": "muntanya",  "wave": "triangle", "loop": true,
+      "notes": [{ "note": "C3", "dur": 1.2 }, { "note": "G3", "dur": 0.6 }] },
+    "terra":    { "name": "terra",     "wave": "sawtooth", "loop": true,
+      "notes": [{ "note": "E3", "dur": 1.0 }, { "note": "rest", "dur": 0.4 }] }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "frames": [
+        [0,1,0,1,1,0,1,0, 0,1,1,1,1,1,1,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,0,1,0,0,1,0,0],
+        [0,1,0,1,1,0,1,0, 0,1,1,1,1,1,1,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ],
+      "idleFps": 1.5,
+      "idle": [
+        [0,1,0,1,1,0,1,0, 0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,0,1,0,0,1,0,0]
+      ]
+    },
+    "wall": {
+      "name": "paret",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,1,1,0,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,0,1,1,1,0,
+        1,1,1,1,1,1,1,1, 1,0,1,1,1,1,0,1, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1
+      ]]
+    },
+    "oracle": {
+      "name": "oracle",
+      "colorIndex": 3,
+      "fps": 2,
+      "script": "{position center}{wavy}l'oracle del centre{/wavy}{p}{if {gte {var comptador} 8}}{position center}has tocat els 8 trigrames{p}{position center}vas començar amb {var primer}{p}{if {eq {var primer} cel}}{position bottom}cel: força en altura{/if}{if {eq {var primer} llac}}{position bottom}llac: profunditat alegre{/if}{if {eq {var primer} foc}}{position bottom}foc: claredat ardent{/if}{if {eq {var primer} tro}}{position bottom}tro: força que desperta{/if}{if {eq {var primer} vent}}{position bottom}vent: penetració suau{/if}{if {eq {var primer} aigua}}{position bottom}aigua: fluidesa perillosa{/if}{if {eq {var primer} muntanya}}{position bottom}muntanya: quietud que sosté{/if}{if {eq {var primer} terra}}{position bottom}terra: receptivitat fèrtil{/if}{else}{position center}encara et falten {sub 8 {var comptador}}{/if}",
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,1,1,0,1,1, 1,0,1,1,1,1,0,1, 1,0,1,1,1,1,0,1, 1,1,0,1,1,0,1,1, 0,1,1,0,0,1,1,0, 0,0,1,1,1,1,0,0],
+        [0,0,1,1,1,1,0,0, 0,1,0,1,1,0,1,0, 1,0,1,1,1,1,0,1, 1,1,0,1,1,0,1,1, 1,1,0,1,1,0,1,1, 1,0,1,1,1,1,0,1, 0,1,0,1,1,0,1,0, 0,0,1,1,1,1,0,0]
+      ]
+    },
+    "el_cel": {
+      "name": "cel",
+      "colorIndex": 3,
+      "isItem": true,
+      "script": "{position center}{wavy}☰ cel · qián{/wavy}{p}{position bottom}fort i resolut{p}{if {eq {var comptador} 0}}{set-var primer cel}{/if}{inc-var comptador}",
+      "frames": [[
+        0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0
+      ]]
+    },
+    "el_llac": {
+      "name": "llac",
+      "colorIndex": 4,
+      "isItem": true,
+      "script": "{position center}{wavy}☱ llac · duì{/wavy}{p}{position bottom}alegre i obert{p}{if {eq {var comptador} 0}}{set-var primer llac}{/if}{inc-var comptador}",
+      "frames": [[
+        0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1, 0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0
+      ]]
+    },
+    "el_foc": {
+      "name": "foc",
+      "colorIndex": 4,
+      "isItem": true,
+      "script": "{position center}{wavy}☲ foc · lí{/wavy}{p}{position bottom}claredat que crema{p}{if {eq {var comptador} 0}}{set-var primer foc}{/if}{inc-var comptador}",
+      "frames": [[
+        0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1,
+        0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0
+      ]]
+    },
+    "el_tro": {
+      "name": "tro",
+      "colorIndex": 3,
+      "isItem": true,
+      "script": "{position center}{shaky}☳ tro · zhèn{/shaky}{p}{position bottom}força que desperta{p}{if {eq {var comptador} 0}}{set-var primer tro}{/if}{inc-var comptador}",
+      "frames": [[
+        0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1, 0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1,
+        0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0
+      ]]
+    },
+    "el_vent": {
+      "name": "vent",
+      "colorIndex": 3,
+      "isItem": true,
+      "script": "{position center}{wavy}☴ vent · xùn{/wavy}{p}{position bottom}penetració suau{p}{if {eq {var comptador} 0}}{set-var primer vent}{/if}{inc-var comptador}",
+      "frames": [[
+        0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0
+      ]]
+    },
+    "el_aigua": {
+      "name": "aigua",
+      "colorIndex": 3,
+      "isItem": true,
+      "script": "{position center}{wavy}☵ aigua · kǎn{/wavy}{p}{position bottom}fluidesa perillosa{p}{if {eq {var comptador} 0}}{set-var primer aigua}{/if}{inc-var comptador}",
+      "frames": [[
+        0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1, 0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1,
+        0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0
+      ]]
+    },
+    "el_muntanya": {
+      "name": "muntanya",
+      "colorIndex": 3,
+      "isItem": true,
+      "script": "{position center}☶ muntanya · gèn{p}{position bottom}quietud que sosté{p}{if {eq {var comptador} 0}}{set-var primer muntanya}{/if}{inc-var comptador}",
+      "frames": [[
+        0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1,
+        0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0
+      ]]
+    },
+    "el_terra": {
+      "name": "terra",
+      "colorIndex": 3,
+      "isItem": true,
+      "script": "{position center}☷ terra · kūn{p}{position bottom}receptivitat fèrtil{p}{if {eq {var comptador} 0}}{set-var primer terra}{/if}{inc-var comptador}",
+      "frames": [[
+        0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1, 0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1,
+        0,0,0,0,0,0,0,0, 1,1,1,0,0,1,1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0
+      ]]
+    }
+  },
+
+  "rooms": {
+    "pati": {
+      "name": "pati del centre",
+      "palette": "pati",
+      "music": "pati",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall",null,"wall","wall","wall","wall","wall","wall","wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        [null,null,null,null,null,null,null,null,"oracle",null,null,null,null,null,null,null],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall",null,"wall","wall","wall","wall","wall","wall","wall"]
+      ],
+      "exits": [
+        { "x": 8,  "y": 0,  "toRoom": "cel",      "toX": 8,  "toY": 14 },
+        { "x": 8,  "y": 15, "toRoom": "terra",    "toX": 8,  "toY": 1 },
+        { "x": 0,  "y": 8,  "toRoom": "aigua",    "toX": 14, "toY": 8 },
+        { "x": 15, "y": 8,  "toRoom": "foc",      "toX": 1,  "toY": 8 },
+        { "x": 4,  "y": 4,  "toRoom": "muntanya", "toX": 8,  "toY": 14 },
+        { "x": 12, "y": 4,  "toRoom": "llac",     "toX": 8,  "toY": 14 },
+        { "x": 4,  "y": 12, "toRoom": "tro",      "toX": 8,  "toY": 1 },
+        { "x": 12, "y": 12, "toRoom": "vent",     "toX": 8,  "toY": 1 }
+      ]
+    },
+    "cel": {
+      "name": "cel",
+      "palette": "cel",
+      "music": "cel",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,"el_cel",null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall",null,"wall","wall","wall","wall","wall","wall","wall"]
+      ],
+      "exits": [
+        { "x": 8, "y": 15, "toRoom": "pati", "toX": 8, "toY": 1 }
+      ]
+    },
+    "llac": {
+      "name": "llac",
+      "palette": "llac",
+      "music": "llac",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,"el_llac",null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall",null,"wall","wall","wall","wall","wall","wall","wall"]
+      ],
+      "exits": [
+        { "x": 8, "y": 15, "toRoom": "pati", "toX": 12, "toY": 5 }
+      ]
+    },
+    "foc": {
+      "name": "foc",
+      "palette": "foc",
+      "music": "foc",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,"el_foc",null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]
+      ],
+      "exits": [
+        { "x": 0, "y": 1, "toRoom": "pati", "toX": 14, "toY": 8 }
+      ]
+    },
+    "tro": {
+      "name": "tro",
+      "palette": "tro",
+      "music": "tro",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,"el_tro",null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]
+      ],
+      "exits": [
+        { "x": 8, "y": 0, "toRoom": "pati", "toX": 4, "toY": 11 }
+      ]
+    },
+    "vent": {
+      "name": "vent",
+      "palette": "vent",
+      "music": "vent",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall",null,"wall","wall","wall","wall","wall","wall","wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,"el_vent",null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]
+      ],
+      "exits": [
+        { "x": 8, "y": 0, "toRoom": "pati", "toX": 12, "toY": 11 }
+      ]
+    },
+    "aigua": {
+      "name": "aigua",
+      "palette": "aigua",
+      "music": "aigua",
+      "ambient": "rgba(5,15,30,0.55)",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,"el_aigua",null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]
+      ],
+      "exits": [
+        { "x": 15, "y": 8, "toRoom": "pati", "toX": 1, "toY": 8 }
+      ]
+    },
+    "muntanya": {
+      "name": "muntanya",
+      "palette": "muntanya",
+      "music": "muntanya",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,"el_muntanya",null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall",null,"wall","wall","wall","wall","wall","wall","wall"]
+      ],
+      "exits": [
+        { "x": 8, "y": 15, "toRoom": "pati", "toX": 4, "toY": 5 }
+      ]
+    },
+    "terra": {
+      "name": "terra",
+      "palette": "terra",
+      "music": "terra",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall",null,"wall","wall","wall","wall","wall","wall","wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,"el_terra",null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]
+      ],
+      "exits": [
+        { "x": 8, "y": 0, "toRoom": "pati", "toX": 8, "toY": 14 }
+      ]
+    }
+  }
+}

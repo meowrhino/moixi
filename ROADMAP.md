@@ -34,9 +34,9 @@
 
 - [x] 🟡 **Indicador "click/tecla para empezar"** sobre el canvas hasta primer input.
 - [x] 🟢 **Cursor pointer + outline al hover** sobre el canvas. Hover → sombra ámbar.
-- [ ] 🟢 **Idle animation del avatar** (parpadea o respira). NOTA: el avatar ya tiene 2 frames con fps:2 que parpadean — animación más distintiva requiere tocar `sprites.js`, queda pendiente.
+- [x] 🟢 **Idle animation del avatar** — `sprites.js` cuenta `idleTime` y usa `sprite.idle: [...]` frames si lleva >2s sin moverse. Backwards-compatible (si el sprite no define idle, sigue como antes). `garden.json` avatar "tu" tiene 2 frames idle (ojos cerrados + pies juntos).
 - [x] 🟢 **Controles más visibles** debajo del canvas (kbd hints: ↑↓←→ moverse · espacio hablar/avanzar · esc cancelar).
-- [ ] 🟡 **D-pad táctil visible también en desktop** — pendiente; `touch.js` ya monta el D-pad en touch devices.
+- [x] 🟡 **D-pad táctil visible también en desktop** — `touch.js` quita el gate `pointer:coarse`. En desktop monta a 90px con opacity 0.45 que sube a 0.9 al hover, para indicarlo sin estorbar.
 - [x] 🟡 **Border/marco** alrededor del canvas que respira (anillo ámbar pulsante) mientras está idle. Para cuando empiezas a jugar.
 
 ### 1.1 — branding meowrhino
@@ -44,7 +44,7 @@
 - [x] 🟢 **Mascota gato-rinoceronte 8x8.** Existe en `assets/mascot.svg`, ya integrada en favicon, header del editor, footer del player y HTML exportado.
 - [x] 🟢 **Paleta studio extendida.** 6 colores (`--paper`, `--ink`, `--amber`, `--teal`, `--rust`, `--coral`) en `style.css`.
 - [x] 🟢 **Footer firma.** "made in barcelona ☼ meowrhino studio · inspirado en mosi" en `play.html` y HTML exportado.
-- [ ] 🟡 **Cursor personalizado en el editor.** SVG del bicho como cursor en las zonas creativas (paint canvas, room grid).
+- [x] 🟡 **Cursor personalizado en el editor.** SVGs 16×16 en `assets/cursors/` (pencil, bucket, eyedropper) con paleta ink/amber/rust. `.paint-canvas` y `.room-grid` usan pencil; `data-tool="bucket|eyedropper"` cambia automáticamente.
 - [x] 🟢 **Separadores tipográficos.** Glifos `▮▰▱` en `.divider-glyphs` en `style.css`.
 - [x] 🟢 **Splash al cargar el editor.** Mascota + "moixi · editor" durante ~1s antes de mostrar la UI. Animación bounce en la mascota.
 
@@ -52,20 +52,20 @@
 
 ## fase 2 — quality-of-life del editor
 
-- [ ] 🟡 **Undo/redo global.** Módulo `undo-redo` que escucha `editor:change` y guarda snapshots en `state.history.past`. Atajos `Z`/`Y` o `Cmd-Z`. Máximo 50 snapshots.
-- [ ] 🟢 **Confirmación antes de cerrar.** `window.onbeforeunload` si `state.dirty === true`.
+- [x] 🟡 **Undo/redo global.** `editor/undo.js` escucha `editor:change`, deep-clone JSON del game en `past[]` (max 50). Atajos `⌘Z` / `Ctrl+Z` / `⌘⇧Z` / `⌘Y` via el sistema de shortcuts. Aplica snapshot mutando state.game in-place para no romper referencias cachées. Emit `editor:rerender` post-apply.
+- [x] 🟢 **Confirmación antes de cerrar.** `window.onbeforeunload` si `state.dirty === true`. Prompt nativo.
 - [ ] 🟡 **Lista de paletas con preview en sprite editor.** Cuando estás editando un sprite, poder ver al lado la lista de paletas y cambiar cuál se usa para preview (sin cambiar la paleta del sprite).
-- [ ] 🟡 **Bucket fill y dropper en el paint canvas.** Hoy solo hay pencil. Añadir flood-fill (`B`) y eyedropper (`I`).
-- [ ] 🟢 **Atajos de teclado en el editor.** Documentarlos: `1234` = tabs, `+/-` = añadir/borrar, `space` = play en preview.
-- [ ] 🟡 **Onion skin entre frames** en el sprite editor: cuando estás en el frame 1, dibujar el frame 0 al 20% de opacidad de fondo.
-- [ ] 🟡 **Drag & drop de JSON en el editor.** Soltar un `.json` sobre la ventana lo carga como juego.
+- [x] 🟡 **Bucket fill y dropper en el paint canvas.** `tool` state en sprite.js (pencil/bucket/eyedropper). Shortcut `B` toggle bucket, `I` toggle eyedropper. Flood-fill BFS, eyedropper vuelve a pencil tras leer color.
+- [x] 🟢 **Atajos de teclado en el editor.** `editor/shortcuts.js`. `1234`=tabs, `+/=` = nuevo, `-/⌫` = borrar, `space` = play, `B/I/O` = bucket/eyedropper/onion, `⌘Z/⌘Y` = undo/redo, `?` = cheatsheet flotante. Botón flotante "?" abajo-izquierda.
+- [x] 🟡 **Onion skin entre frames** en el sprite editor: frame N-1 en `globalAlpha 0.2` detrás del actual. Toggle via shortcut `O`.
+- [x] 🟡 **Drag & drop de JSON en el editor.** Overlay con borde dashed ámbar (DESIGN.md). Contador dragenter/leave para evitar flickering.
 
 ---
 
 ## fase 3 — features visuales del runtime
 
 - [x] 🟢 **`modules/gameplay/transitions.js`** — fade negro de 420ms al cambiar de room. Tipos: 'fade' (default), 'instant', 'wipe'. Hook `render:final`. Config via `game.transition` o `room.transition`.
-- [ ] 🟡 **`modules/render/lighting.js`** — radio de luz por sprite, `ambient` por room. Hook `render:fg`. Plantilla concreta ya está en el README, sección "crear un módulo nuevo". Añade `room.ambient` y `sprite.lightRadius`.
+- [x] 🟡 **`modules/render/lighting.js`** — capa de oscuridad ambient + halos de luz radiales. Hook `render:fg` con dos pasadas: `destination-out` para agujerear + `screen` para tinte cálido. Schema: `sprite.light: { radius, color }`, `room.ambient: rgba`. API: `toggle()`, `setAmbient(rgba)`. ScriptFns: `{light-off}`, `{light-on}`, `{set-ambient rgba}`. Registrado en `play.html`, `editor/panels/play.js`, `editor/export.js`. `garden.json`: avatar tiene light cálido, room `forest` tiene ambient nocturno.
 - [x] 🟡 **`modules/render/camera.js`** — modos `flip` (default, retrocompat mosi), `follow`, `smooth`. Aplica `ctx.translate` en render:bg con clamp al room. `game.cameraMode` o `{set-camera mode}`.
 - [ ] 🟡 **`modules/render/layers.js`** — z-ordering por sprite con `sprite.layer: 0..3`. Hook `render:bg/tiles/sprites/fg`. Reescribir el orden de pintado de `sprites.js` para respetar layer.
 - [ ] 🔴 **`modules/render/parallax.js`** — capas con scroll diferencial. Depende de `layers` y `camera`. Añade `layer.parallax: 0..1`.
@@ -121,7 +121,7 @@
 ## fase 8 — accesibilidad y mobile
 
 - [ ] 🟢 **`aria-live` en el diálogo.** Ya está parcialmente. Verificar que un screen reader anuncia el texto a medida que se escribe.
-- [ ] 🟡 **Navegación 100% por teclado en el editor.** Tab order coherente, focus visible, atajos documentados en un panel de ayuda.
+- [~] 🟡 **Navegación 100% por teclado en el editor.** `:focus-visible` global con outline ámbar añadido. Tabs con role=tablist + aria-selected. Botones de toolbar y "×" cripticos con aria-label. Color swatches como role=radiogroup. Cheatsheet "?" flotante. **Falta**: list-items navegables, room-cells con teclado, navegación entre frames con flechas.
 - [ ] 🟡 **Modo daltonismo.** Toggle que aplica filtros CSS al canvas para previsualizar protanopia/deuteranopia/tritanopia.
 - [ ] 🟡 **PWA del editor.** `manifest.webmanifest` + service worker que cachea todos los archivos. Editor funciona offline.
 - [ ] 🟡 **Editor responsive en móvil.** El layout 3-columnas se rompe a 1-columna. El paint canvas necesita zoom para que se pueda pintar con el dedo (hoy es muy pequeño).
@@ -150,6 +150,8 @@ Esta fase es la que más diferencia moixi de mosi: mosi vive en el desktop y exp
 ---
 
 ### Fase 10a — UX/UI del arxiu (sin backend) · arrancable YA
+
+> **Estado 2026-05-11**: refinado el diseño de cards (jerarquía visual del autor, fecha en footer, gradient thumb limpio). `arxiu-mock.json` ampliado a 10 juegos con concept fuerte (variedad de tags walking-sim, weird, ritual, micro-fiction) + 4 autores nuevos.
 
 - [ ] 🟡 **Wireframe de la landing `/`**: grid de juegos, buscador, filtros (tag/autor/fecha/features), sort, botón "crear juego". Empezar con mockup estático en HTML/CSS, datos de juegos fake hardcoded.
 - [ ] 🟡 **Wireframe de `/game/<id>`**: hero con el juego embebido + metadata + autor + forks + (más adelante) histórico. También mockup estático primero.

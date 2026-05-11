@@ -38,7 +38,7 @@ async function init() {
   const totalForks = myGames.reduce((s, g) => s + g.forks, 0);
 
   const gamesHTML = myGames.length ? myGames.map(g => `
-    <a class="profile-game" href="/game.html?id=${encodeURIComponent(g.id)}">
+    <a class="profile-game" href="./game.html?id=${encodeURIComponent(g.id)}">
       <div class="profile-game-thumb" style="background: ${g.thumb};"></div>
       <div class="profile-game-body">
         <div class="profile-game-title">${escapeHTML(g.name)}${g.forkOf ? ' <span class="fork-badge">↳ fork</span>' : ''}</div>

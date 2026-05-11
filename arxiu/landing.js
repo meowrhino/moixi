@@ -49,13 +49,13 @@ function gameCard(g) {
     ? `<span class="fork-badge" title="fork de ${g.forkOf}">↳ fork</span>`
     : '';
   return `
-    <article class="card" data-href="/game.html?id=${encodeURIComponent(g.id)}" tabindex="0" role="link" aria-label="${escapeHTML(g.name)} por ${escapeHTML(g.author)}">
+    <article class="card" data-href="./game.html?id=${encodeURIComponent(g.id)}" tabindex="0" role="link" aria-label="${escapeHTML(g.name)} por ${escapeHTML(g.author)}">
       <div class="card-thumb" style="background: ${g.thumb};" aria-hidden="true"></div>
       <div class="card-body">
         <div class="card-title">${escapeHTML(g.name)}${forkBadge}</div>
         <div class="card-byline">
           <span class="by">por</span>
-          <a href="/u.html?handle=${encodeURIComponent(g.authorHandle)}" class="author-link">${escapeHTML(g.author)}</a>
+          <a href="./u.html?handle=${encodeURIComponent(g.authorHandle)}" class="author-link">${escapeHTML(g.author)}</a>
         </div>
         <p class="card-summary">${escapeHTML(g.summary)}</p>
         <div class="card-tags">${tagsHTML}</div>

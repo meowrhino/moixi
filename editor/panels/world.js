@@ -52,7 +52,10 @@ function render(state) {
   const center = document.querySelector('.panel.center');
   center.innerHTML = '';
   if (!selectedRoom || !game.rooms[selectedRoom]) {
-    center.appendChild(el('div', { class: 'empty' }, 'crea un room'));
+    const cta = el('div', { class: 'empty-cta' });
+    cta.appendChild(el('p', {}, 'todavía no hay rooms'));
+    cta.appendChild(el('button', { class: 'primary', onclick: () => addRoom(state) }, '+ crear el primero'));
+    center.appendChild(cta);
   } else {
     const room = game.rooms[selectedRoom];
     const [rw, rh] = game.roomSize;

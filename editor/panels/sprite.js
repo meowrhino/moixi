@@ -88,7 +88,16 @@ function renderList(state) {
 function renderEditor(state) {
   const editor = el('div', { class: 'paint' });
   if (!selected) {
-    editor.appendChild(el('div', { class: 'empty' }, 'selecciona un sprite'));
+    const spriteCount = Object.keys(game.sprites || {}).length;
+    const cta = el('div', { class: 'empty-cta' });
+    if (spriteCount === 0) {
+      cta.appendChild(el('p', {}, 'todavía no hay sprites'));
+      cta.appendChild(el('button', { class: 'primary', onclick: () => addSprite(state) }, '+ crear el primero'));
+    } else {
+      cta.appendChild(el('p', {}, '👈 selecciona uno · o crea uno nuevo'));
+      cta.appendChild(el('button', { class: 'primary', onclick: () => addSprite(state) }, '+ nuevo sprite'));
+    }
+    editor.appendChild(cta);
     return editor;
   }
   const sp = game.sprites[selected];
@@ -225,7 +234,7 @@ function renderFrameActions(state, sp) {
 
 // Panel derecho: name/fps/colorIndex + toggles isWall/isItem + textarea script.
 function renderProps(state) {
-  if (!selected) return [el('div', { class: 'empty' }, '—')];
+  if (!selected) return [el('div', { class: 'empty' }, 'propiedades del sprite seleccionado aparecen aquí')];
   const sp = game.sprites[selected];
   const out = [el('h2', {}, 'propiedades')];
 

@@ -6,6 +6,7 @@ import { on as onEditorEv } from './ui.js';
 import { setupShortcuts } from './shortcuts.js';
 import { setupUndo, clearHistory } from './undo.js';
 import { setupKeyNav } from './keynav.js';
+import { buildEmptyGame } from './starters.js';
 
 // Cargamos los paneles con cache-bust dinámico: el editor.html ya lo hace con
 // editor.js, replicamos el patrón aquí para que los paneles (que iteran rápido)
@@ -49,6 +50,8 @@ function setupLayout() {
       <aside class="panel right" id="panel-right"></aside>
     </div>
     <div class="statusbar">
+      <span id="status-info"></span>
+      <span class="status-sep" id="status-sep"></span>
       <span id="status-msg">listo</span>
       <span class="spacer" style="flex:1"></span>
       <span id="status-dirty"></span>
@@ -105,8 +108,24 @@ function loadGame(g, fileName = 'untitled.json') {
   state.fileName = fileName;
   state.dirty = false;
   $('#file-name').textContent = fileName;
+  $('#status-dirty').textContent = '';
+  updateStatusInfo();
   clearHistory();
   rerender();
+}
+
+// Resumen del juego en la status bar: nombre + counts de rooms/sprites/paletas.
+function updateStatusInfo() {
+  const info = $('#status-info');
+  const sep = $('#status-sep');
+  if (!info) return;
+  const g = state.game;
+  if (!g) { info.textContent = ''; if (sep) sep.textContent = ''; return; }
+  const rc = Object.keys(g.rooms || {}).length;
+  const sc = Object.keys(g.sprites || {}).length;
+  const pc = Object.keys(g.palettes || {}).length;
+  info.textContent = `${g.name || 'untitled'} · ${rc} ${rc === 1 ? 'room' : 'rooms'} · ${sc} ${sc === 1 ? 'sprite' : 'sprites'} · ${pc} ${pc === 1 ? 'paleta' : 'paletas'}`;
+  if (sep) sep.textContent = '·';
 }
 
 function setStatus(msg) {
@@ -119,6 +138,7 @@ function setStatus(msg) {
 onEditorEv('editor:change', () => {
   state.dirty = true;
   $('#status-dirty').textContent = '● sin guardar';
+  updateStatusInfo();
   try {
     localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state.game));
   } catch {}
@@ -249,9 +269,15 @@ async function bootstrap() {
   }
 
   if (!game) {
-    const src = isNew ? './examples/empty.json' : './examples/garden.json';
-    game = await fetch(src).then(r => r.json());
-    fileName = isNew ? 'untitled.json' : 'garden.json';
+    if (isNew) {
+      // En vez de cargar examples/empty.json fijo, generamos un game vivo
+      // con paleta random, nombre random y avatar = mascot oficial.
+      game = buildEmptyGame();
+      fileName = `${(game.name || 'untitled').toLowerCase().replace(/\s+/g, '-')}.json`;
+    } else {
+      game = await fetch('./examples/garden.json').then(r => r.json());
+      fileName = 'garden.json';
+    }
   }
   loadGame(game, fileName);
 }

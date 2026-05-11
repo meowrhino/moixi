@@ -7,6 +7,7 @@ let selected = null;        // sprite id seleccionado
 let activeFrame = 0;
 let activeColor = 1;        // índice en la paleta actual
 let tool = 'pencil';        // 'pencil' | 'bucket' | 'eyedropper'
+let onionSkin = false;
 let currentRerender = null; // referencia para que los shortcuts puedan re-render
 
 // Listeners de shortcuts (registrados una vez al cargar el módulo)
@@ -16,6 +17,10 @@ on('editor:shortcut:bucket', () => {
 });
 on('editor:shortcut:eyedropper', () => {
   tool = tool === 'eyedropper' ? 'pencil' : 'eyedropper';
+  currentRerender?.();
+});
+on('editor:shortcut:onion', () => {
+  onionSkin = !onionSkin;
   currentRerender?.();
 });
 
@@ -73,9 +78,10 @@ function render(state) {
     const grid = renderPaintCanvas(big, sp, activeFrame, game.tileSize, colors);
     editor.appendChild(big);
 
-    // Indicador de herramienta activa
+    // Indicador de herramienta + onion
+    const toolLabel = tool === 'pencil' ? 'lápiz' : tool === 'bucket' ? 'cubo (B)' : 'cuentagotas (I)';
     editor.appendChild(el('div', { class: 'tool-indicator', 'aria-live': 'polite' },
-      tool === 'pencil' ? 'lápiz' : tool === 'bucket' ? 'cubo (B)' : 'cuentagotas (I)'));
+      toolLabel + (onionSkin && sp.frames.length > 1 ? ' · onion (O)' : '')));
 
     // Color picker (solo del 0..colors.length-1, color 0 = transparente / fondo)
     const cRow = el('div', { class: 'color-row', role: 'radiogroup', 'aria-label': 'color activo' });
@@ -183,7 +189,29 @@ function renderPaintCanvas(big, sprite, frameIdx, tileSize, colors) {
   const ctx = big.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   const bitmap = sprite.frames[frameIdx];
-  const draw = () => paintBitmap(big, bitmap, tileSize, colors, sprite.colorIndex ?? 1);
+  const colorIndex = sprite.colorIndex ?? 1;
+  const draw = () => {
+    ctx.fillStyle = colors[0] || '#000';
+    ctx.fillRect(0, 0, tileSize, tileSize);
+    // onion skin: frame previo en alpha 0.2 detrás del actual
+    if (onionSkin && frameIdx > 0 && sprite.frames[frameIdx - 1]) {
+      ctx.globalAlpha = 0.2;
+      ctx.fillStyle = colors[colorIndex] || '#fff';
+      const prev = sprite.frames[frameIdx - 1];
+      for (let y = 0; y < tileSize; y++) {
+        for (let x = 0; x < tileSize; x++) {
+          if (prev[y * tileSize + x]) ctx.fillRect(x, y, 1, 1);
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+    ctx.fillStyle = colors[colorIndex] || '#fff';
+    for (let y = 0; y < tileSize; y++) {
+      for (let x = 0; x < tileSize; x++) {
+        if (bitmap[y * tileSize + x]) ctx.fillRect(x, y, 1, 1);
+      }
+    }
+  };
   draw();
 
   const eventXY = (e) => {

@@ -8,6 +8,7 @@ import playPanel from './panels/play.js';
 import { downloadJSON, exportHTML, importJSON } from './export.js';
 import { on as onEditorEv } from './ui.js';
 import { setupShortcuts } from './shortcuts.js';
+import { setupUndo, clearHistory } from './undo.js';
 
 const PANELS = {
   world: worldPanel,
@@ -100,6 +101,7 @@ function loadGame(g, fileName = 'untitled.json') {
   state.fileName = fileName;
   state.dirty = false;
   $('#file-name').textContent = fileName;
+  clearHistory();
   rerender();
 }
 
@@ -201,10 +203,19 @@ onEditorEv('editor:shortcut:play', () => {
   if (p?.onPlay) p.onPlay(state);
 });
 
+// Re-render externo (emitido por undo/redo tras aplicar snapshot)
+onEditorEv('editor:rerender', () => {
+  state.dirty = true;
+  $('#status-dirty').textContent = '● sin guardar';
+  try { localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state.game)); } catch {}
+  rerender();
+});
+
 async function bootstrap() {
   setupLayout();
   setupDragDrop();
   setupShortcuts();
+  setupUndo(state);
   showSplash();
 
   // Intentar restaurar autosave

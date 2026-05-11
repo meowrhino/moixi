@@ -50,6 +50,7 @@
       "name": "tu",
       "colorIndex": 2,
       "fps": 2,
+      "light": { "radius": 4, "color": "rgba(255,200,100,0.5)" },
       "frames": [
         [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
         [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
@@ -138,6 +139,7 @@
       "name": "bosque",
       "palette": "dusk",
       "music": "mystery",
+      "ambient": "rgba(20,15,30,0.78)",
       "enterScript": "{position center}el bosque es callado{p}sigue al norte",
       "tiles": [
         ["tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree"],

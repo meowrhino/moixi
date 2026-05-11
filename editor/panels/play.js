@@ -14,7 +14,7 @@ async function startPreview(state) {
 
   // imports dinámicos para reset
   const [
-    coreMod, canvasMod, palettes, sprites, camera, keyboard, touch, mover,
+    coreMod, canvasMod, palettes, sprites, camera, lighting, keyboard, touch, mover,
     walls, interactable, dialog, inventory, world, transitions,
     script, stdlib, vars, audio, save,
   ] = await Promise.all([
@@ -23,6 +23,7 @@ async function startPreview(state) {
     import('../../modules/render/palettes.js?t=' + Date.now()),
     import('../../modules/render/sprites.js?t=' + Date.now()),
     import('../../modules/render/camera.js?t=' + Date.now()),
+    import('../../modules/render/lighting.js?t=' + Date.now()),
     import('../../modules/input/keyboard.js?t=' + Date.now()),
     import('../../modules/input/touch.js?t=' + Date.now()),
     import('../../modules/input/mover.js?t=' + Date.now()),
@@ -44,7 +45,7 @@ async function startPreview(state) {
   const gameClone = JSON.parse(JSON.stringify(state.game));
   c.load(gameClone);
 
-  c.use(canvasMod.default).use(palettes.default).use(sprites.default).use(camera.default)
+  c.use(canvasMod.default).use(palettes.default).use(sprites.default).use(camera.default).use(lighting.default)
     .use(keyboard.default).use(touch.default).use(mover.default)
     .use(walls.default).use(interactable.default).use(script.default).use(stdlib.default).use(vars.default)
     .use(dialog.default).use(inventory.default).use(world.default).use(transitions.default)

@@ -17,6 +17,7 @@ const RUNTIME_FILES = [
   'modules/input/touch.js',
   'modules/input/mover.js',
   'modules/gameplay/walls.js',
+  'modules/gameplay/interactable.js',
   'modules/gameplay/dialog.js',
   'modules/gameplay/inventory.js',
   'modules/gameplay/world.js',
@@ -111,6 +112,7 @@ export async function exportHTML(game) {
     import touch from "${finalURLs['modules/input/touch.js']}";
     import mover from "${finalURLs['modules/input/mover.js']}";
     import walls from "${finalURLs['modules/gameplay/walls.js']}";
+    import interactable from "${finalURLs['modules/gameplay/interactable.js']}";
     import dialog from "${finalURLs['modules/gameplay/dialog.js']}";
     import inventory from "${finalURLs['modules/gameplay/inventory.js']}";
     import world from "${finalURLs['modules/gameplay/world.js']}";
@@ -124,7 +126,7 @@ export async function exportHTML(game) {
     core.load(game);
     core.use(canvasMod).use(palettes).use(sprites)
       .use(keyboard).use(touch).use(mover)
-      .use(walls).use(script).use(stdlib).use(vars)
+      .use(walls).use(interactable).use(script).use(stdlib).use(vars)
       .use(dialog).use(inventory).use(world)
       .use(audio).use(save);
     core.bus.emit('roomEnter', { roomId: game.startRoom });

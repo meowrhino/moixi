@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>mosi · player</title>
+  <title>moixi · player</title>
   <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
   <link rel="stylesheet" href="./style.css">
   <style>
@@ -50,28 +50,40 @@
   </div>
 
   <script type="module">
-    import core from './core/index.js';
-    import canvasMod from './modules/render/canvas.js';
-    import palettes from './modules/render/palettes.js';
-    import sprites from './modules/render/sprites.js';
-    import keyboard from './modules/input/keyboard.js';
-    import touch from './modules/input/touch.js';
-    import mover from './modules/input/mover.js';
-    import walls from './modules/gameplay/walls.js';
-    import dialog from './modules/gameplay/dialog.js';
-    import inventory from './modules/gameplay/inventory.js';
-    import world from './modules/gameplay/world.js';
-    import script from './modules/script/mosi.js';
-    import stdlib from './modules/script/stdlib.js';
-    import vars from './modules/script/vars.js';
-    import audio from './modules/audio/beeps.js';
-    import save from './modules/persistence/save.js';
+    // Imports dinámicos con cache-bust. Evita que el browser sirva módulos viejos
+    // tras cambios en el motor durante development. El HTML standalone exportado
+    // no usa este path (export.js inline-a todo con blob URLs).
+    const t = Date.now();
+    const im = (p) => import(`${p}?t=${t}`).then(m => m.default);
+    const [
+      core, canvasMod, palettes, sprites, keyboard, touch, mover,
+      walls, interactable, dialog, inventory, world,
+      script, stdlib, vars, audio, save,
+    ] = await Promise.all([
+      im('./core/index.js'),
+      im('./modules/render/canvas.js'),
+      im('./modules/render/palettes.js'),
+      im('./modules/render/sprites.js'),
+      im('./modules/input/keyboard.js'),
+      im('./modules/input/touch.js'),
+      im('./modules/input/mover.js'),
+      im('./modules/gameplay/walls.js'),
+      im('./modules/gameplay/interactable.js'),
+      im('./modules/gameplay/dialog.js'),
+      im('./modules/gameplay/inventory.js'),
+      im('./modules/gameplay/world.js'),
+      im('./modules/script/mosi.js'),
+      im('./modules/script/stdlib.js'),
+      im('./modules/script/vars.js'),
+      im('./modules/audio/beeps.js'),
+      im('./modules/persistence/save.js'),
+    ]);
 
     const url = new URLSearchParams(location.search).get('game') || './examples/garden.json';
     const gameData = await fetch(url).then(r => r.json());
 
-    document.getElementById('game-title').textContent = gameData.name || 'mosi';
-    document.title = `mosi · ${gameData.name || 'player'}`;
+    document.getElementById('game-title').textContent = gameData.name || 'moixi';
+    document.title = `moixi · ${gameData.name || 'player'}`;
 
     core.load(gameData);
 
@@ -83,6 +95,7 @@
       .use(touch)
       .use(mover)
       .use(walls)
+      .use(interactable)
       .use(script)
       .use(stdlib)
       .use(vars)

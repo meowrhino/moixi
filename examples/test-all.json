@@ -68,7 +68,7 @@
       "name": "llave",
       "colorIndex": 2,
       "isItem": true,
-      "script": "{position center}{shaky}+1 llave{/shaky}{p}llaves: {item-count llave}",
+      "script": "{inc-item-count llave}{position center}{shaky}+1 llave{/shaky}{p}llaves: {item-count llave}",
       "frames": [[0,0,0,1,1,0,0,0, 0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,1,1,0, 0,0,0,1,1,0,1,0, 0,0,0,1,1,1,1,0]]
     },
     "door": {

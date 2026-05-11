@@ -249,10 +249,65 @@ function tick({ t }) {
   }
 }
 
+// Pre-procesa {if cond}then{else}else{/if} respetando anidamiento, evalúa cond y
+// devuelve el script con solo la rama elegida (o vacío si no había rama). Lo necesita
+// el parser principal porque parseScript es secuencial y no entiende bloques.
+function resolveIfElse(src) {
+  let out = '';
+  let i = 0;
+  while (i < src.length) {
+    if (src.slice(i, i + 4) === '{if ') {
+      // encuentra el } que cierra el if-tag (respetando llaves de la condición)
+      let d = 1, j = i + 1;
+      while (j < src.length && d > 0) {
+        if (src[j] === '{') d++;
+        else if (src[j] === '}') d--;
+        if (d > 0) j++;
+      }
+      const condRaw = src.slice(i + 4, j).trim();
+      const condInner = (condRaw.startsWith('{') && condRaw.endsWith('}'))
+        ? condRaw.slice(1, -1) : condRaw;
+      const condValue = evaluateExpr(condInner);
+
+      // busca {else} y {/if} al mismo nivel
+      let bodyStart = j + 1, nest = 1, elsePos = -1, endIfPos = -1, k = bodyStart;
+      while (k < src.length) {
+        if (src.slice(k, k + 4) === '{if ') {
+          nest++;
+          let d2 = 1, m = k + 1;
+          while (m < src.length && d2 > 0) {
+            if (src[m] === '{') d2++;
+            else if (src[m] === '}') d2--;
+            if (d2 > 0) m++;
+          }
+          k = m + 1;
+        } else if (src.slice(k, k + 5) === '{/if}') {
+          nest--;
+          if (nest === 0) { endIfPos = k; break; }
+          k += 5;
+        } else if (nest === 1 && src.slice(k, k + 6) === '{else}') {
+          elsePos = k; k += 6;
+        } else {
+          k++;
+        }
+      }
+      if (endIfPos < 0) { out += src.slice(i); return out; }
+      const thenBody = src.slice(bodyStart, elsePos >= 0 ? elsePos : endIfPos);
+      const elseBody = elsePos >= 0 ? src.slice(elsePos + 6, endIfPos) : '';
+      out += condValue ? resolveIfElse(thenBody) : resolveIfElse(elseBody);
+      i = endIfPos + 5;
+    } else {
+      out += src[i];
+      i++;
+    }
+  }
+  return out;
+}
+
 export function runScript(src) {
   if (!src) return;
   open();
-  queue = parseScript(src);
+  queue = parseScript(resolveIfElse(src));
   startNextPage();
 }
 

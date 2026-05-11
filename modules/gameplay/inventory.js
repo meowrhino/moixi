@@ -13,9 +13,13 @@ export default {
     c.bus.on('pickup', ({ sprite }) => {
       const inv = c.state.runtime.inventory;
       const key = sprite.name || sprite.id;
-      inv[key] = (inv[key] || 0) + 1;
-      // si tiene script, ejecutarlo (mensaje de pickup)
-      if (sprite.script) c.api.dialog.run(sprite.script);
+      // Si el sprite tiene script, el script controla la lógica (usa {inc-item-count name}).
+      // Si no, el motor incrementa automáticamente.
+      if (sprite.script) {
+        c.api.dialog.run(sprite.script);
+      } else {
+        inv[key] = (inv[key] || 0) + 1;
+      }
       // remover del grid
       c.state.runtime.currentRoom.tiles[sprite.y][sprite.x] = null;
     });

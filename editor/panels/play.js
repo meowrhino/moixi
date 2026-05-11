@@ -15,7 +15,7 @@ async function startPreview(state) {
   // imports dinámicos para reset
   const [
     coreMod, canvasMod, palettes, sprites, keyboard, touch, mover,
-    walls, dialog, inventory, world, script, stdlib, vars, audio, save,
+    walls, interactable, dialog, inventory, world, script, stdlib, vars, audio, save,
   ] = await Promise.all([
     import('../../core/index.js?t=' + Date.now()),
     import('../../modules/render/canvas.js?t=' + Date.now()),
@@ -25,6 +25,7 @@ async function startPreview(state) {
     import('../../modules/input/touch.js?t=' + Date.now()),
     import('../../modules/input/mover.js?t=' + Date.now()),
     import('../../modules/gameplay/walls.js?t=' + Date.now()),
+    import('../../modules/gameplay/interactable.js?t=' + Date.now()),
     import('../../modules/gameplay/dialog.js?t=' + Date.now()),
     import('../../modules/gameplay/inventory.js?t=' + Date.now()),
     import('../../modules/gameplay/world.js?t=' + Date.now()),
@@ -42,7 +43,7 @@ async function startPreview(state) {
 
   c.use(canvasMod.default).use(palettes.default).use(sprites.default)
     .use(keyboard.default).use(touch.default).use(mover.default)
-    .use(walls.default).use(script.default).use(stdlib.default).use(vars.default)
+    .use(walls.default).use(interactable.default).use(script.default).use(stdlib.default).use(vars.default)
     .use(dialog.default).use(inventory.default).use(world.default)
     .use(audio.default).use(save.default);
 

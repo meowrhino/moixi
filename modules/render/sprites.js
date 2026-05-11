@@ -186,10 +186,18 @@ export default {
 
   api: {
     clearCache,
+    // Devuelve una vista mutable del sprite en (x,y): lecturas y escrituras
+    // van al sprite original (game.sprites[id]); id/x/y se "inyectan" como propiedades
+    // de instancia. Sin esto, set-sprite-wall y demás mutarían una copia y se perderían.
     spriteAt(x, y) {
       const id = core.state.runtime.currentRoom?.tiles?.[y]?.[x];
       if (!id) return null;
-      return { id, ...core.state.game.sprites[id], x, y };
+      const og = core.state.game.sprites[id];
+      return new Proxy(og, {
+        get: (t, k) => k === 'id' ? id : k === 'x' ? x : k === 'y' ? y : t[k],
+        set: (t, k, v) => { if (k === 'id' || k === 'x' || k === 'y') return true; t[k] = v; return true; },
+        has: (t, k) => k === 'id' || k === 'x' || k === 'y' || k in t,
+      });
     },
   },
 };

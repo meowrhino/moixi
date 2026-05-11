@@ -245,6 +245,29 @@ a:hover { color: var(--amber); }
   padding-top: 2px;
 }
 
+/* Overlay drag&drop: aparece al arrastrar un .json sobre el editor */
+.drop-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(244, 236, 216, 0.92);
+  outline: 4px dashed var(--amber);
+  outline-offset: -16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  z-index: 9998;
+  pointer-events: none;
+  animation: drop-overlay-in 0.12s ease-out;
+}
+@keyframes drop-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* Splash del editor: 600ms al cargar antes de mostrar la UI */
 .splash {
   position: fixed;

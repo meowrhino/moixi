@@ -126,6 +126,47 @@ window.addEventListener('beforeunload', (e) => {
   }
 });
 
+function setupDragDrop() {
+  let dragCounter = 0;
+  let overlay = null;
+  const show = () => {
+    if (overlay) return;
+    overlay = document.createElement('div');
+    overlay.className = 'drop-overlay';
+    overlay.textContent = 'soltar para cargar .json';
+    document.body.appendChild(overlay);
+  };
+  const hide = () => { overlay?.remove(); overlay = null; };
+
+  window.addEventListener('dragenter', (e) => {
+    if (!e.dataTransfer?.types?.includes('Files')) return;
+    dragCounter++;
+    if (dragCounter === 1) show();
+  });
+  window.addEventListener('dragleave', () => {
+    if (--dragCounter <= 0) { dragCounter = 0; hide(); }
+  });
+  window.addEventListener('dragover', (e) => {
+    if (e.dataTransfer?.types?.includes('Files')) e.preventDefault();
+  });
+  window.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    dragCounter = 0; hide();
+    const file = e.dataTransfer?.files?.[0];
+    if (!file || !file.name.endsWith('.json')) {
+      setStatus('arrastra un .json');
+      return;
+    }
+    try {
+      const text = await file.text();
+      loadGame(JSON.parse(text), file.name);
+      setStatus(`cargado ${file.name}`);
+    } catch (err) {
+      alert('JSON inválido: ' + err.message);
+    }
+  });
+}
+
 function showSplash() {
   document.body.insertAdjacentHTML('afterbegin', `
     <div class="splash" id="splash" aria-hidden="true">
@@ -140,6 +181,7 @@ function showSplash() {
 
 async function bootstrap() {
   setupLayout();
+  setupDragDrop();
   showSplash();
 
   // Intentar restaurar autosave

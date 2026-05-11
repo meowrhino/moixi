@@ -1,0 +1,243 @@
+/* editor/editor.css — estilos específicos del editor */
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+  flex-wrap: wrap;
+}
+.toolbar .brand {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.toolbar .brand .mascot {
+  width: 24px;
+  height: 24px;
+}
+.toolbar .spacer { flex: 1; }
+.toolbar .file-name {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+.tab {
+  background: transparent;
+  border: 1.5px solid transparent;
+  border-bottom: 1.5px solid var(--ink);
+  padding: 0.3em 0.8em;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  text-transform: lowercase;
+}
+.tab.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 280px 1fr 320px;
+  gap: 0;
+  overflow: hidden;
+}
+.panel {
+  overflow: auto;
+  padding: 1rem;
+  border-right: 1px solid var(--ink);
+}
+.panel:last-child { border-right: none; }
+.panel.center {
+  background: var(--paper-2);
+  display: grid;
+  place-items: center;
+}
+
+.panel h2 { margin-bottom: 0.5rem; }
+.panel h3 { margin-top: 1rem; margin-bottom: 0.4rem; }
+
+.list {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 1rem;
+}
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35em 0.5em;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.list-item:hover { background: var(--paper-2); }
+.list-item.active {
+  border-color: var(--ink);
+  background: var(--paper);
+  box-shadow: 3px 3px 0 var(--amber);
+}
+.list-item .preview {
+  width: 24px; height: 24px;
+  background: var(--ink);
+  image-rendering: pixelated;
+}
+
+.actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin: 0.5rem 0;
+}
+
+/* Pixel paint editor */
+.paint {
+  display: grid;
+  gap: 0.5rem;
+  width: 100%;
+}
+.paint canvas {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  border: 2px solid var(--ink);
+  cursor: crosshair;
+  touch-action: none;
+}
+.paint .frames {
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.paint .frame {
+  width: 40px; height: 40px;
+  border: 1.5px solid var(--ink);
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+.paint .frame.active {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.color-row {
+  display: flex; gap: 4px; flex-wrap: wrap; margin-top: 0.4rem;
+}
+.color-swatch {
+  width: 28px; height: 28px;
+  border: 1.5px solid var(--ink);
+  cursor: pointer;
+  position: relative;
+}
+.color-swatch.active::after {
+  content: "▮";
+  position: absolute; bottom: -2px; left: 50%;
+  transform: translate(-50%, 0);
+  color: var(--amber);
+  font-size: 0.6rem;
+  text-shadow: 0 0 2px var(--ink);
+}
+
+/* Room editor (grid) */
+.room-grid {
+  display: grid;
+  gap: 0;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  width: min(80vh, 100%);
+  aspect-ratio: 1;
+  user-select: none;
+  touch-action: none;
+}
+.room-cell {
+  background: var(--paper);
+  cursor: pointer;
+  position: relative;
+}
+.room-cell canvas {
+  width: 100%; height: 100%;
+  image-rendering: pixelated;
+}
+.room-cell.avatar-here::after {
+  content: "@";
+  position: absolute;
+  inset: 0;
+  display: grid; place-items: center;
+  color: var(--amber);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+/* Field rows */
+.field {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 0.6rem;
+}
+.field label {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+}
+.field textarea {
+  font-size: 0.8rem;
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Toggle buttons */
+.toggle {
+  display: inline-flex; gap: 4px;
+}
+.toggle button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Empty state */
+.empty {
+  opacity: 0.5;
+  font-style: italic;
+  text-align: center;
+  padding: 2rem 0;
+  font-size: 0.85rem;
+}
+
+/* Status bar */
+.statusbar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.75rem;
+  padding: 0.3em 1rem;
+  font-family: var(--mono);
+  display: flex; gap: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .workspace { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
+  .panel { border-right: none; border-bottom: 1px solid var(--ink); max-height: 40vh; }
+}

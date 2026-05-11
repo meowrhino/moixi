@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>mosi · player</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    body {
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 2vh;
+    }
+    .player {
+      display: grid;
+      gap: 1rem;
+      width: min(100%, 640px);
+      text-align: center;
+    }
+    .player header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 0.4rem;
+    }
+    .player .credits {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      margin-top: 0.5rem;
+    }
+    [data-mosi-canvas] {
+      width: 100%;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="player">
+    <header>
+      <h1 id="game-title">cargando…</h1>
+      <span class="credits">↑↓←→ + space</span>
+    </header>
+    <canvas data-mosi-canvas></canvas>
+    <div class="divider-glyphs"></div>
+    <footer class="studio-footer">
+      <img class="mascot alive" src="./assets/mascot.svg" alt="">
+      &nbsp;made in barcelona ☼ <a href="https://meowrhino.neocities.org">meowrhino studio</a>
+    </footer>
+  </div>
+
+  <script type="module">
+    import core from './core/index.js';
+    import canvasMod from './modules/render/canvas.js';
+    import palettes from './modules/render/palettes.js';
+    import sprites from './modules/render/sprites.js';
+    import keyboard from './modules/input/keyboard.js';
+    import touch from './modules/input/touch.js';
+    import mover from './modules/input/mover.js';
+    import walls from './modules/gameplay/walls.js';
+    import dialog from './modules/gameplay/dialog.js';
+    import inventory from './modules/gameplay/inventory.js';
+    import world from './modules/gameplay/world.js';
+    import script from './modules/script/mosi.js';
+    import stdlib from './modules/script/stdlib.js';
+    import vars from './modules/script/vars.js';
+    import audio from './modules/audio/beeps.js';
+    import save from './modules/persistence/save.js';
+
+    const url = new URLSearchParams(location.search).get('game') || './examples/garden.json';
+    const gameData = await fetch(url).then(r => r.json());
+
+    document.getElementById('game-title').textContent = gameData.name || 'mosi';
+    document.title = `mosi · ${gameData.name || 'player'}`;
+
+    core.load(gameData);
+
+    core
+      .use(canvasMod)
+      .use(palettes)
+      .use(sprites)
+      .use(keyboard)
+      .use(touch)
+      .use(mover)
+      .use(walls)
+      .use(script)
+      .use(stdlib)
+      .use(vars)
+      .use(dialog)
+      .use(inventory)
+      .use(world)
+      .use(audio)
+      .use(save);
+
+    // dispara roomEnter al inicio para que el módulo audio arranque la música
+    core.bus.emit('roomEnter', { roomId: gameData.startRoom });
+
+    core.start();
+  </script>
+</body>
+</html>

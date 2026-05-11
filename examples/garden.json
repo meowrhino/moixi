@@ -1,0 +1,161 @@
+{
+  "name": "el jardín",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "garden",
+  "avatarStart": { "x": 7, "y": 8 },
+  "introScript": "{position center}bienvenida al jardín{p}{position center}{wavy}busca el secreto{/wavy}",
+
+  "palettes": {
+    "morning": {
+      "name": "amanecer",
+      "colors": ["#f4ecd8", "#3d7068", "#1a1a1a", "#d4843e", "#a83e3e"]
+    },
+    "dusk": {
+      "name": "atardecer",
+      "colors": ["#2a1a2e", "#5d275d", "#f4ecd8", "#d4843e", "#ef7d57"]
+    }
+  },
+
+  "songs": {
+    "calm": {
+      "name": "tema del jardín",
+      "wave": "triangle",
+      "loop": true,
+      "notes": [
+        { "note": "C4", "dur": 0.4 }, { "note": "E4", "dur": 0.4 },
+        { "note": "G4", "dur": 0.4 }, { "note": "E4", "dur": 0.4 },
+        { "note": "A4", "dur": 0.4 }, { "note": "G4", "dur": 0.4 },
+        { "note": "E4", "dur": 0.4 }, { "note": "C4", "dur": 0.8 }
+      ]
+    },
+    "mystery": {
+      "name": "tema del bosque",
+      "wave": "sawtooth",
+      "loop": true,
+      "notes": [
+        { "note": "D4", "dur": 0.3 }, { "note": "F4", "dur": 0.3 },
+        { "note": "A4", "dur": 0.6 }, { "note": "G4", "dur": 0.3 },
+        { "note": "F4", "dur": 0.3 }, { "note": "D4", "dur": 0.6 }
+      ]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ]
+    },
+    "wall": {
+      "name": "pared",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,0,1,1,0,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,0,1,1,1,0,
+        1,1,1,1,1,1,1,1, 1,0,1,1,1,1,0,1, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1
+      ]]
+    },
+    "flower": {
+      "name": "flor",
+      "colorIndex": 3,
+      "isItem": true,
+      "fps": 3,
+      "script": "{position center}una flor de oro{p}{inc-item-count flor}ahora tienes {item-count flor}",
+      "frames": [
+        [0,0,0,1,1,0,0,0, 0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,1,0,0,1,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0],
+        [0,0,0,1,1,0,0,0, 0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,0,1,1,0,1,0]
+      ]
+    },
+    "fox": {
+      "name": "zorro",
+      "colorIndex": 3,
+      "script": "{position center}un zorro te mira{p}\"¿buscas la salida?\"{p}{if {gte {item-count flor} 3}}\"toma, te enseño\"{set-music mystery}{move-avatar forest 7 14}{else}\"trae 3 flores y te muestro un sitio\"{/if}",
+      "frames": [
+        [0,1,0,0,0,0,1,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,1,0,1,1,0,1,0, 0,1,0,1,1,0,1,0],
+        [0,1,0,0,0,0,1,0, 1,1,0,1,1,0,1,1, 1,1,1,0,0,1,1,1, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0]
+      ]
+    },
+    "tree": {
+      "name": "arbol",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[
+        0,0,0,1,1,0,0,0, 0,1,1,1,1,1,1,0, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,
+        0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0
+      ]]
+    },
+    "sign": {
+      "name": "letrero",
+      "colorIndex": 4,
+      "isWall": true,
+      "script": "{position top}{shaky}toca al zorro!{/shaky}{p}{position bottom}llévale 3 flores",
+      "frames": [[
+        0,1,1,1,1,1,1,0, 1,1,0,0,0,0,1,1, 1,0,1,0,0,1,0,1, 1,0,0,0,0,0,0,1,
+        1,0,1,0,0,1,0,1, 0,1,1,1,1,1,1,0, 0,0,0,1,1,0,0,0, 0,0,0,1,1,0,0,0
+      ]]
+    }
+  },
+
+  "rooms": {
+    "garden": {
+      "name": "jardín",
+      "palette": "morning",
+      "music": "calm",
+      "tiles": [
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,"tree",null,null,null,null,null,null,"flower",null,null,"tree",null,null,"wall"],
+        ["wall",null,null,null,null,"flower",null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,"sign","wall"],
+        ["wall",null,"flower",null,null,null,null,null,null,null,null,"flower",null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,"fox",null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,"tree",null,null,null,null,null,null,null,"tree",null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,null,null,null,"flower",null,null,null,null,"flower",null,null,null,null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall",null,"tree",null,null,null,null,null,null,null,null,null,null,"tree",null,"wall"],
+        ["wall",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"wall"],
+        ["wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall","wall"]
+      ]
+    },
+    "forest": {
+      "name": "bosque",
+      "palette": "dusk",
+      "music": "mystery",
+      "enterScript": "{position center}el bosque es callado{p}sigue al norte",
+      "tiles": [
+        ["tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree","tree"],
+        ["tree",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"tree"],
+        ["tree",null,null,null,null,"tree","tree",null,null,"tree","tree",null,null,null,null,"tree"],
+        ["tree",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"tree"],
+        ["tree",null,"tree",null,null,null,null,null,null,null,null,null,null,"tree",null,"tree"],
+        ["tree",null,null,null,null,null,"flower",null,null,"flower",null,null,null,null,null,"tree"],
+        ["tree",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"tree"],
+        ["tree","tree",null,null,"tree",null,null,null,null,null,null,"tree",null,null,"tree","tree"],
+        ["tree",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"tree"],
+        ["tree",null,null,"tree",null,null,null,null,null,null,null,null,"tree",null,null,"tree"],
+        ["tree",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"tree"],
+        ["tree",null,null,null,null,"tree","tree","tree","tree","tree","tree",null,null,null,null,"tree"],
+        ["tree",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"tree"],
+        ["tree",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"tree"],
+        ["tree",null,null,null,null,null,null,null,null,null,null,null,null,null,null,"tree"],
+        ["tree","tree","tree","tree","tree","tree","tree",null,null,"tree","tree","tree","tree","tree","tree","tree"]
+      ],
+      "exits": [
+        { "x": 7, "y": 15, "toRoom": "garden", "toX": 7, "toY": 1 },
+        { "x": 8, "y": 15, "toRoom": "garden", "toX": 8, "toY": 1 }
+      ]
+    }
+  }
+}

@@ -1,0 +1,306 @@
+// modules/gameplay/dialog.js — caja de diálogo con typewriter + tags inline.
+// Soporta: {b} (line break), {p} (page break), {wavy}...{/wavy}, {shaky}...{/shaky},
+//          {color N}...{/color}, {position top|center|bottom|fullscreen}...{/position},
+//          {delay N}, {if ...}{/if}, expresiones {var name}, etc.
+// Las funciones no-dialogo se dispatchan a core.scriptFns y se ejecutan inline.
+
+let core = null;
+let el = null;
+let queue = [];      // páginas pendientes
+let charBuffer = ''; // texto que se está escribiendo char a char
+let bufferIdx = 0;
+let lastCharTime = 0;
+let charsPerSec = 40;
+let position = 'bottom';
+
+function ensureEl() {
+  if (el) return;
+  el = document.createElement('div');
+  el.dataset.mosiDialog = '';
+  el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-live', 'polite');
+  Object.assign(el.style, {
+    position: 'fixed', left: '50%', transform: 'translateX(-50%)',
+    bottom: '8%', maxWidth: 'min(90vw, 540px)', minWidth: '60vw',
+    padding: '0.8em 1em', font: '16px ui-monospace, "JetBrains Mono", monospace',
+    background: '#1a1a1a', color: '#f4ecd8',
+    border: '2px solid #d4843e', boxShadow: '4px 4px 0 #d4843e',
+    display: 'none', zIndex: 100, lineHeight: 1.4,
+    whiteSpace: 'pre-wrap', wordWrap: 'break-word',
+  });
+  el.addEventListener('click', advance);
+  document.body.appendChild(el);
+}
+
+function setPosition(p) {
+  position = p;
+  if (!el) return;
+  el.style.bottom = el.style.top = el.style.height = el.style.maxHeight = '';
+  if (p === 'top')         { el.style.top = '8%'; el.style.bottom = ''; }
+  else if (p === 'center') { el.style.top = '40%'; el.style.bottom = ''; }
+  else if (p === 'bottom') { el.style.bottom = '8%'; }
+  else if (p === 'fullscreen') {
+    Object.assign(el.style, { top: '5%', bottom: '5%', left: '5%', right: '5%',
+      transform: 'none', maxWidth: 'none', maxHeight: '90vh', overflow: 'auto' });
+  }
+}
+
+function open() {
+  ensureEl();
+  el.style.display = 'block';
+  core.state.runtime.dialogActive = true;
+  charBuffer = ''; bufferIdx = 0;
+}
+function close() {
+  if (el) el.style.display = 'none';
+  core.state.runtime.dialogActive = false;
+  queue = []; charBuffer = ''; bufferIdx = 0;
+  setPosition('bottom');
+}
+function advance() {
+  if (bufferIdx < charBuffer.length) { bufferIdx = charBuffer.length; render(); return; }
+  if (queue.length) { startNextPage(); return; }
+  close();
+}
+function startNextPage() {
+  const page = queue.shift();
+  if (!page) { close(); return; }
+  charBuffer = page.text;
+  bufferIdx = 0;
+  setPosition(page.position || 'bottom');
+  // ejecuta funciones embebidas que no producen dialog (side effects)
+  for (const sideEffect of page.effects || []) sideEffect();
+  lastCharTime = performance.now();
+  render();
+}
+
+// Parser muy simple del DSL del diálogo. Devuelve un array de "páginas",
+// cada página es { text, position, effects: [fn,...] (efectos inmediatos al abrir) }.
+function parseScript(src) {
+  const pages = [{ text: '', position: 'bottom', effects: [] }];
+  let i = 0;
+  const len = src.length;
+  while (i < len) {
+    if (src[i] === '{') {
+      // encuentra el cierre balanceado
+      let depth = 1, j = i + 1;
+      while (j < len && depth > 0) {
+        if (src[j] === '{') depth++;
+        else if (src[j] === '}') depth--;
+        if (depth > 0) j++;
+      }
+      const inner = src.slice(i + 1, j).trim();
+      const result = handleTag(inner, pages);
+      if (result?.appendText) pages[pages.length - 1].text += result.appendText;
+      i = j + 1;
+    } else {
+      pages[pages.length - 1].text += src[i];
+      i++;
+    }
+  }
+  return pages.filter(p => p.text.length > 0 || p.effects.length > 0);
+}
+
+// Parser de argumentos: tokens separados por espacios, strings con comillas, expresiones {x} anidadas.
+function tokenize(s) {
+  const out = [];
+  let i = 0;
+  while (i < s.length) {
+    while (i < s.length && /\s/.test(s[i])) i++;
+    if (i >= s.length) break;
+    if (s[i] === '"') {
+      let j = i + 1; while (j < s.length && s[j] !== '"') j++;
+      out.push(s.slice(i + 1, j));
+      i = j + 1;
+    } else if (s[i] === '{') {
+      let depth = 1, j = i + 1;
+      while (j < s.length && depth > 0) {
+        if (s[j] === '{') depth++;
+        else if (s[j] === '}') depth--;
+        if (depth > 0) j++;
+      }
+      out.push({ expr: s.slice(i + 1, j) });
+      i = j + 1;
+    } else {
+      let j = i; while (j < s.length && !/\s/.test(s[j])) j++;
+      out.push(s.slice(i, j));
+      i = j;
+    }
+  }
+  return out;
+}
+
+function evaluateExpr(exprStr) {
+  // Evalúa una expresión recursivamente (puede ser otra llamada con args)
+  const tokens = tokenize(exprStr);
+  if (!tokens.length) return '';
+  const head = tokens[0];
+  const fn = core.scriptFns[head];
+  if (!fn) return '';
+  const args = tokens.slice(1).map(t => typeof t === 'object' && t.expr ? evaluateExpr(t.expr) : t);
+  return fn(core, ...args);
+}
+
+function handleTag(inner, pages) {
+  // Tags inline de formato: se convierten en marcadores que el render interpreta
+  if (inner === 'b') return { appendText: '\n' };
+  if (inner === 'p') { pages.push({ text: '', position: pages[pages.length - 1].position, effects: [] }); return; }
+  if (inner === 'wavy' || inner === 'shaky') return { appendText: `<<${inner}>>` };
+  if (inner === '/wavy') return { appendText: '<</wavy>>' };
+  if (inner === '/shaky') return { appendText: '<</shaky>>' };
+  if (inner.startsWith('color ')) return { appendText: `<<color:${inner.slice(6).trim()}>>` };
+  if (inner === '/color') return { appendText: '<</color>>' };
+
+  // Tags estructurales (no inline)
+  const tokens = tokenize(inner);
+  const head = tokens[0];
+
+  if (head === 'position') {
+    const p = tokens[1] || 'bottom';
+    pages[pages.length - 1].position = p;
+    return;
+  }
+  if (head === 'delay') {
+    const n = parseInt(tokens[1] || '5', 10);
+    pages[pages.length - 1].effects.push(() => { lastCharTime = performance.now() + n * 16; });
+    return;
+  }
+  if (head === 'if') {
+    // condicional simple inline: {if {expr}}texto{else}texto{/if}
+    // resolvemos la condición ahora (el dialog vive en runtime)
+    const condExpr = (tokens[1] && tokens[1].expr) ? tokens[1].expr : tokens[1];
+    const cond = condExpr ? evaluateExpr(condExpr) : false;
+    // contenido se trataría en un parser más complejo; aquí dejamos como side effect simple
+    return;
+  }
+
+  // Si es una función registrada del lenguaje y NO devuelve string visible,
+  // ejecutamos como side effect. Si devuelve algo, lo concatenamos como texto.
+  const fn = core.scriptFns[head];
+  if (fn) {
+    const args = tokens.slice(1).map(t => typeof t === 'object' && t.expr ? evaluateExpr(t.expr) : t);
+    try {
+      const ret = fn(core, ...args);
+      if (ret !== undefined && ret !== null && typeof ret !== 'object') {
+        return { appendText: String(ret) };
+      }
+    } catch (e) { console.error(`[dialog] error en {${head}}`, e); }
+  }
+  return;
+}
+
+// Renderizado con efectos inline (wavy/shaky/color)
+function render() {
+  if (!el) return;
+  const visible = charBuffer.slice(0, bufferIdx);
+  el.innerHTML = renderEffects(visible);
+}
+
+function escapeHTML(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function renderEffects(text) {
+  // Sustituye marcadores <<tag>> por spans HTML con clases
+  let out = '';
+  let i = 0;
+  let active = []; // pila de clases activas
+  while (i < text.length) {
+    if (text.slice(i, i + 2) === '<<') {
+      const end = text.indexOf('>>', i);
+      if (end < 0) { out += escapeHTML(text[i]); i++; continue; }
+      const tag = text.slice(i + 2, end);
+      if (tag.startsWith('/')) {
+        // cerrar
+        const t = tag.slice(1);
+        // cerrar el último que matchee
+        for (let k = active.length - 1; k >= 0; k--) {
+          if (active[k].name === t) { active.splice(k, 1); out += '</span>'; break; }
+        }
+      } else if (tag.startsWith('color:')) {
+        const idx = parseInt(tag.slice(6), 10);
+        const color = window.MOSI?.api?.palettes?.color?.(idx) ?? 'inherit';
+        out += `<span style="color:${color}">`;
+        active.push({ name: 'color' });
+      } else {
+        out += `<span class="mosi-fx-${tag}">`;
+        active.push({ name: tag });
+      }
+      i = end + 2;
+    } else {
+      out += escapeHTML(text[i]);
+      i++;
+    }
+  }
+  while (active.length) { out += '</span>'; active.pop(); }
+  return out;
+}
+
+function tick({ t }) {
+  if (!core.state.runtime.dialogActive) return;
+  if (bufferIdx < charBuffer.length) {
+    const elapsed = t - lastCharTime;
+    const charsToAdd = Math.floor(elapsed * charsPerSec / 1000);
+    if (charsToAdd > 0) {
+      bufferIdx = Math.min(bufferIdx + charsToAdd, charBuffer.length);
+      lastCharTime = t;
+      render();
+    }
+  }
+}
+
+export function runScript(src) {
+  if (!src) return;
+  open();
+  queue = parseScript(src);
+  startNextPage();
+}
+
+export default {
+  name: 'dialog',
+  version: '1.0.0',
+  deps: ['sprites', 'mover'],
+
+  setup(c) {
+    core = c;
+    ensureEl();
+
+    c.bus.on('bump:sprite', ({ sprite }) => {
+      c.state.runtime.currentSprite = sprite;
+      if (sprite.script) runScript(sprite.script);
+    });
+    c.bus.on('pickup', ({ sprite }) => {
+      c.state.runtime.currentSprite = sprite;
+      // sumar al inventario; el módulo inventory lo gestiona
+    });
+    c.bus.on('roomEnter', ({ roomId }) => {
+      const room = c.state.game.rooms[roomId];
+      if (room?.enterScript) runScript(room.enterScript);
+    });
+    c.bus.on('gameStart', () => {
+      const intro = c.state.game.introScript;
+      if (intro) runScript(intro);
+    });
+    c.bus.on('input:action', () => {
+      if (c.state.runtime.dialogActive) advance();
+    });
+
+    // CSS para los efectos de texto
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes mosi-wave { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+      @keyframes mosi-shake { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-1px,1px); } 75% { transform: translate(1px,-1px); } }
+      .mosi-fx-wavy { display: inline-block; animation: mosi-wave 0.4s infinite; }
+      .mosi-fx-shaky { display: inline-block; animation: mosi-shake 0.1s infinite; }
+    `;
+    document.head.appendChild(style);
+  },
+
+  hooks: { 'tick': tick },
+
+  scriptFns: {
+    // los inline (wavy/shaky/color/position/delay/b/p) los procesa el parser arriba
+  },
+
+  api: { run: runScript, close, isOpen: () => core.state.runtime.dialogActive },
+};

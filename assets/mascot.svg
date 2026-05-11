@@ -1,0 +1,21 @@
+<svg viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" aria-hidden="true">
+  <!-- orejas de gato -->
+  <rect x="1" y="0" width="1" height="1" fill="#1a1a1a"/>
+  <rect x="6" y="0" width="1" height="1" fill="#1a1a1a"/>
+  <!-- cuerno de rinoceronte (ámbar) -->
+  <rect x="3" y="0" width="2" height="2" fill="#d4843e"/>
+  <!-- cabeza -->
+  <rect x="1" y="1" width="6" height="4" fill="#1a1a1a"/>
+  <rect x="0" y="2" width="1" height="2" fill="#1a1a1a"/>
+  <rect x="7" y="2" width="1" height="2" fill="#1a1a1a"/>
+  <!-- ojos -->
+  <rect x="2" y="2" width="1" height="1" fill="#f4ecd8" class="eye eye-left"/>
+  <rect x="5" y="2" width="1" height="1" fill="#f4ecd8" class="eye eye-right"/>
+  <!-- naricilla -->
+  <rect x="3" y="3" width="2" height="1" fill="#ef7d57"/>
+  <!-- cuerpo -->
+  <rect x="2" y="5" width="4" height="1" fill="#1a1a1a"/>
+  <!-- patas -->
+  <rect x="2" y="6" width="1" height="2" fill="#1a1a1a"/>
+  <rect x="5" y="6" width="1" height="2" fill="#1a1a1a"/>
+</svg>

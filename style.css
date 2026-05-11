@@ -1,0 +1,160 @@
+/* style.css — base compartida.
+ * Aesthetic: lo-fi crema/tinta/ámbar, brutalist clean, monoespaciado.
+ * Sin border-radius, sin sombras gausianas, sólo desplazamientos sólidos.
+ */
+
+:root {
+  --paper:    #f4ecd8;
+  --ink:      #1a1a1a;
+  --amber:    #d4843e;
+  --teal:     #3d7068;
+  --rust:     #a83e3e;
+  --coral:    #ef7d57;
+  --paper-2:  #e8dcb8;
+  --ink-soft: #444;
+
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code",
+          "Fira Code", "Source Code Pro", Menlo, Consolas, monospace;
+  --display: var(--mono);
+}
+
+/* Mascota inline reutilizable */
+.mascot {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+  vertical-align: middle;
+  display: inline-block;
+}
+.mascot.lg { width: 32px; height: 32px; }
+.mascot.xl { width: 64px; height: 64px; }
+
+/* Decoraciones tipográficas */
+.divider-glyphs {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--ink-soft);
+  opacity: 0.5;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0.5rem 0;
+  user-select: none;
+}
+.divider-glyphs::before { content: "▮▰▱ ▮▰▱ ▮▰▱ ▮▰▱ ▮▰▱ ▮▰▱ ▮▰▱"; }
+
+/* Easter egg: parpadeo de la mascota */
+@keyframes mascot-blink {
+  0%, 95%, 100% { opacity: 1; }
+  97% { opacity: 0; }
+}
+.mascot.alive .eye {
+  animation: mascot-blink 4s infinite;
+}
+
+/* Footer de créditos */
+.studio-footer {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  text-align: center;
+  padding: 0.5rem;
+  letter-spacing: 0.05em;
+}
+.studio-footer a { color: inherit; text-decoration: none; border-bottom: 1px dashed currentColor; }
+.studio-footer a:hover { color: var(--amber); }
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--mono);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(212, 132, 62, 0.04) 0, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(61, 112, 104, 0.04) 0, transparent 40%);
+}
+
+/* Cuando hay canvas del juego en página, centrarlo */
+[data-mosi-canvas] {
+  display: block;
+  margin: 2vh auto;
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  background: var(--ink);
+}
+
+/* Botones genéricos */
+button {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  padding: 0.4em 0.8em;
+  cursor: pointer;
+  transition: transform 0.06s, box-shadow 0.06s;
+}
+button:hover { background: var(--paper-2); }
+button:active { transform: translate(2px, 2px); }
+button.primary {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--amber);
+}
+button.primary:hover { background: var(--amber); color: var(--ink); }
+button.danger { color: var(--rust); border-color: var(--rust); }
+
+/* Inputs */
+input, select, textarea {
+  font-family: var(--mono);
+  background: var(--paper);
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  padding: 0.35em 0.5em;
+}
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--amber);
+  outline-offset: 1px;
+}
+
+/* Detalles tipográficos */
+h1, h2, h3 {
+  font-family: var(--display);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+h1 { font-size: 1.4rem; font-weight: 700; }
+h2 { font-size: 1rem; font-weight: 700; text-transform: lowercase; }
+h3 { font-size: 0.85rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }
+
+a { color: var(--teal); text-underline-offset: 3px; }
+a:hover { color: var(--amber); }
+
+/* Decoración: línea doble al estilo terminal */
+.divider-double {
+  height: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  margin: 0.5rem 0;
+  padding-top: 2px;
+}
+
+/* Pixel border (uso decorativo) */
+.pixel-border {
+  border: none;
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+  background:
+    linear-gradient(var(--ink), var(--ink)) top left/2px 2px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) top right/2px 2px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom left/2px 2px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom right/2px 2px no-repeat;
+}

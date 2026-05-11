@@ -14,19 +14,26 @@ const SVG = `
 
 function mount() {
   if (dpadEl) return;
+  const isTouch = matchMedia('(pointer: coarse)').matches;
   dpadEl = document.createElement('div');
   dpadEl.dataset.mosiDpad = '';
   dpadEl.innerHTML = SVG;
+  // Touch: 120px opaco. Desktop: 90px semi-transparente, sube al hover.
+  const size = isTouch ? 120 : 90;
   Object.assign(dpadEl.style, {
     position: 'fixed', bottom: '1rem', right: '1rem',
-    width: '120px', height: '120px',
+    width: size + 'px', height: size + 'px',
     color: '#1a1a1a',
+    opacity: isTouch ? '1' : '0.45',
     pointerEvents: 'auto',
     userSelect: 'none', touchAction: 'none',
     zIndex: 50,
+    transition: 'opacity 0.15s',
   });
-  // Solo mostrar en pantallas táctiles
-  if (!matchMedia('(pointer: coarse)').matches) dpadEl.style.display = 'none';
+  if (!isTouch) {
+    dpadEl.addEventListener('pointerenter', () => dpadEl.style.opacity = '0.9');
+    dpadEl.addEventListener('pointerleave', () => dpadEl.style.opacity = '0.45');
+  }
 
   dpadEl.addEventListener('pointerdown', e => {
     const dir = e.target?.dataset?.dir;

@@ -227,16 +227,33 @@ async function bootstrap() {
   setupKeyNav();
   showSplash();
 
-  // Intentar restaurar autosave
+  // Flow de arranque:
+  // - ?new → ignora autosave y carga plantilla vacía (botón "crear juego" del arxiu)
+  // - sin ?new → restaura autosave si existe, sino abre garden.json como demo
+  const params = new URLSearchParams(location.search);
+  const isNew = params.has('new');
+
   let game = null;
-  const autosaved = localStorage.getItem(AUTOSAVE_KEY);
-  if (autosaved) {
-    try { game = JSON.parse(autosaved); } catch {}
+  let fileName = 'garden.json';
+
+  if (isNew) {
+    // Limpia autosave para empezar de cero, y borra el ?new de la URL para
+    // que un F5 no destruya el progreso si el user empezó a editar.
+    localStorage.removeItem(AUTOSAVE_KEY);
+    history.replaceState({}, '', './editor.html');
+  } else {
+    const autosaved = localStorage.getItem(AUTOSAVE_KEY);
+    if (autosaved) {
+      try { game = JSON.parse(autosaved); fileName = 'autosaved.json'; } catch {}
+    }
   }
+
   if (!game) {
-    game = await fetch('./examples/garden.json').then(r => r.json());
+    const src = isNew ? './examples/empty.json' : './examples/garden.json';
+    game = await fetch(src).then(r => r.json());
+    fileName = isNew ? 'untitled.json' : 'garden.json';
   }
-  loadGame(game, autosaved ? 'autosaved.json' : 'garden.json');
+  loadGame(game, fileName);
 }
 
 bootstrap();

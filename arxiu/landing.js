@@ -7,12 +7,34 @@ const $ = (s) => document.querySelector(s);
 
 let allGames = [];
 let users = {};
+let feed = [];
 const state = {
   query: '',
   tag: '',
   author: '',
   sort: 'recent',
 };
+
+// Sincroniza el state con la query-string de la URL (?q=, ?tag=, ?author=, ?sort=).
+// Permite que al volver desde game.html con back, la landing recupere los filtros.
+function syncURL() {
+  const params = new URLSearchParams();
+  if (state.query) params.set('q', state.query);
+  if (state.tag) params.set('tag', state.tag);
+  if (state.author) params.set('author', state.author);
+  if (state.sort && state.sort !== 'recent') params.set('sort', state.sort);
+  const qs = params.toString();
+  const url = qs ? `./?${qs}` : './';
+  history.replaceState({}, '', url);
+}
+
+function readURL() {
+  const p = new URLSearchParams(location.search);
+  state.query = p.get('q') || '';
+  state.tag = p.get('tag') || '';
+  state.author = p.get('author') || '';
+  state.sort = p.get('sort') || 'recent';
+}
 
 function fmtDate(iso) {
   // 2026-05-11 → 11 may 2026
@@ -90,6 +112,48 @@ function escapeHTML(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// "hace 3d", "hace 12h", "hoy"
+function relTime(iso) {
+  const now = new Date('2026-05-11');
+  const then = new Date(iso);
+  const days = Math.floor((now - then) / 86400000);
+  if (days <= 0) return 'hoy';
+  if (days === 1) return 'ayer';
+  if (days < 30) return `hace ${days}d`;
+  const months = Math.floor(days / 30);
+  return `hace ${months}m`;
+}
+
+const ACTION_LABEL = {
+  published: 'publicó',
+  updated: 'actualizó',
+  forked: 'forkeó',
+};
+
+function renderFeed() {
+  const root = $('#activity-feed');
+  if (!root || !feed.length) return;
+  const gameById = (id) => allGames.find(g => g.id === id);
+  const items = feed.slice(0, 8).map(ev => {
+    const u = users[ev.actor];
+    const g = gameById(ev.target);
+    if (!g) return '';
+    const actorName = u?.name || ev.actor;
+    const actionTxt = ACTION_LABEL[ev.action] || ev.action;
+    const parentName = ev.from ? gameById(ev.from)?.name : null;
+    return `
+      <li class="feed-item">
+        <span class="feed-when">${relTime(ev.at)}</span>
+        <a class="feed-actor" href="./u.html?handle=${encodeURIComponent(ev.actor)}">${escapeHTML(actorName)}</a>
+        <span class="feed-action">${actionTxt}</span>
+        <a class="feed-target" href="./game.html?id=${encodeURIComponent(g.id)}">${escapeHTML(g.name)}</a>
+        ${parentName ? `<span class="feed-from">de <span>${escapeHTML(parentName)}</span></span>` : ''}
+      </li>
+    `;
+  }).join('');
+  root.innerHTML = `<h2 class="feed-heading">actividad reciente</h2><ul class="feed-list">${items}</ul>`;
+}
+
 function render() {
   const filtered = applyFilters(allGames);
   const grid = $('#grid');
@@ -121,15 +185,32 @@ function clearFilters() {
   $('#filter-tag').value = '';
   $('#filter-author').value = '';
   $('#sort').value = 'recent';
+  syncURL();
   render();
 }
 
+function applyStateToInputs() {
+  // Re-asigna los valores del state a los controles (para hidratar al cargar
+  // con ?q=...&tag=... o cuando vuelve por popstate).
+  if ($('#search')) $('#search').value = state.query;
+  if ($('#filter-tag')) $('#filter-tag').value = state.tag;
+  if ($('#filter-author')) $('#filter-author').value = state.author;
+  if ($('#sort')) $('#sort').value = state.sort;
+}
+
 function bind() {
-  $('#search').addEventListener('input', e => { state.query = e.target.value; render(); });
-  $('#filter-tag').addEventListener('change', e => { state.tag = e.target.value; render(); });
-  $('#filter-author').addEventListener('change', e => { state.author = e.target.value; render(); });
-  $('#sort').addEventListener('change', e => { state.sort = e.target.value; render(); });
+  $('#search').addEventListener('input', e => { state.query = e.target.value; syncURL(); render(); });
+  $('#filter-tag').addEventListener('change', e => { state.tag = e.target.value; syncURL(); render(); });
+  $('#filter-author').addEventListener('change', e => { state.author = e.target.value; syncURL(); render(); });
+  $('#sort').addEventListener('change', e => { state.sort = e.target.value; syncURL(); render(); });
   $('#clear-filters').addEventListener('click', clearFilters);
+  // popstate: si el user navega back/forward DENTRO de la landing (mismas URLs
+  // con diferentes filtros via syncURL), reaplicamos.
+  window.addEventListener('popstate', () => {
+    readURL();
+    applyStateToInputs();
+    render();
+  });
 }
 
 async function init() {
@@ -137,13 +218,19 @@ async function init() {
     const data = await fetch(`${MOCK_URL}?t=${Date.now()}`).then(r => r.json());
     allGames = data.games || [];
     users = data.users || {};
+    feed = data.feed || [];
   } catch (e) {
     $('#grid').innerHTML = `<div class="empty">no se pudo cargar el arxiu (${escapeHTML(e.message)}).</div>`;
     return;
   }
+  // Lee filtros desde URL antes de poblar (para que `state.tag` etc estén
+  // listos cuando los selects se rellenan y aplicamos los valores).
+  readURL();
   populateFilters();
+  applyStateToInputs();
   bind();
   render();
+  renderFeed();
 }
 
 init();

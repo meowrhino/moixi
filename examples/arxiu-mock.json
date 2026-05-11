@@ -202,5 +202,17 @@
     "ivan": { "handle": "ivan", "name": "iván", "bio": "historias de oficina.", "url": null, "joined": "2026-03-15" },
     "ren": { "handle": "ren", "name": "ren", "bio": "rituales mínimos.", "url": null, "joined": "2026-01-20" },
     "lluc": { "handle": "lluc", "name": "lluc", "bio": "passejades nocturnes.", "url": null, "joined": "2026-01-25" }
-  }
+  },
+  "feed": [
+    { "at": "2026-05-11", "actor": "meowrhino", "action": "updated", "target": "garden" },
+    { "at": "2026-05-10", "actor": "meowrhino", "action": "published", "target": "garden" },
+    { "at": "2026-05-03", "actor": "anais", "action": "updated", "target": "lluna" },
+    { "at": "2026-05-01", "actor": "mar", "action": "forked", "target": "lluna-fork-mar", "from": "lluna" },
+    { "at": "2026-04-30", "actor": "raul", "action": "updated", "target": "cafe-vibes" },
+    { "at": "2026-04-22", "actor": "anais", "action": "published", "target": "lluna" },
+    { "at": "2026-04-22", "actor": "julia", "action": "published", "target": "norte" },
+    { "at": "2026-04-15", "actor": "guille", "action": "published", "target": "mudanza" },
+    { "at": "2026-03-28", "actor": "ivan", "action": "published", "target": "contestador" },
+    { "at": "2026-03-12", "actor": "anais", "action": "published", "target": "cartes" }
+  ]
 }

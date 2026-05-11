@@ -1,0 +1,66 @@
+{
+  "_comment": "Plantilla mínima cargada cuando entras al editor con ?new (botón 'crear juego' de la landing). Avatar minimal, paleta default, 1 room vacío.",
+  "name": "untitled",
+  "version": 1,
+  "tileSize": 8,
+  "roomSize": [16, 16],
+  "wrapH": false,
+  "wrapV": false,
+  "avatar": "avatar",
+  "startRoom": "room1",
+  "avatarStart": { "x": 8, "y": 8 },
+  "introScript": "{position center}qué pintamos hoy?",
+
+  "palettes": {
+    "default": {
+      "name": "default",
+      "colors": ["#f4ecd8", "#3d7068", "#1a1a1a", "#d4843e", "#a83e3e"]
+    }
+  },
+
+  "sprites": {
+    "avatar": {
+      "name": "tu",
+      "colorIndex": 2,
+      "fps": 2,
+      "frames": [
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,0,1,0,0,1,0,0, 0,1,1,0,0,1,1,0],
+        [0,0,1,1,1,1,0,0, 0,0,1,1,1,1,0,0, 1,1,0,1,1,0,1,1, 1,1,1,1,1,1,1,1, 0,1,1,1,1,1,1,0, 0,0,1,1,1,1,0,0, 0,1,1,0,0,1,1,0, 1,1,0,0,0,0,1,1]
+      ]
+    },
+    "wall": {
+      "name": "pared",
+      "colorIndex": 1,
+      "isWall": true,
+      "frames": [[
+        1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1
+      ]]
+    }
+  },
+
+  "rooms": {
+    "room1": {
+      "name": "room 1",
+      "palette": "default",
+      "tiles": [
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
+      ]
+    }
+  }
+}

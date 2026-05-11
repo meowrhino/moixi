@@ -245,6 +245,84 @@ a:hover { color: var(--amber); }
   padding-top: 2px;
 }
 
+/* Botón flotante "?" para mostrar el cheatsheet de atajos */
+.shortcut-hint {
+  position: fixed;
+  bottom: 0.8rem;
+  left: 0.8rem;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--paper);
+  color: var(--ink-soft);
+  border: 1.5px solid var(--ink-soft);
+  cursor: pointer;
+  z-index: 40;
+  opacity: 0.6;
+  transition: opacity 0.12s, color 0.12s, border-color 0.12s;
+}
+.shortcut-hint:hover {
+  opacity: 1;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+/* Cheatsheet de atajos */
+.cheatsheet {
+  position: fixed;
+  bottom: 3rem;
+  left: 0.8rem;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 0.9rem 1rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  z-index: 9999;
+  max-width: 320px;
+}
+.cheatsheet-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1.5px solid var(--ink);
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+}
+.cheatsheet-head strong { font-size: 0.85rem; letter-spacing: -0.01em; }
+.cheatsheet-close {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 0 0.2em;
+}
+.cheatsheet-close:hover { color: var(--rust); }
+.cheatsheet dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35em 0.8em;
+  margin: 0;
+}
+.cheatsheet dt { margin: 0; }
+.cheatsheet dd { margin: 0; opacity: 0.85; line-height: 1.3; }
+.cheatsheet kbd {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  background: var(--paper-2);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 0.05em 0.4em;
+  white-space: nowrap;
+}
+
 /* Overlay drag&drop: aparece al arrastrar un .json sobre el editor */
 .drop-overlay {
   position: fixed;

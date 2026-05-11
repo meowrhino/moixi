@@ -199,4 +199,6 @@ export default {
   label: 'world',
   render,
   rightPanelSelector: 'world-props',
+  onAdd: (state) => addRoom(state),
+  onRemove: (state) => selectedRoom && removeRoom(state),
 };

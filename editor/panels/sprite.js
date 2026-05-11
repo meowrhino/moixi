@@ -219,4 +219,6 @@ export default {
   render,
   layout: 'three-column',  // izq (lista) | centro (paint) | der (props)
   rightPanelSelector: 'sprite-props',
+  onAdd: (state) => addSprite(state),
+  onRemove: (state) => selected && deleteSprite(state),
 };

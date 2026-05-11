@@ -122,4 +122,6 @@ export default {
   label: 'paletas',
   render,
   rightPanelSelector: 'palette-props',
+  onAdd: (state) => addPalette(state),
+  onRemove: (state) => selected && Object.keys(state.game.palettes).length > 1 && removePalette(state),
 };

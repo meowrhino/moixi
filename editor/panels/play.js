@@ -101,4 +101,5 @@ export default {
   label: 'play',
   render,
   rightPanelSelector: 'play-props',
+  onPlay: (state) => startPreview(state),
 };

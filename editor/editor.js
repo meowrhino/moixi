@@ -7,6 +7,7 @@ import palettePanel from './panels/palette.js';
 import playPanel from './panels/play.js';
 import { downloadJSON, exportHTML, importJSON } from './export.js';
 import { on as onEditorEv } from './ui.js';
+import { setupShortcuts } from './shortcuts.js';
 
 const PANELS = {
   world: worldPanel,
@@ -179,9 +180,26 @@ function showSplash() {
   setTimeout(() => document.getElementById('splash')?.remove(), 1000);
 }
 
+// Atajos teclado globales — el panel activo recibe add/remove via PANELS[active].onAdd/onRemove
+onEditorEv('editor:shortcut:tab', (tab) => { if (PANELS[tab]) switchTab(tab); });
+onEditorEv('editor:shortcut:add', () => {
+  const p = PANELS[state.activeTab];
+  if (p?.onAdd) p.onAdd(state);
+});
+onEditorEv('editor:shortcut:remove', () => {
+  const p = PANELS[state.activeTab];
+  if (p?.onRemove) p.onRemove(state);
+});
+onEditorEv('editor:shortcut:play', () => {
+  if (state.activeTab !== 'play') switchTab('play');
+  const p = PANELS.play;
+  if (p?.onPlay) p.onPlay(state);
+});
+
 async function bootstrap() {
   setupLayout();
   setupDragDrop();
+  setupShortcuts();
   showSplash();
 
   // Intentar restaurar autosave

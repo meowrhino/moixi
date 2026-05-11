@@ -14,13 +14,15 @@ async function startPreview(state) {
 
   // imports dinámicos para reset
   const [
-    coreMod, canvasMod, palettes, sprites, keyboard, touch, mover,
-    walls, interactable, dialog, inventory, world, script, stdlib, vars, audio, save,
+    coreMod, canvasMod, palettes, sprites, camera, keyboard, touch, mover,
+    walls, interactable, dialog, inventory, world, transitions,
+    script, stdlib, vars, audio, save,
   ] = await Promise.all([
     import('../../core/index.js?t=' + Date.now()),
     import('../../modules/render/canvas.js?t=' + Date.now()),
     import('../../modules/render/palettes.js?t=' + Date.now()),
     import('../../modules/render/sprites.js?t=' + Date.now()),
+    import('../../modules/render/camera.js?t=' + Date.now()),
     import('../../modules/input/keyboard.js?t=' + Date.now()),
     import('../../modules/input/touch.js?t=' + Date.now()),
     import('../../modules/input/mover.js?t=' + Date.now()),
@@ -29,6 +31,7 @@ async function startPreview(state) {
     import('../../modules/gameplay/dialog.js?t=' + Date.now()),
     import('../../modules/gameplay/inventory.js?t=' + Date.now()),
     import('../../modules/gameplay/world.js?t=' + Date.now()),
+    import('../../modules/gameplay/transitions.js?t=' + Date.now()),
     import('../../modules/script/mosi.js?t=' + Date.now()),
     import('../../modules/script/stdlib.js?t=' + Date.now()),
     import('../../modules/script/vars.js?t=' + Date.now()),
@@ -41,10 +44,10 @@ async function startPreview(state) {
   const gameClone = JSON.parse(JSON.stringify(state.game));
   c.load(gameClone);
 
-  c.use(canvasMod.default).use(palettes.default).use(sprites.default)
+  c.use(canvasMod.default).use(palettes.default).use(sprites.default).use(camera.default)
     .use(keyboard.default).use(touch.default).use(mover.default)
     .use(walls.default).use(interactable.default).use(script.default).use(stdlib.default).use(vars.default)
-    .use(dialog.default).use(inventory.default).use(world.default)
+    .use(dialog.default).use(inventory.default).use(world.default).use(transitions.default)
     .use(audio.default).use(save.default);
 
   c.bus.emit('roomEnter', { roomId: gameClone.startRoom });

@@ -13,6 +13,7 @@ const RUNTIME_FILES = [
   'modules/render/canvas.js',
   'modules/render/palettes.js',
   'modules/render/sprites.js',
+  'modules/render/camera.js',
   'modules/input/keyboard.js',
   'modules/input/touch.js',
   'modules/input/mover.js',
@@ -21,6 +22,7 @@ const RUNTIME_FILES = [
   'modules/gameplay/dialog.js',
   'modules/gameplay/inventory.js',
   'modules/gameplay/world.js',
+  'modules/gameplay/transitions.js',
   'modules/script/mosi.js',
   'modules/script/stdlib.js',
   'modules/script/vars.js',
@@ -108,6 +110,7 @@ export async function exportHTML(game) {
     import canvasMod from "${finalURLs['modules/render/canvas.js']}";
     import palettes from "${finalURLs['modules/render/palettes.js']}";
     import sprites from "${finalURLs['modules/render/sprites.js']}";
+    import camera from "${finalURLs['modules/render/camera.js']}";
     import keyboard from "${finalURLs['modules/input/keyboard.js']}";
     import touch from "${finalURLs['modules/input/touch.js']}";
     import mover from "${finalURLs['modules/input/mover.js']}";
@@ -116,6 +119,7 @@ export async function exportHTML(game) {
     import dialog from "${finalURLs['modules/gameplay/dialog.js']}";
     import inventory from "${finalURLs['modules/gameplay/inventory.js']}";
     import world from "${finalURLs['modules/gameplay/world.js']}";
+    import transitions from "${finalURLs['modules/gameplay/transitions.js']}";
     import script from "${finalURLs['modules/script/mosi.js']}";
     import stdlib from "${finalURLs['modules/script/stdlib.js']}";
     import vars from "${finalURLs['modules/script/vars.js']}";
@@ -124,10 +128,10 @@ export async function exportHTML(game) {
 
     const game = ${JSON.stringify(game)};
     core.load(game);
-    core.use(canvasMod).use(palettes).use(sprites)
+    core.use(canvasMod).use(palettes).use(sprites).use(camera)
       .use(keyboard).use(touch).use(mover)
       .use(walls).use(interactable).use(script).use(stdlib).use(vars)
-      .use(dialog).use(inventory).use(world)
+      .use(dialog).use(inventory).use(world).use(transitions)
       .use(audio).use(save);
     core.bus.emit('roomEnter', { roomId: game.startRoom });
     core.start();

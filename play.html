@@ -65,14 +65,15 @@
     const t = Date.now();
     const im = (p) => import(`${p}?t=${t}`).then(m => m.default);
     const [
-      core, canvasMod, palettes, sprites, keyboard, touch, mover,
-      walls, interactable, dialog, inventory, world,
+      core, canvasMod, palettes, sprites, camera, keyboard, touch, mover,
+      walls, interactable, dialog, inventory, world, transitions,
       script, stdlib, vars, audio, save,
     ] = await Promise.all([
       im('./core/index.js'),
       im('./modules/render/canvas.js'),
       im('./modules/render/palettes.js'),
       im('./modules/render/sprites.js'),
+      im('./modules/render/camera.js'),
       im('./modules/input/keyboard.js'),
       im('./modules/input/touch.js'),
       im('./modules/input/mover.js'),
@@ -81,6 +82,7 @@
       im('./modules/gameplay/dialog.js'),
       im('./modules/gameplay/inventory.js'),
       im('./modules/gameplay/world.js'),
+      im('./modules/gameplay/transitions.js'),
       im('./modules/script/mosi.js'),
       im('./modules/script/stdlib.js'),
       im('./modules/script/vars.js'),
@@ -100,6 +102,7 @@
       .use(canvasMod)
       .use(palettes)
       .use(sprites)
+      .use(camera)
       .use(keyboard)
       .use(touch)
       .use(mover)
@@ -111,6 +114,7 @@
       .use(dialog)
       .use(inventory)
       .use(world)
+      .use(transitions)
       .use(audio)
       .use(save);
 

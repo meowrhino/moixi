@@ -55,7 +55,7 @@ function render(state) {
     editor.appendChild(el('h2', {}, sp.name || selected));
 
     // Canvas grande para pintar
-    const big = el('canvas');
+    const big = el('canvas', { class: 'paint-canvas' });
     const grid = renderPaintCanvas(big, sp, activeFrame, game.tileSize, colors);
     editor.appendChild(big);
 

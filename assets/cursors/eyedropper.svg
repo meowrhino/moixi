@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <!-- eyedropper cursor: tubo diagonal con gota al pie. hotspot (1,15) -->
+  <rect x="9" y="1" width="5" height="4" fill="#d4843e" stroke="#1a1a1a" stroke-width="1" transform="rotate(45 11.5 3)"/>
+  <line x1="2" y1="14" x2="11" y2="5" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+  <line x1="3" y1="15" x2="12" y2="6" stroke="#f4ecd8" stroke-width="1"/>
+  <circle cx="1.5" cy="14.5" r="1.2" fill="#a83e3e" stroke="#1a1a1a" stroke-width="0.5"/>
+</svg>

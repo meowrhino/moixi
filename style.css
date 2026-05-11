@@ -245,6 +245,20 @@ a:hover { color: var(--amber); }
   padding-top: 2px;
 }
 
+/* Cursores SVG en zonas creativas del editor.
+ * El atributo data-tool en el canvas cambia el cursor (pencil default,
+ * bucket / eyedropper se activan en F2 bucket fill + eyedropper). */
+.paint-canvas,
+.room-grid {
+  cursor: url('./assets/cursors/pencil.svg') 0 15, crosshair;
+}
+.paint-canvas[data-tool="bucket"] {
+  cursor: url('./assets/cursors/bucket.svg') 3 15, crosshair;
+}
+.paint-canvas[data-tool="eyedropper"] {
+  cursor: url('./assets/cursors/eyedropper.svg') 1 15, crosshair;
+}
+
 /* Botón flotante "?" para mostrar el cheatsheet de atajos */
 .shortcut-hint {
   position: fixed;

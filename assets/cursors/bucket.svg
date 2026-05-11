@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <!-- bucket cursor: cubo + gota cayendo. hotspot (3,15) en la punta de la gota -->
+  <path fill="#f4ecd8" stroke="#1a1a1a" stroke-width="1" d="M 5 5 L 15 5 L 13 14 L 7 14 Z"/>
+  <path fill="none" stroke="#1a1a1a" stroke-width="1" d="M 5 5 Q 10 2 15 5"/>
+  <!-- gota -->
+  <path fill="#d4843e" stroke="#1a1a1a" stroke-width="0.5" d="M 3 15 Q 2 13 3 11 Q 4 13 3 15 Z"/>
+</svg>

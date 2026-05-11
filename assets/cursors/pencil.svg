@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <!-- pencil cursor: punta abajo-izquierda, mango arriba-derecha. hotspot (0,15) -->
+  <path fill="#f4ecd8" stroke="#1a1a1a" stroke-width="1" d="M 0.5 15.5 L 3 13 L 10 6 L 13 9 L 6 16"/>
+  <path fill="#d4843e" stroke="#1a1a1a" stroke-width="1" d="M 10 6 L 13 3 L 16 6 L 13 9 Z"/>
+  <line x1="3" y1="13" x2="6" y2="16" stroke="#1a1a1a" stroke-width="1"/>
+</svg>

@@ -1,6 +1,8 @@
 // arxiu/profile.js — página de perfil de un autor del arxiu.
 // Lee ?handle=<userHandle>. Muestra bio, lista de juegos y genealogía.
 
+import { hydrateThumbs } from './thumb.js';
+
 const MOCK_URL = './examples/arxiu-mock.json';
 const $ = (s) => document.querySelector(s);
 
@@ -37,9 +39,12 @@ async function init() {
   const totalPlays = myGames.reduce((s, g) => s + g.plays, 0);
   const totalForks = myGames.reduce((s, g) => s + g.forks, 0);
 
+  const gameJSONUrl = (g) => (g.playUrl || '').split('?')[1]
+    ? new URLSearchParams(g.playUrl.split('?')[1]).get('game') || ''
+    : '';
   const gamesHTML = myGames.length ? myGames.map(g => `
     <a class="profile-game" href="./game.html?id=${encodeURIComponent(g.id)}">
-      <div class="profile-game-thumb" style="background: ${g.thumb};"></div>
+      <div class="profile-game-thumb" style="background: ${g.thumb};"${gameJSONUrl(g) ? ` data-game-url="./${escapeHTML(gameJSONUrl(g))}"` : ''}></div>
       <div class="profile-game-body">
         <div class="profile-game-title">${escapeHTML(g.name)}${g.forkOf ? ' <span class="fork-badge">↳ fork</span>' : ''}</div>
         <div class="profile-game-meta">${fmtDate(g.updatedAt)} · ▶ ${g.plays} · ↳ ${g.forks}</div>
@@ -69,6 +74,7 @@ async function init() {
       <div class="profile-game-grid">${gamesHTML}</div>
     </section>
   `;
+  hydrateThumbs($('#profile-page'));
 }
 
 init();

@@ -1,6 +1,8 @@
 // arxiu/landing.js — render del grid de juegos del arxiu con filtros y búsqueda.
 // Carga datos mockeados de examples/arxiu-mock.json hasta que F10b (Workers + R2) esté online.
 
+import { hydrateThumbs } from './thumb.js';
+
 const MOCK_URL = './examples/arxiu-mock.json';
 
 const $ = (s) => document.querySelector(s);
@@ -67,12 +69,17 @@ function applyFilters(games) {
 
 function gameCard(g) {
   const tagsHTML = g.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  // URL del JSON real del juego (para la thumb renderizada); del playUrl
+  // sacamos el param ?game=. Si no hay, la card se queda con el gradiente.
+  const gameURL = (g.playUrl || '').split('?')[1]
+    ? new URLSearchParams(g.playUrl.split('?')[1]).get('game') || ''
+    : '';
   const forkBadge = g.forkOf
     ? `<span class="fork-badge" title="fork de ${g.forkOf}">↳ fork</span>`
     : '';
   return `
     <article class="card" data-href="./game.html?id=${encodeURIComponent(g.id)}" tabindex="0" role="link" aria-label="${escapeHTML(g.name)} por ${escapeHTML(g.author)}">
-      <div class="card-thumb" style="background: ${g.thumb};" aria-hidden="true"></div>
+      <div class="card-thumb" style="background: ${g.thumb};"${gameURL ? ` data-game-url="./${escapeHTML(gameURL)}"` : ''} aria-hidden="true"></div>
       <div class="card-body">
         <div class="card-title">${escapeHTML(g.name)}${forkBadge}</div>
         <div class="card-byline">
@@ -163,6 +170,7 @@ function render() {
   } else {
     grid.innerHTML = filtered.map(gameCard).join('');
     bindCardClicks();
+    hydrateThumbs(grid); // async, fire-and-forget: el gradiente queda de placeholder
   }
   $('#filter-results').textContent = `${filtered.length} ${filtered.length === 1 ? 'juego' : 'juegos'}`;
 }

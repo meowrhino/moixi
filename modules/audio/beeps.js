@@ -6,6 +6,8 @@ let core = null;
 let actx = null;
 let masterGain = null;
 let currentLoop = null;
+let volume = 0.18;
+let muted = false;
 
 const NOTE_FREQ = (() => {
   const names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -24,7 +26,7 @@ function ensureContext() {
   if (actx) return;
   actx = new (window.AudioContext || window.webkitAudioContext)();
   masterGain = actx.createGain();
-  masterGain.gain.value = 0.18;
+  masterGain.gain.value = muted ? 0 : volume;
   masterGain.connect(actx.destination);
 }
 
@@ -94,5 +96,12 @@ export default {
   api: {
     playSong, stopAll,
     beep(note = 'C5', dur = 0.1) { ensureContext(); playNote(note, dur, actx.currentTime + 0.01); },
+    mute() { muted = true; if (masterGain) masterGain.gain.value = 0; },
+    unmute() { muted = false; if (masterGain) masterGain.gain.value = volume; },
+    isMuted: () => muted,
+    setVolume(v) {
+      volume = Math.max(0, Math.min(1, Number(v) || 0));
+      if (masterGain && !muted) masterGain.gain.value = volume;
+    },
   },
 };

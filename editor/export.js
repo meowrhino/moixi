@@ -55,34 +55,20 @@ export async function exportHTML(game) {
   }
   const styleCSS = await fetch('./style.css').then(r => r.text());
 
-  // Usaremos <script type="importmap"> con data: URLs.
-  // Truco: cada archivo se convierte a data URL y se mapea al path original.
-  const importMap = {};
-  for (const [path, code] of Object.entries(files)) {
-    const url = 'data:text/javascript;base64,' + btoa(unescape(encodeURIComponent(code)));
-    importMap['./' + path] = url;
-    // mapeo también con prefijos relativos comunes
-    const parts = path.split('/');
-    importMap['../' + path.split('/').slice(-2).join('/')] = url;
-  }
-  // Mapear los imports relativos que aparecen DENTRO de los módulos.
-  // Mosi engine usa imports como './bus.js' (mismo directorio) o '../render/canvas.js' (de mover hacia render).
-  // Generamos un importmap genérico con todas las rutas absolutas y relativas posibles.
-
-  // Estrategia simplificada: en vez de importmap, inlineamos cada módulo como blob URL
-  // y reescribimos los imports.
+  // Cada módulo se inlinea como data: URL (autocontenida: sobrevive a file://
+  // y a cerrar el editor — un blob URL muere con el documento que lo creó).
+  // Los imports internos se reescriben ANTES de codificar, así que hay que
+  // procesar en orden de dependencias: RUNTIME_FILES ya lista el core primero
+  // (bus/state/loop/loader/index) y los módulos —que no se importan entre sí—
+  // después.
+  const toDataURL = (code) =>
+    'data:text/javascript;base64,' + btoa(unescape(encodeURIComponent(code)));
 
   const moduleURLs = {};
-  for (const path of RUNTIME_FILES) {
-    const blob = new Blob([files[path]], { type: 'text/javascript' });
-    moduleURLs[path] = URL.createObjectURL(blob);
-  }
 
-  // Re-escribir los imports de cada módulo a sus URLs reales.
-  // Mapeamos por nombre de archivo terminal porque los imports son relativos y los blob URLs no.
+  // Re-escribir los imports relativos de un módulo a las data URLs ya generadas.
   function rewrite(code, currentPath) {
     return code.replace(/from\s+['"](\.\.?\/[^'"]+)['"]/g, (_, rel) => {
-      // resolver relativo a currentPath
       const resolved = resolveRelative(currentPath, rel);
       const url = moduleURLs[resolved];
       if (!url) console.warn(`[export] no map for ${rel} from ${currentPath}`);
@@ -100,13 +86,11 @@ export async function exportHTML(game) {
     return fromParts.join('/');
   }
 
-  // Crear blobs reescritos
-  const finalURLs = {};
+  // Codificar en orden de dependencias (ver arriba)
   for (const path of RUNTIME_FILES) {
-    const rewritten = rewrite(files[path], path);
-    const blob = new Blob([rewritten], { type: 'text/javascript' });
-    finalURLs[path] = URL.createObjectURL(blob);
+    moduleURLs[path] = toDataURL(rewrite(files[path], path));
   }
+  const finalURLs = moduleURLs;
 
   // El bootstrap script: importa de los blobs
   const bootstrapCode = `
@@ -142,8 +126,32 @@ export async function exportHTML(game) {
       .use(walls).use(interactable).use(script).use(stdlib).use(vars)
       .use(dialog).use(inventory).use(world).use(transitions)
       .use(audio).use(save);
-    core.bus.emit('roomEnter', { roomId: game.startRoom });
-    core.start();
+
+    // igual que play.html: un frame estático de preview, y el juego arranca
+    // de verdad (gameStart + roomEnter/música) con el primer input
+    {
+      const t0 = performance.now();
+      for (const ev of ['render:bg', 'render:tiles', 'render:sprites', 'render:fg', 'render:ui', 'render:final']) {
+        core.bus.emit(ev, { dt: 0, t: t0 });
+      }
+    }
+    const overlay = document.getElementById('play-overlay');
+    let started = false;
+    const begin = () => {
+      if (started) return;
+      started = true;
+      overlay?.classList.add('hidden');
+      document.querySelector('.canvas-wrap')?.classList.add('playing');
+      window.removeEventListener('keydown', begin);
+      overlay?.removeEventListener('click', begin);
+      core.bus.emit('roomEnter', { roomId: game.startRoom });
+      core.start();
+    };
+    window.addEventListener('keydown', begin);
+    overlay?.addEventListener('click', begin);
+    for (const ev of ['input:up', 'input:down', 'input:left', 'input:right', 'input:action']) {
+      core.bus.on(ev, begin);
+    }
   `;
 
   const html = `<!doctype html>
@@ -165,7 +173,12 @@ export async function exportHTML(game) {
     <h1>${escapeHTML(game.name || 'mosi')}</h1>
     <span style="font-size:0.75rem; opacity:0.6;">↑↓←→ + space</span>
   </header>
-  <canvas data-mosi-canvas></canvas>
+  <div class="canvas-wrap">
+    <canvas data-mosi-canvas></canvas>
+    <div class="play-overlay" id="play-overlay" role="button" tabindex="0" aria-label="empezar a jugar">
+      <span class="overlay-text">click o teclas para jugar</span>
+    </div>
+  </div>
   <div style="font-size:0.75rem; opacity:0.5;">made with <a href="https://github.com/meowrhino/moixi" style="color:inherit">moixi</a> · inspirado en <a href="https://zenzoa.itch.io/mosi" style="color:inherit">mosi</a></div>
 </div>
 <script type="module">

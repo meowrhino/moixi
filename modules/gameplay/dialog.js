@@ -19,30 +19,42 @@ function ensureEl() {
   el.dataset.mosiDialog = '';
   el.setAttribute('role', 'dialog');
   el.setAttribute('aria-live', 'polite');
+  // Se ancla al contenedor del canvas (la caja queda "dentro" del juego).
+  // Si no hay canvas montado, fallback a body con position fixed.
+  const canvasEl = core.api.canvas?.el?.();
+  const host = canvasEl?.parentElement || document.body;
+  if (host !== document.body && getComputedStyle(host).position === 'static') {
+    host.style.position = 'relative';
+  }
   Object.assign(el.style, {
-    position: 'fixed', left: '50%', transform: 'translateX(-50%)',
-    bottom: '8%', maxWidth: 'min(90vw, 540px)', minWidth: '60vw',
-    padding: '0.8em 1em', font: '16px ui-monospace, "JetBrains Mono", monospace',
+    position: host === document.body ? 'fixed' : 'absolute',
+    padding: '0.8em 1em', font: '15px ui-monospace, "JetBrains Mono", monospace',
     background: '#1a1a1a', color: '#f4ecd8',
     border: '2px solid #d4843e', boxShadow: '4px 4px 0 #d4843e',
     display: 'none', zIndex: 100, lineHeight: 1.4,
-    whiteSpace: 'pre-wrap', wordWrap: 'break-word',
+    whiteSpace: 'pre-wrap', wordWrap: 'break-word', boxSizing: 'border-box',
   });
   el.addEventListener('click', advance);
-  document.body.appendChild(el);
+  host.appendChild(el);
+  setPosition('bottom');
 }
 
 function setPosition(p) {
   position = p;
   if (!el) return;
-  el.style.bottom = el.style.top = el.style.height = el.style.maxHeight = '';
-  if (p === 'top')         { el.style.top = '8%'; el.style.bottom = ''; }
-  else if (p === 'center') { el.style.top = '40%'; el.style.bottom = ''; }
-  else if (p === 'bottom') { el.style.bottom = '8%'; }
+  // reset completo: fullscreen deja left/right/transform tocados si no se limpia
+  Object.assign(el.style, {
+    top: '', bottom: '', height: '', maxHeight: '', right: '', overflow: '',
+    left: '50%', transform: 'translateX(-50%)',
+    width: 'calc(100% - 12px)', maxWidth: '540px',
+  });
+  if (p === 'top')         { el.style.top = '4%'; }
+  else if (p === 'center') { el.style.top = '50%'; el.style.transform = 'translate(-50%, -50%)'; }
   else if (p === 'fullscreen') {
-    Object.assign(el.style, { top: '5%', bottom: '5%', left: '5%', right: '5%',
-      transform: 'none', maxWidth: 'none', maxHeight: '90vh', overflow: 'auto' });
+    Object.assign(el.style, { top: '4%', bottom: '4%', left: '4%', right: '4%',
+      width: 'auto', transform: 'none', maxWidth: 'none', overflow: 'auto' });
   }
+  else { el.style.bottom = '4%'; }
 }
 
 function open() {
@@ -304,11 +316,38 @@ function resolveIfElse(src) {
   return out;
 }
 
+// Los scripts pueden disparar otros scripts mientras se parsean (p.ej. {move-avatar}
+// emite roomEnter y el room tiene enterScript). Si pisáramos `queue` se perderían
+// páginas: los scripts reentrantes se apuntan en `pendingScripts` y se encolan
+// DETRÁS de las páginas del script que los provocó.
+let parsing = false;
+let pendingScripts = [];
+
+function parsePages(src) {
+  parsing = true;
+  try { return parseScript(resolveIfElse(src)); }
+  finally { parsing = false; }
+}
+
+function drainPending() {
+  while (pendingScripts.length) {
+    queue.push(...parsePages(pendingScripts.shift()));
+  }
+}
+
 export function runScript(src) {
   if (!src) return;
+  if (parsing) { pendingScripts.push(src); return; }
+  if (core.state.runtime.dialogActive) {
+    // ya hay un diálogo en pantalla: encolamos detrás sin resetear lo visible
+    queue.push(...parsePages(src));
+    drainPending();
+    return;
+  }
   open();
-  queue = parseScript(resolveIfElse(src));
+  queue = parsePages(src);
   startNextPage();
+  drainPending();
 }
 
 export default {

@@ -100,7 +100,9 @@ body {
 .canvas-wrap {
   position: relative;
   margin: 2vh auto;
-  width: fit-content;
+  /* ancho real para que el canvas (width:100%) escale de verdad;
+     con fit-content colapsaba al tamaño lógico del canvas (128px) */
+  width: min(100%, 512px);
 }
 /* Anillo sutil que respira cuando el juego NO se está jugando (atrayendo a pulsar) */
 .canvas-wrap::before {

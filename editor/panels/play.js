@@ -11,6 +11,9 @@ async function startPreview(state) {
     // limpiar listeners y reset
     runningCore.bus.clear();
   }
+  // el restart reimporta módulos frescos: la caja de diálogo del run anterior
+  // quedaría huérfana (y visible si estaba abierta) — fuera
+  document.querySelectorAll('[data-mosi-dialog]').forEach((n) => n.remove());
 
   // imports dinámicos para reset
   const T = Date.now();
@@ -68,7 +71,7 @@ function render(state) {
   center.innerHTML = '';
   const wrapper = el('div', { style: { display: 'grid', gap: '1rem', placeItems: 'center', width: '100%' } });
 
-  const canvasHost = el('div');
+  const canvasHost = el('div', { style: { width: 'min(100%, 512px)', position: 'relative' } });
   canvasHost.innerHTML = '<canvas data-mosi-canvas></canvas>';
   wrapper.appendChild(canvasHost);
 

@@ -49,7 +49,8 @@ editor/
 └── panels/            ← sprite, world, palette, play
 examples/              ← JSONs de juegos para probar
 play.html              ← player standalone
-index.html             ← editor
+editor.html            ← editor
+index.html             ← arxiu (landing de juegos)
 style.css              ← base
 ```
 
@@ -171,7 +172,7 @@ zip -r dist.zip . -x "node_modules/*" "*.zip" ".git/*"
    - El zorro habla al chocar.
    - Las flores se recogen y `{item-count flor}` se incrementa.
    - El exit a `forest` funciona con `{gte {item-count flor} 3}`.
-3. Abrir `index.html` (editor). Comprobar tabs world/sprite/palette/play.
+3. Abrir `editor.html` (editor). Comprobar tabs world/sprite/palette/play.
 4. Pulsar "exportar html" y abrir el `.html` resultante. Tiene que correr aislado.
 
 ## estética

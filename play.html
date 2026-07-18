@@ -183,22 +183,34 @@
       .use(audio)
       .use(save);
 
-    // dispara roomEnter al inicio para que el módulo audio arranque la música
-    core.bus.emit('roomEnter', { roomId: gameData.startRoom });
+    // Pinta UN frame estático para que el room se vea detrás del overlay,
+    // pero sin arrancar el juego: gameStart (introScript) y roomEnter (música)
+    // esperan al primer input del jugador.
+    {
+      const t0 = performance.now();
+      for (const ev of ['render:bg', 'render:tiles', 'render:sprites', 'render:fg', 'render:ui', 'render:final']) {
+        core.bus.emit(ev, { dt: 0, t: t0 });
+      }
+    }
 
-    core.start();
-
-    // Overlay "click o teclas para jugar": se quita al primer input.
+    // Overlay "click o teclas para jugar": el primer input arranca de verdad.
     const overlay = document.getElementById('play-overlay');
-    if (overlay) {
-      const hideOverlay = () => {
-        overlay.classList.add('hidden');
-        document.querySelector('.canvas-wrap')?.classList.add('playing');
-        window.removeEventListener('keydown', hideOverlay);
-        overlay.removeEventListener('click', hideOverlay);
-      };
-      window.addEventListener('keydown', hideOverlay);
-      overlay.addEventListener('click', hideOverlay);
+    let started = false;
+    const begin = () => {
+      if (started) return;
+      started = true;
+      overlay?.classList.add('hidden');
+      document.querySelector('.canvas-wrap')?.classList.add('playing');
+      window.removeEventListener('keydown', begin);
+      overlay?.removeEventListener('click', begin);
+      core.bus.emit('roomEnter', { roomId: gameData.startRoom });
+      core.start();
+    };
+    window.addEventListener('keydown', begin);
+    overlay?.addEventListener('click', begin);
+    // el d-pad táctil emite input:* por el bus, no keydown: también debe arrancar
+    for (const ev of ['input:up', 'input:down', 'input:left', 'input:right', 'input:action']) {
+      core.bus.on(ev, begin);
     }
   </script>
 </body>

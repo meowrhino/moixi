@@ -10,7 +10,17 @@ const handler = (e) => {
     ' ': 'action', Enter: 'action', z: 'action', Z: 'action',
     Escape: 'cancel',
   };
-  const dir = map[e.key];
+  // fallback por e.code: algunos entornos (teclados virtuales, automatización)
+  // dan e.key raro pero e.code fiable
+  const codeMap = {
+    ArrowUp: 'up', KeyW: 'up',
+    ArrowDown: 'down', KeyS: 'down',
+    ArrowLeft: 'left', KeyA: 'left',
+    ArrowRight: 'right', KeyD: 'right',
+    Space: 'action', Enter: 'action', KeyZ: 'action',
+    Escape: 'cancel',
+  };
+  const dir = map[e.key] ?? codeMap[e.code];
   if (!dir) return;
   e.preventDefault();
   core.bus.emit(`input:${dir}`, { source: 'keyboard' });

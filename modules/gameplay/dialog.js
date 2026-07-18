@@ -2,7 +2,9 @@
 // Soporta: {b} (line break), {p} (page break), {wavy}...{/wavy}, {shaky}...{/shaky},
 //          {color N}...{/color}, {position top|center|bottom|fullscreen}...{/position},
 //          {delay N}, {if ...}{/if}, expresiones {var name}, etc.
-// Las funciones no-dialogo se dispatchan a core.scriptFns y se ejecutan inline.
+// Las funciones no-dialogo se dispatchan a core.scriptFns y se ejecutan cuando
+// su página se muestra (no al parsear): el jugador lee la página que las contiene
+// en el momento en que sus efectos ocurren.
 
 let core = null;
 let el = null;
@@ -74,22 +76,55 @@ function advance() {
   if (queue.length) { startNextPage(); return; }
   close();
 }
+// Convierte los segmentos de una página en texto final. AQUÍ (al mostrar la
+// página, no al parsear) se ejecutan las funciones de script: {move-avatar},
+// {set-music}, {inc-item-count}... corren cuando el jugador llega a su página,
+// en orden con las interpolaciones de valor ({item-count flor}) del mismo texto.
+function materializePage(page) {
+  let text = '';
+  for (const seg of page.segments) {
+    if (typeof seg === 'string') { text += seg; continue; }
+    try {
+      const ret = evaluateExpr(seg.expr);
+      if (ret !== undefined && ret !== null && typeof ret !== 'object') text += String(ret);
+    } catch (e) { console.error(`[dialog] error en {${seg.expr}}`, e); }
+  }
+  return text;
+}
+
 function startNextPage() {
   const page = queue.shift();
   if (!page) { close(); return; }
-  charBuffer = page.text;
-  bufferIdx = 0;
   setPosition(page.position || 'bottom');
-  // ejecuta funciones embebidas que no producen dialog (side effects)
-  for (const sideEffect of page.effects || []) sideEffect();
+  // lastCharTime ANTES de los efectos: {delay N} lo empuja hacia delante
+  // (antes se machacaba justo después y el delay no hacía nada)
   lastCharTime = performance.now();
+  for (const sideEffect of page.effects || []) sideEffect();
+  charBuffer = materializePage(page);
+  bufferIdx = 0;
+  // página sin texto (solo side effects): saltar a la siguiente o cerrar.
+  // OJO: los efectos pueden haber encolado páginas nuevas (scripts reentrantes),
+  // por eso se comprueba queue DESPUÉS de materializar.
+  if (!charBuffer.length) {
+    if (queue.length) { startNextPage(); return; }
+    close();
+    return;
+  }
   render();
 }
 
-// Parser muy simple del DSL del diálogo. Devuelve un array de "páginas",
-// cada página es { text, position, effects: [fn,...] (efectos inmediatos al abrir) }.
+// Parser muy simple del DSL del diálogo. Devuelve un array de "páginas":
+// { segments: [string | { expr }], position, effects }. Los strings son texto
+// literal (con marcadores <<wavy>> etc.); los { expr } son llamadas de script
+// que se evalúan al MOSTRAR la página (ver materializePage).
+function appendText(pages, s) {
+  const segs = pages[pages.length - 1].segments;
+  if (typeof segs[segs.length - 1] === 'string') segs[segs.length - 1] += s;
+  else segs.push(s);
+}
+
 function parseScript(src) {
-  const pages = [{ text: '', position: 'bottom', effects: [] }];
+  const pages = [{ segments: [], position: 'bottom', effects: [] }];
   let i = 0;
   const len = src.length;
   while (i < len) {
@@ -103,14 +138,17 @@ function parseScript(src) {
       }
       const inner = src.slice(i + 1, j).trim();
       const result = handleTag(inner, pages);
-      if (result?.appendText) pages[pages.length - 1].text += result.appendText;
+      if (result?.appendText) appendText(pages, result.appendText);
+      else if (result?.defer) pages[pages.length - 1].segments.push({ expr: result.defer });
       i = j + 1;
     } else {
-      pages[pages.length - 1].text += src[i];
+      appendText(pages, src[i]);
       i++;
     }
   }
-  return pages.filter(p => p.text.length > 0 || p.effects.length > 0);
+  return pages.filter(p =>
+    p.effects.length > 0 ||
+    p.segments.some(s => typeof s !== 'string' || s.length > 0));
 }
 
 // Parser de argumentos: tokens separados por espacios, strings con comillas, expresiones {x} anidadas.
@@ -156,7 +194,7 @@ function evaluateExpr(exprStr) {
 function handleTag(inner, pages) {
   // Tags inline de formato: se convierten en marcadores que el render interpreta
   if (inner === 'b') return { appendText: '\n' };
-  if (inner === 'p') { pages.push({ text: '', position: pages[pages.length - 1].position, effects: [] }); return; }
+  if (inner === 'p') { pages.push({ segments: [], position: pages[pages.length - 1].position, effects: [] }); return; }
   if (inner === 'wavy' || inner === 'shaky') return { appendText: `<<${inner}>>` };
   if (inner === '/wavy') return { appendText: '<</wavy>>' };
   if (inner === '/shaky') return { appendText: '<</shaky>>' };
@@ -186,18 +224,9 @@ function handleTag(inner, pages) {
     return;
   }
 
-  // Si es una función registrada del lenguaje y NO devuelve string visible,
-  // ejecutamos como side effect. Si devuelve algo, lo concatenamos como texto.
-  const fn = core.scriptFns[head];
-  if (fn) {
-    const args = tokens.slice(1).map(t => typeof t === 'object' && t.expr ? evaluateExpr(t.expr) : t);
-    try {
-      const ret = fn(core, ...args);
-      if (ret !== undefined && ret !== null && typeof ret !== 'object') {
-        return { appendText: String(ret) };
-      }
-    } catch (e) { console.error(`[dialog] error en {${head}}`, e); }
-  }
+  // Función registrada del lenguaje: se DIFIERE — se ejecutará al mostrar la
+  // página (materializePage). Si devuelve algo visible, se interpola en el texto.
+  if (core.scriptFns[head]) return { defer: inner };
   return;
 }
 
